@@ -1,0 +1,3 @@
+<Files build.php>
+    deny from all
+</Files>
