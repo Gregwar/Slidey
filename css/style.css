@@ -160,6 +160,11 @@ a.prev, a.next {
     font-size:35px;
 }
 
+.slide {
+    width:900px;
+    float:left;
+}
+
 .slideEnabled .middleSlide {
     vertical-align:middle;
     display:table-cell;
