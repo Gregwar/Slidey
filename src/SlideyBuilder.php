@@ -68,16 +68,26 @@ class SlideyBuilder
 	Slidey::$targetDirectory = $targetDirectory;
 	Slidey::$pagesDirectory = $pagesDirectory;
 
+	if (isset($_SERVER['argv'])) {
+	    $argv = $_SERVER['argv'];
+	}
+
+	if (isset($argv[1])) {
+	    if ($argv[1] == 'clean') {
+		$this->cleanCache();
+	    }
+	}
+
 	$this->run();
     }
 
     /**
-     * Clears the cache
+     * Cleans the cache
      */
-    public function clearCache()
+    public function cleanCache()
     {
-	echo "Clearing cache\n";
-	system('rm -rf ' . Slidey::$targetDirectory . DIRECTORY_SEPARATOR . '*'."\n");
+	echo "* Clearing cache\n";
+	system('rm -rf ' . Slidey::targetFilePath('*') ." \n");
     }
 
     /**
