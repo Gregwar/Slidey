@@ -35,6 +35,11 @@ class SlideyTemplate
     public $footer = null;
 
     /**
+     * Page browser
+     */
+    public $browser = null;
+
+    /**
      * File contents
      */
     public $contentsFile;
@@ -99,6 +104,17 @@ class SlideyTemplate
 	return $this->header;
     }
 
+    /**
+     * Page browser
+     */
+    public function browser()
+    {
+	return $this->browser;
+    }
+
+    /**
+     * Adds a stylesheet
+     */
     public function addCss($file)
     {
 	$this->header .= '<link type="text/css" media="screen" rel="stylesheet" href="' . $file .'" />';

@@ -3,9 +3,9 @@
 namespace Gregwar;
 
 /**
- * Builds the cache used by Slidey
+ * Builds the slidey project
  */
-class SlideyCacheBuilder
+class SlideyBuilder
 {
     /**
      * The cache that is being geneated
@@ -19,6 +19,11 @@ class SlideyCacheBuilder
      * The current meta
      */
     protected $meta = array();
+
+    /**
+     * Directories that need to be copied
+     */
+    protected $copyDirectories = array();
 
     /**
      * Files processed
@@ -46,14 +51,25 @@ class SlideyCacheBuilder
     protected $file;
 
     /**
-     * Cache directory
+     * Template
      */
-    protected $cacheDirectory;
+    public $template;
+
+    public function __construct()
+    {
+	$this->template = new SlideyTemplate;
+    }
 
     /**
-     * The directory to crawl
+     * Run the builder 
      */
-    protected $pagesDirectory;
+    public function build($targetDirectory = 'web', $pagesDirectory = 'pages')
+    {
+	Slidey::$targetDirectory = $targetDirectory;
+	Slidey::$pagesDirectory = $pagesDirectory;
+
+	$this->run();
+    }
 
     /**
      * Clears the cache
@@ -61,7 +77,7 @@ class SlideyCacheBuilder
     public function clearCache()
     {
 	echo "Clearing cache\n";
-	system('rm -rf ' . $this->cacheDirectory . DIRECTORY_SEPARATOR . '*'."\n");
+	system('rm -rf ' . Slidey::$targetDirectory . DIRECTORY_SEPARATOR . '*'."\n");
     }
 
     /**
@@ -69,7 +85,7 @@ class SlideyCacheBuilder
      */
     protected function metaFilename()
     {
-	return $this->cacheDirectory . DIRECTORY_SEPARATOR . 'meta.php';
+	return Slidey::targetFilePath('meta.php');
     }
 
     /**
@@ -104,15 +120,18 @@ class SlideyCacheBuilder
     /**
      * Runs the cache builder
      */
-    public function run($directory)
+    public function run()
     {
-	$this->cacheDirectory = realpath($directory . DIRECTORY_SEPARATOR . Slidey::$cacheDirectory);
-	$this->pagesDirectory = realpath($directory . DIRECTORY_SEPARATOR . Slidey::$pagesDirectory);
-
 	$this->loadMeta();
 
-	echo "Crawling " . $this->pagesDirectory . "\n";
-	
+	echo "* Copying static files\n";
+	system('cp -R ' . __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'static' . DIRECTORY_SEPARATOR . '* ' . Slidey::targetFilePath('slidey/'));
+
+	$this->copyAllDirectories();
+
+	echo "* Crawling " . $this->pagesDirectory . "\n";
+
+	// Adding index
 	$this->manifest['index'] = 'Table des matières';
 
 	$this->summary['index'] = array(
@@ -124,11 +143,14 @@ class SlideyCacheBuilder
 
 	$this->order = array('index');
 
-	$files = opendir($this->pagesDirectory);
+	$this->processed['index'] = true;
+
+	$files = opendir(Slidey::$pagesDirectory);
 
 	if (!$files)
 	{
-	    echo "Unable to open directory\n";
+	    echo "! Unable to open " . Slidey::$pagesDirectory . "\n";
+	    return;
 	}
 	else
 	{
@@ -142,9 +164,10 @@ class SlideyCacheBuilder
 	}
 
 	closedir($files);
+
 	$this->generateSummary();
 	$this->generateBrowsers();
-	$this->save();
+	$this->saveMeta();
     }
 
     /**
@@ -154,26 +177,26 @@ class SlideyCacheBuilder
     {
 	$this->file = $file;
 
-	$input = $this->pagesDirectory . DIRECTORY_SEPARATOR . $this->file;
+	$input = Slidey::pagesFilePath($this->file);
 
 	if ($slug = $this->metaSlug($file)) {
-	    $output = $this->cacheDirectory . DIRECTORY_SEPARATOR . $slug . '.html';
+	    $output = Slidey::targetFilePath($slug . '.html');
 
 	    if (file_exists($output) && filectime($output) >= filectime($input))
 	    {
-		echo "Passing ".$file."\n";
+		echo "! Passing ".$file."\n";
 		return;
 	    }
 	}
 	
-	echo "Processing ".$file."\n";
+	echo "* Processing ".$file."\n";
 
 	ob_start();
 	$slidey = $this;
 	include($input);
 	$contents = ob_get_clean();
 
-	$output = $this->cacheDirectory . DIRECTORY_SEPARATOR . $this->slug . '.html';
+	$output = Slidey::targetFilePath($this->slug . '.html');
 
 	file_put_contents($output, $contents);
 	$this->processed[$this->slug] = true;
@@ -224,7 +247,7 @@ class SlideyCacheBuilder
      */
     public function highlight($file, $lang='php')
     {
-	$geshi = new \GeSHi(rtrim(file_get_contents($this->pagesDirectory . DIRECTORY_SEPARATOR . $file)), $lang);
+	$geshi = new \GeSHi(rtrim(file_get_contents(Slidey::pagesFilePath($file))), $lang);
 	$geshi->enable_classes();
 	$geshi->enable_keyword_links(false);
 
@@ -232,12 +255,12 @@ class SlideyCacheBuilder
     }
 
     /**
-     * Saving the cache
+     * Saving the meta file
      */
-    public function save()
+    public function saveMeta()
     {
 	$cacheFile = $this->metaFilename();
-	echo 'Saving manifest to '.$cacheFile."\n";
+	echo '* Saving manifest to '.$cacheFile."\n";
 
 	$meta = array(
 	    'manifest' => $this->manifest,
@@ -254,7 +277,7 @@ class SlideyCacheBuilder
      */
     public function generateSummary()
     {
-	echo "Generating summary\n";
+	echo "* Generating summary\n";
 
 	$summary = $this->summary;
 
@@ -262,7 +285,7 @@ class SlideyCacheBuilder
 	include(__DIR__.'/templates/summary.php');
 	$contents = ob_get_clean();
 
-	file_put_contents($this->cacheDirectory . DIRECTORY_SEPARATOR . 'index.html', $contents);
+	file_put_contents(Slidey::targetFilePath('index.html'), $contents);
     }
 
 
@@ -289,11 +312,45 @@ class SlideyCacheBuilder
 	    $current = $this->summary[$slug];
 	    $after = ($k < count($this->order)-1 ? $this->summary[$this->order[$k+1]] : null);
 
-	    $file = $this->cacheDirectory . DIRECTORY_SEPARATOR . $slug . '.html';
+	    $file = Slidey::targetFilePath($slug . '.html');
 
 	    if (isset($this->processed[$slug])) {
-		file_put_contents($file, $this->generateBrowser($before, $current, $after), FILE_APPEND); 
+		$this->template->title = $this->manifest[$slug];
+		$this->template->browser = $this->generateBrowser($before, $current, $after);
+		$this->template->contentsFile = $file;
+
+		ob_start();
+		$this->template->render();
+		$contents = ob_get_clean();
+
+		file_put_contents($file, $contents);
 	    }
+	}
+    }
+
+    /**
+     * Copy a directory to the build
+     */
+    public function copyDirectory($source, $target = null)
+    {
+	if ($target === null)
+	{
+	    $target = '';
+	}
+	
+	$this->copyDirectories[] = array($source, $target);
+    }
+
+    /**
+     * Copy directories
+     */
+    public function copyAllDirectories()
+    {
+	foreach ($this->copyDirectories as $directories)
+	{
+	    list($source, $target) = $directories;
+	    $target = Slidey::targetFilePath($target);
+	    system('cp -R ' . $source . ' ' . $target);
 	}
     }
 }

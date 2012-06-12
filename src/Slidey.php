@@ -3,14 +3,14 @@
 namespace Gregwar;
 
 require_once('SlideyTemplate.php');
-require_once('SlideyCacheBuilder.php');
+require_once('SlideyBuilder.php');
 
 class Slidey
 {
     /**
-     * Cache directory
+     * Target directory
      */
-    public static $cacheDirectory = 'cache';
+    public static $targetDirectory = 'web';
 
     /**
      * Directory containing all pages
@@ -18,52 +18,19 @@ class Slidey
     public static $pagesDirectory = 'pages';
 
     /**
-     * Template engine
+     * Gets the target file from its path
      */
-    public $template;
-
-    /**
-     * Current page
-     */
-    public $page;
-
-    /**
-     * Pages meta
-     */
-    protected $meta = null;
-
-    public function __construct()
+    public static function targetFilePath($file)
     {
-	$this->template = new SlideyTemplate;
+	return self::$targetDirectory . DIRECTORY_SEPARATOR . $file;
     }
 
     /**
-     * Gets the cache file from its path
+     * Gets the page file path
      */
-    protected function cacheFilePath($file)
+    public static function pagesFilePath($file)
     {
-	return self::$cacheDirectory . DIRECTORY_SEPARATOR . $file;
-    }
-
-    /**
-     * Loads the meta
-     */
-    protected function loadMeta()
-    {
-	if ($this->meta === null)
-	{
-	    $cacheFile = $this->cacheFilePath('meta.php');
-
-	    if (file_exists($cacheFile))
-	    {
-		$this->meta = include($cacheFile);
-	    }
-	}
-
-	if (!$this->meta) 
-	{
-	    die('Slidey is not able to find its meta, please build it');
-	}
+	return self::$pagesDirectory . DIRECTORY_SEPARATOR . $file;
     }
 
     /**

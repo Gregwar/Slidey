@@ -22,6 +22,7 @@
 
 	   <?php echo $slidey->contents(); ?>
 	</div>
+	<?php echo $slidey->browser(); ?>
 	<?php echo $slidey->footer(); ?>
     </body>
 </html>
