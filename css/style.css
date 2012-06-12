@@ -162,7 +162,6 @@ a.prev, a.next {
 
 .slide {
     width:900px;
-    float:left;
 }
 
 .slideEnabled .middleSlide {
@@ -269,3 +268,4 @@ img {
 .slideEnabled p {
     margin-bottom:35px;
 }
+
