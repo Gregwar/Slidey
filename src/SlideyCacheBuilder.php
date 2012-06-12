@@ -176,7 +176,7 @@ class SlideyCacheBuilder
 	$output = $this->cacheDirectory . DIRECTORY_SEPARATOR . $this->slug . '.html';
 
 	file_put_contents($output, $contents);
-	$processed[$this->slug] = true;
+	$this->processed[$this->slug] = true;
     }
 
     /**
