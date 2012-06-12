@@ -151,7 +151,9 @@ class SlideyBuilder
 	    'parts' => array(),
 	);
 
-	$this->order = array('index');
+	if (!in_array('index', $this->order)) {
+	    $this->order[] = 'index';
+	}
 
 	$this->processed['index'] = true;
 
