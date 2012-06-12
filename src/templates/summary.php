@@ -2,7 +2,7 @@
 <ul>
 <?php foreach ($summary as $entry) { ?>
     <?php if ($entry['number'] == 0) continue; ?>
-    <div class="slide">
+    <div class="slide middleSlide summarySlide">
     <li>
 	<a href="<?php echo $entry['slug']; ?>.html"><?php echo $entry['number']; ?> - <?php echo $entry['chapter']; ?></a>
 	<ul>

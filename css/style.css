@@ -173,6 +173,7 @@ a.prev, a.next {
 .slideEnabled h2 {
     font-size:45px;
     border:none;
+    border-bottom:3px solid #aaa;
 }
 
 .slideEnabled h2:before {
@@ -185,7 +186,13 @@ a.prev, a.next {
 
 .slideEnabled .highlight {
     font-size:30px;
-    line-height:22px;
+    line-height:23px;
+    padding-top:3px;
+    padding-bottom:3px;
+}
+
+.slideEnabled .highlight pre {
+    margin:10px;
 }
 
 .slideNumber {
@@ -232,4 +239,28 @@ a.prev, a.next {
 
 .goHome {
     background-image:url('gfx/home.png');
+}
+
+.slideEnabled .summarySlide {
+    font-size: 60px;
+}
+
+.slideEnabled .summarySlide ul {
+    font-size: 45px;
+}
+
+img {
+    margin:20px;
+}
+
+.right {
+    float:right;
+}
+
+.left {
+    float:left;
+}
+
+.slideEnabled p {
+    margin-bottom:35px;
 }

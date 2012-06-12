@@ -140,7 +140,7 @@ class SlideyCacheBuilder
 	    'number' => $this->currentPart,
 	);
 
-	return '<h2 id="part' . $this->currentPart . '">' . $this->currentPart . ' - ' . $title . '</h2>';
+	return '<h2 id="part' . $this->currentPart . '">' . $this->currentPart . ') ' . $title . '</h2>';
     }
 
     /**
