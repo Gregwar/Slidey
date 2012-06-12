@@ -168,7 +168,6 @@ function runSlideMode()
     $('.slideWrapper').addClass('slideEnabled');
     resizeSlides();
     updateDiscovers();
-    scrollToCurrentSlide();
 }
 
 function runTextMode()
@@ -183,7 +182,6 @@ function runTextMode()
     $('.slideEnabled').height('auto');
     resizeSlides();
     $('.slideWrapper').removeClass('slideEnabled');
-    scrollToCurrentSlide();
 }
 
 $(document).ready(function() {
@@ -200,10 +198,12 @@ $(document).ready(function() {
 
     $('.slideModeNormal').click(function() {
 	runTextMode();
+	scrollToCurrentSlide();
     });	
 
     $('.slideModeSlide').click(function() {
 	runSlideMode();
+        scrollToCurrentSlide();
     });	
 
     $('.slideNumber').click(function() {
@@ -213,6 +213,7 @@ $(document).ready(function() {
 	} else {
 	    runTextMode();
 	}
+	scrollToCurrentSlide();
     });
 
     runSlideMode();
