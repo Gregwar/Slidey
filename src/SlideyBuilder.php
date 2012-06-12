@@ -125,7 +125,7 @@ class SlideyBuilder
 	$this->loadMeta();
 
 	echo "* Copying static files\n";
-	system('cp -R ' . __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'static' . DIRECTORY_SEPARATOR . '* ' . Slidey::targetFilePath('slidey/'));
+	system('cp -R ' . __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'static' . DIRECTORY_SEPARATOR . '* ' . Slidey::targetFilePath(''));
 
 	$this->copyAllDirectories();
 
