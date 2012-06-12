@@ -13,6 +13,17 @@ class SlideyCacheBuilder
     protected $summary = array();
     protected $manifest = array();
     protected $order = array();
+    protected $slugs = array();
+
+    /**
+     * The current meta
+     */
+    protected $meta = array();
+
+    /**
+     * Files processed
+     */
+    protected $processed = array();
 
     /**
      * Curent chapter
@@ -45,6 +56,52 @@ class SlideyCacheBuilder
     protected $pagesDirectory;
 
     /**
+     * Clears the cache
+     */
+    public function clearCache()
+    {
+	echo "Clearing cache\n";
+	system('rm -rf ' . $this->cacheDirectory . DIRECTORY_SEPARATOR . '*'."\n");
+    }
+
+    /**
+     * Gets the meta filename
+     */
+    protected function metaFilename()
+    {
+	return $this->cacheDirectory . DIRECTORY_SEPARATOR . 'meta.php';
+    }
+
+    /**
+     * Try to load meta
+     */
+    protected function loadMeta()
+    {
+	$metaFile = $this->metaFilename();
+
+	if (file_exists($metaFile)) {
+	    $this->meta = @include($metaFile);
+
+	    $this->summary = $this->meta['summary'];
+	    $this->order = $this->meta['order'];
+	    $this->manifest = $this->meta['manifest'];
+	    $this->slugs = $this->meta['slugs'];
+	}
+    }
+
+    /**
+     * Try to get the slug from metadata
+     */
+    protected function metaSlug($file)
+    {
+	if (isset($this->slugs[$file])) {
+	    return $this->slugs[$file];
+	}
+
+	return null;
+    }
+
+    /**
      * Runs the cache builder
      */
     public function run($directory)
@@ -52,8 +109,7 @@ class SlideyCacheBuilder
 	$this->cacheDirectory = realpath($directory . DIRECTORY_SEPARATOR . Slidey::$cacheDirectory);
 	$this->pagesDirectory = realpath($directory . DIRECTORY_SEPARATOR . Slidey::$pagesDirectory);
 
-	echo "Clearing cache\n";
-	system('rm -rf ' . $this->cacheDirectory . DIRECTORY_SEPARATOR . '*'."\n");
+	$this->loadMeta();
 
 	echo "Crawling " . $this->pagesDirectory . "\n";
 	
@@ -97,14 +153,30 @@ class SlideyCacheBuilder
     public function process($file)
     {
 	$this->file = $file;
-	echo "Processing ".$this->file."\n";
+
+	$input = $this->pagesDirectory . DIRECTORY_SEPARATOR . $this->file;
+
+	if ($slug = $this->metaSlug($file)) {
+	    $output = $this->cacheDirectory . DIRECTORY_SEPARATOR . $slug . '.html';
+
+	    if (file_exists($output) && filectime($output) >= filectime($input))
+	    {
+		echo "Passing ".$file."\n";
+		return;
+	    }
+	}
+	
+	echo "Processing ".$file."\n";
 
 	ob_start();
 	$slidey = $this;
-	include($this->pagesDirectory . DIRECTORY_SEPARATOR . $this->file);
+	include($input);
 	$contents = ob_get_clean();
 
-	file_put_contents($this->cacheDirectory . DIRECTORY_SEPARATOR . $this->slug . '.html', $contents);
+	$output = $this->cacheDirectory . DIRECTORY_SEPARATOR . $this->slug . '.html';
+
+	file_put_contents($output, $contents);
+	$processed[$this->slug] = true;
     }
 
     /**
@@ -125,7 +197,11 @@ class SlideyCacheBuilder
 	    'parts' => array(),
 	);
 
-	$this->order[] = $slug;
+	$this->slugs[$this->file] = $slug;
+
+	if (!in_array($slug, $this->order)) {
+	    $this->order[] = $slug;
+	}
     }
 
     /**
@@ -160,13 +236,14 @@ class SlideyCacheBuilder
      */
     public function save()
     {
-	$cacheFile = $this->cacheDirectory . DIRECTORY_SEPARATOR . 'meta.php';
+	$cacheFile = $this->metaFilename();
 	echo 'Saving manifest to '.$cacheFile."\n";
 
 	$meta = array(
 	    'manifest' => $this->manifest,
 	    'summary' => $this->summary,
-	    'order' => $this->order
+	    'order' => $this->order,
+	    'slugs' => $this->slugs,
 	);
 
 	file_put_contents($cacheFile, '<?php return '.var_export($meta, true).';');
@@ -214,7 +291,9 @@ class SlideyCacheBuilder
 
 	    $file = $this->cacheDirectory . DIRECTORY_SEPARATOR . $slug . '.html';
 
-	    file_put_contents($file, $this->generateBrowser($before, $current, $after), FILE_APPEND); 
+	    if (isset($this->processed[$slug])) {
+		file_put_contents($file, $this->generateBrowser($before, $current, $after), FILE_APPEND); 
+	    }
 	}
     }
 }
