@@ -17,6 +17,7 @@ class SlideyBuilder
     protected $order = array();
     protected $slugs = array();
     protected $annexes = array();
+    protected $annexFiles = array();
 
     /**
      * Target directory for the build
@@ -37,11 +38,6 @@ class SlideyBuilder
      * Directories that need to be copied
      */
     protected $copyDirectories = array();
-
-    /**
-     * Annexes to crawl
-     */
-    protected $annexFiles = array();
 
     /**
      * Current annex
@@ -156,6 +152,8 @@ class SlideyBuilder
 	    $this->order = $this->meta['order'];
 	    $this->manifest = $this->meta['manifest'];
 	    $this->slugs = $this->meta['slugs'];
+	    $this->annexes = $this->meta['annexes'];
+	    $this->annexFiles = $this->meta['annexFiles'];
 	}
     }
 
@@ -264,7 +262,7 @@ class SlideyBuilder
 
 	    $this->annexLinks[$file] = $link;
 
-	    $this->summary[$depend]['annexes'][] = array(
+	    $this->summary[$depend]['annexes'][$this->slug] = array(
 		'slug' => $this->slug,
 		'title' => $this->annexes[$this->slug]['chapter'],
 	    );
@@ -280,8 +278,8 @@ class SlideyBuilder
 
 	$input = $this->pagesFilePath($this->file);
 
-	if ($slug = $this->metaSlug($file)) {
-	    $output = $this->targetFilePath($slug . '.html');
+	if ($this->slug = $this->metaSlug($file)) {
+	    $output = $this->targetFilePath($this->slug . '.html');
 
 	    if (file_exists($output) && filectime($output) >= filectime($input))
 	    {
@@ -398,6 +396,7 @@ class SlideyBuilder
 	    'order' => $this->order,
 	    'slugs' => $this->slugs,
 	    'annexes' => $this->annexes,
+	    'annexFiles' => $this->annexFiles,
 	);
 
 	file_put_contents($cacheFile, '<?php return '.var_export($meta, true).';');

@@ -10,6 +10,10 @@ function generateMenu()
 {
     var menuElements = '';
 
+    if ($('h1, h2, h3').length < 2) {
+	return;
+    }
+
     $('h1, h2, h3').each(function() {
 	if ($(this).is(':visible')) {
 	    html = '<div id="menu_for_'+$(this).attr('id')+'" rel="'+$(this).attr('id')+'" class="menuItem menu'+$(this)[0].tagName.toLowerCase()+'">'+$(this).html()+'</div>';
