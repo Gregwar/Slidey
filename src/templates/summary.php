@@ -13,6 +13,14 @@
 		</a>
 	    </li>
 	<?php } ?>
+
+	<?php foreach ($entry['annexes'] as $annex) { ?>
+	    <li class="annexSummary">
+		<a href="<?php echo $annex['slug']; ?>.html">
+		    Annexe&nbsp;: <?php echo $annex['title']; ?>
+		</a>
+	    </li>
+	<?php } ?>
 	</ul>
     </li>
     </div>

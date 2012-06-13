@@ -16,6 +16,7 @@ class SlideyBuilder
     protected $manifest = array();
     protected $order = array();
     protected $slugs = array();
+    protected $annexes = array();
 
     /**
      * Target directory for the build
@@ -38,9 +39,19 @@ class SlideyBuilder
     protected $copyDirectories = array();
 
     /**
-     * Files processed
+     * Annexes to crawl
      */
-    protected $processed = array();
+    protected $annexFiles = array();
+
+    /**
+     * Current annex
+     */
+    protected $annex;
+
+    /**
+     * Pretty links to annexes
+     */
+    protected $annexLinks = array();
 
     /**
      * Curent chapter
@@ -56,6 +67,11 @@ class SlideyBuilder
      * Current slug
      */
     protected $slug;
+
+    /**
+     * Current mode (pages or annex)
+     */
+    protected $mode;
 
     /**
      * The current file
@@ -183,20 +199,42 @@ class SlideyBuilder
 	    $this->order[] = 'index';
 	}
 
-	$this->processed['index'] = true;
+	// Processing files
+	$this->generatePages();
+
+	// Generating annexes
+	$this->generateAnnexes();
+
+	// Generating summary
+	$this->generateSummary();
+
+	// Generating layouts
+	$this->generateLayouts();
+
+	// Saving meta
+	$this->saveMeta();
+    }
+
+    /**
+     * Generating pages
+     */
+    public function generatePages()
+    {
+	$this->currentChapter = 0;
+	$this->currentPart = 0;
+	$this->mode = 'pages';
 
 	$files = opendir($this->pagesDirectory);
 
 	if (!$files)
 	{
-	    echo "! Unable to open " . $this->pagesDirectory . "\n";
-	    return;
+	    die("! Unable to open " . $this->pagesDirectory . "\n");
 	}
 	else
 	{
 	    while ($file = readdir($files))
 	    {
-		if (substr($file,-4) == '.php')
+		if (substr($file, -4) == '.php')
 		{
 		    $this->process($file);
 		}
@@ -204,10 +242,33 @@ class SlideyBuilder
 	}
 
 	closedir($files);
+    }
 
-	$this->generateSummary();
-	$this->generateBrowsers();
-	$this->saveMeta();
+    /**
+     * Processing annexes
+     */
+    public function generateAnnexes()
+    {
+	$this->currentChapter = 0;
+	$this->currentPart = 0;
+	$this->mode = 'annexes';
+
+	foreach ($this->annexFiles as $file => $depend) {
+	    $this->annex = $depend;
+	    $this->process($file);
+
+	    ob_start();
+	    $annex = $this->annexes[$this->slug];
+	    include(__DIR__.'/templates/annex.php');
+	    $link = ob_get_clean();
+
+	    $this->annexLinks[$file] = $link;
+
+	    $this->summary[$depend]['annexes'][] = array(
+		'slug' => $this->slug,
+		'title' => $this->annexes[$this->slug]['chapter'],
+	    );
+	}
     }
 
     /**
@@ -236,10 +297,13 @@ class SlideyBuilder
 	include($input);
 	$contents = ob_get_clean();
 
-	$output = $this->targetFilePath($this->slug . '.html');
+	if ($this->mode == 'pages') {
+	    $contents .= '<?php echo $browser; ?' . '>';
+	}
+
+	$output = $this->targetFilePath($this->slug . '.tmp.php');
 
 	file_put_contents($output, $contents);
-	$this->processed[$this->slug] = true;
     }
 
     /**
@@ -248,22 +312,40 @@ class SlideyBuilder
     public function chapter($chapter, $slug)
     {
 	$this->currentChapter++;
+
 	$this->currentPart = 0;
 
-	$this->manifest[$slug] = $this->currentChapter . ' - ' . $chapter;
+	if ($this->mode == 'pages') {
+	   $this->manifest[$slug] = $this->currentChapter . ' - ' . $chapter;
+	} else {
+	   $this->manifest[$slug] = $chapter;
+	}
+
 	$this->slug = $slug;
 
-	$this->summary[$this->slug] = array(
+	$data = array(
 	    'number' => $this->currentChapter,
 	    'chapter' => $chapter,
 	    'slug' => $slug,
 	    'parts' => array(),
+	    'annexes' => array(),
 	);
+
+	if ($this->mode == 'pages') {
+	    $this->summary[$this->slug] = $data;
+	}
 
 	$this->slugs[$this->file] = $slug;
 
-	if (!in_array($slug, $this->order)) {
-	    $this->order[] = $slug;
+	if ($this->mode == 'annexes') {
+	    $data['depend'] = $this->annex;
+	    $this->annexes[$this->slug] = $data;
+	}
+
+	if ($this->mode == 'pages') {
+	    if (!in_array($slug, $this->order)) {
+		$this->order[] = $slug;
+	    }
 	}
     }
 
@@ -273,11 +355,19 @@ class SlideyBuilder
     public function part($title)
     {
 	$this->currentPart++;
-
-	$this->summary[$this->slug]['parts'][] = array(
+	
+	$data = array(
 	    'title' => $title,
 	    'number' => $this->currentPart,
 	);
+
+	if ($this->mode == 'pages') {
+	    $this->summary[$this->slug]['parts'][] = $data;
+	} 
+
+	if ($this->mode == 'annex') {
+	    $this->annexes[$this->slug]['parts'][] = $data;
+	}
 
 	return '<h2 id="part' . $this->currentPart . '">' . $this->currentPart . ') ' . $title . '</h2>';
     }
@@ -307,6 +397,7 @@ class SlideyBuilder
 	    'summary' => $this->summary,
 	    'order' => $this->order,
 	    'slugs' => $this->slugs,
+	    'annexes' => $this->annexes,
 	);
 
 	file_put_contents($cacheFile, '<?php return '.var_export($meta, true).';');
@@ -325,7 +416,9 @@ class SlideyBuilder
 	include(__DIR__.'/templates/summary.php');
 	$contents = ob_get_clean();
 
-	file_put_contents($this->targetFilePath('index.html'), $contents);
+	$contents .= '<?php echo $browser; ?'.'>';
+
+	file_put_contents($this->targetFilePath('index.tmp.php'), $contents);
     }
 
 
@@ -340,10 +433,11 @@ class SlideyBuilder
     }
 
     /**
-     * Generates a browser for each page
+     * Generates a layout for each page
      */
-    public function generateBrowsers()
+    public function generateLayouts()
     {
+	// Rendering pages
 	$before = $after = $current = null;
 
 	foreach ($this->order as $k => $slug)
@@ -352,20 +446,42 @@ class SlideyBuilder
 	    $current = $this->summary[$slug];
 	    $after = ($k < count($this->order)-1 ? $this->summary[$this->order[$k+1]] : null);
 
-	    $file = $this->targetFilePath($slug . '.html');
+	    $tmpFile = $this->targetFilePath($slug . '.tmp.php');
 
-	    if (isset($this->processed[$slug])) {
-		$this->template->title = $this->manifest[$slug];
-		$this->template->browser = $this->generateBrowser($before, $current, $after);
-		$this->template->contentsFile = $file;
-
-		ob_start();
-		$this->template->render();
-		$contents = ob_get_clean();
-
-		file_put_contents($file, $contents);
+	    if (file_exists($tmpFile)) {	
+		$variables = array(
+		    'browser' => $this->generateBrowser($before, $current, $after),
+		    'annexLinks' => $this->annexLinks,
+		);
+		
+		$this->renderLayout($slug, $tmpFile, $variables);
 	    }
 	}
+
+	// Rendering annexes
+	foreach ($this->annexes as $slug => $annex)
+	{
+	    $tmpFile = $this->targetFilePath($slug . '.tmp.php');
+
+	    if (file_exists($tmpFile)) {
+		$this->renderLayout($slug, $tmpFile);
+	    }
+	}
+    }
+
+    protected function renderLayout($slug, $tmpFile, $variables = array())
+    {
+	$file = $this->targetFilePath($slug . '.html');
+
+	$this->template->title = $this->manifest[$slug];
+	$this->template->contentsFile = $tmpFile;
+
+	ob_start();
+	$this->template->render($variables);
+	$contents = ob_get_clean();
+
+	file_put_contents($file, $contents);
+	unlink($tmpFile);
     }
 
     /**
@@ -392,5 +508,15 @@ class SlideyBuilder
 	    $target = $this->targetFilePath($target);
 	    system('cp -R ' . $source . ' ' . $target);
 	}
+    }
+
+    /**
+     * Annex
+     */
+    public function annex($file)
+    {
+	$this->annexFiles[$file] = $this->slug;
+
+	return '<?php echo $annexLinks["' . $file . '"]; ?' . '>';
     }
 }

@@ -44,8 +44,14 @@ class SlideyTemplate
      */
     public $contentsFile;
 
-    public function render()
+    /**
+     * Template variables
+     */
+    public $variables = array();
+
+    public function render($variables = array())
     {
+	$this->variables = $variables;
 	$slidey = $this;
 	include(__DIR__.'/templates/layout.php');
     }
@@ -84,7 +90,11 @@ class SlideyTemplate
 	}
 	else
 	{
-	    return file_get_contents($this->contentsFile);
+	    foreach ($this->variables as $variable => $value) {
+		$$variable = $value;
+	    }
+
+	    include($this->contentsFile);
 	}
     }
 

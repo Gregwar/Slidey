@@ -16,6 +16,21 @@ body {
     font-weight:normal;
 }
 
+.annexSummary a {
+    color:#9a620b;
+}
+
+.annex {
+    padding-top:10px;
+    padding-bottom:10px;
+    font-size:25px;
+}
+
+.annex a {
+    color:#9a620b;
+    font-weight:bold;
+}
+
 h1 {
     text-align:center;
     font-weight:bold;
