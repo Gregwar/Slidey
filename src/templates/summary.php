@@ -1,6 +1,6 @@
 <div class="summary">
 <ul>
-<?php foreach ($summary as $entry) { ?>
+<?php foreach ($order as $slug) { $entry = $summary[$slug]; ?>
     <?php if ($entry['number'] == 0) continue; ?>
     <div class="slide middleSlide summarySlide">
     <li>

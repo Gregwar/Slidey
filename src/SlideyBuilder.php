@@ -307,9 +307,13 @@ class SlideyBuilder
     /**
      * Adding a chapter
      */
-    public function chapter($chapter, $slug)
+    public function chapter($chapter, $slug, $order = null)
     {
-	$this->currentChapter++;
+        if ($order != null) {
+            $this->currentChapter = $order;
+        } else {
+            $this->currentChapter++;
+        }
 
 	$this->currentPart = 0;
 
@@ -342,7 +346,7 @@ class SlideyBuilder
 
 	if ($this->mode == 'pages') {
 	    if (!in_array($slug, $this->order)) {
-		$this->order[] = $slug;
+		$this->order[$this->currentChapter] = $slug;
 	    }
 	}
     }
@@ -407,8 +411,11 @@ class SlideyBuilder
      */
     public function generateSummary()
     {
-	echo "* Generating summary\n";
+        echo "* Generating summary\n";
 
+        ksort($this->order);
+
+        $order = $this->order;
 	$summary = $this->summary;
 
 	ob_start();
