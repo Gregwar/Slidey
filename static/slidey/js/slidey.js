@@ -6,6 +6,52 @@ var currentDiscover = 0;
 
 var slideMode = false;
 
+function generateMenu()
+{
+    var menuElements = '';
+
+    $('h1, h2, h3').each(function() {
+	if ($(this).is(':visible')) {
+	    html = '<div id="menu_for_'+$(this).attr('id')+'" rel="'+$(this).attr('id')+'" class="menuItem menu'+$(this)[0].tagName.toLowerCase()+'">'+$(this).html()+'</div>';
+	    menuElements += html;
+	}
+    });
+
+    $('.menu').html(menuElements);
+
+    $('.menuItem').click(function() {
+	var titleId = $(this).attr('rel');
+	if (!slideMode) {
+	    $('html,body').animate({scrollTop:$('#' + titleId).offset().top}, 300, 0);
+	} else {
+	    currentSlide = $('#' + titleId).closest('.slideWrapper').attr('rel');
+	    scrollTo(currentSlide);
+	    updateDiscovers(0);
+	}
+    });
+}
+
+function updateMenuPosition()
+{
+    var scrollTop = $('html').scrollTop();
+
+    $('h1, h2, h3').each(function() {
+	if ($(this).is(':visible')) {
+	    var menuElement = $('#menu_for_' + $(this).attr('id'));
+
+	    if ($(this).offset().top < scrollTop) {
+		if (!menuElement.hasClass('menuPassed')) {
+		    menuElement.addClass('menuPassed');
+		}
+	    } else {
+		if (menuElement.hasClass('menuPassed')) {
+		    menuElement.removeClass('menuPassed');
+		}
+	    }
+	}
+    });
+}
+
 function resizeSlides()
 {
     var width = $(document.body).width();
@@ -137,7 +183,7 @@ $(document).keydown(function(e){
     }
 });
 
-function initSlides()
+function init()
 {
     var id = 0;
     slidesCount = $('.slide').length;
@@ -156,6 +202,13 @@ function initSlides()
 
 	id++;
     });
+
+    var titleId = 0;
+    $('h1, h2, h3').each(function() {
+	if (!$(this).attr('id')) {
+	    $(this).attr('id', 'title'+(titleId++));
+	}
+    });
 }
 
 function runSlideMode() 
@@ -168,6 +221,7 @@ function runSlideMode()
     $('.slideWrapper').addClass('slideEnabled');
     resizeSlides();
     updateDiscovers();
+    generateMenu();
 }
 
 function runTextMode()
@@ -182,11 +236,18 @@ function runTextMode()
     $('.slideEnabled').height('auto');
     resizeSlides();
     $('.slideWrapper').removeClass('slideEnabled');
+    generateMenu();
+}
+
+function tick()
+{
+    resizeSlides();
+    updateMenuPosition();
 }
 
 $(document).ready(function() {
-    initSlides();
-    setInterval(resizeSlides, 1000);
+    init();
+    setInterval(tick, 500);
     
     if (window.location.hash) {
 	obj = $(window.location.hash);

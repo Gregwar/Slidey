@@ -15,6 +15,9 @@
 	    <a href="index.html" class="goHome"></a>
 	</div>
 
+	<div class="menu">
+	</div>
+
 	<div class="contents">
 	    <div class="slide middleSlide">
 		    <?php echo $slidey->pageTitle(); ?>
