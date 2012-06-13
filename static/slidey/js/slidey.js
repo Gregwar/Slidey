@@ -312,4 +312,5 @@ $(document).ready(function() {
     runSlideMode();
     runTextMode();
     resizeSlides();
+    updateMenuPosition();
 });
