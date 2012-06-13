@@ -183,8 +183,36 @@ $(document).keydown(function(e){
     }
 });
 
+function initSpoilers()
+{
+    var spoilerId = 0;
+
+    $('.spoiler').each(function() {
+	$(this).attr('id', 'spoiler'+spoilerId);
+
+	$(this).wrap('<div class="spoilerWrapper" id="spoilerWrapper'+spoilerId+'"></div>');
+	$('#spoilerWrapper'+spoilerId).prepend('<a rel="'+spoilerId+'" class="spoilerLink" href="javascript:void(0);">Afficher/masquer le contenu</a>');
+
+	spoilerId++;
+    });
+
+    $('.spoilerLink').click(function() {
+	var spoiler = $('#spoiler' + $(this).attr('rel'));
+
+	if (spoiler.is(':visible')) {
+	    spoiler.slideUp();
+	} else {
+	    spoiler.slideDown();
+	}
+    });
+
+    $('.spoiler').hide();
+}
+
 function init()
 {
+    initSpoilers();
+
     var id = 0;
     slidesCount = $('.slide').length;
 
