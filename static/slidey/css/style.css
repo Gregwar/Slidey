@@ -270,6 +270,12 @@ a.prev, a.next {
 
 img {
     margin:20px;
+    border:0px;
+    vertical-align:middle;
+}
+
+img.formula {
+    margin:0px;
 }
 
 .right {
