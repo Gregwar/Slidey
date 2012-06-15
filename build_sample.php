@@ -26,7 +26,7 @@ $slidey->template->footer = file_get_contents('license.htm');
  */
 
 // This will copy the directory "css" to the target directory
-$slidey->copyDirectory('css');
+$slidey->copy('css');
 
 // Runs the build to the web directory
 $slidey->build();

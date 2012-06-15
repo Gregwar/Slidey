@@ -35,9 +35,9 @@ class SlideyBuilder
     protected $meta = array();
 
     /**
-     * Directories that need to be copied
+     * Files that need to be copied
      */
-    protected $copyDirectories = array();
+    protected $copies = array();
 
     /**
      * Current annex
@@ -211,7 +211,7 @@ class SlideyBuilder
 	echo "* Copying static files\n";
 	system('cp -R ' . __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'static' . DIRECTORY_SEPARATOR . '* ' . $this->targetFilePath(''));
 
-	$this->copyAllDirectories();
+	$this->doCopy();
     }
 
     /**
@@ -482,24 +482,24 @@ class SlideyBuilder
     /**
      * Copy a directory to the build
      */
-    public function copyDirectory($source, $target = null)
+    public function copy($source, $target = null)
     {
 	if ($target === null)
 	{
 	    $target = '';
 	}
 	
-	$this->copyDirectories[] = array($source, $target);
+	$this->copies[] = array($source, $target);
     }
 
     /**
      * Copy directories
      */
-    public function copyAllDirectories()
+    public function doCopy()
     {
-	foreach ($this->copyDirectories as $directories)
+	foreach ($this->copies as $copy)
 	{
-	    list($source, $target) = $directories;
+	    list($source, $target) = $copy;
 	    $target = $this->targetFilePath($target);
 	    system('cp -R ' . $source . ' ' . $target);
 	}
