@@ -36,7 +36,15 @@ class SlideyStandard extends SlideyBuilder
      */
     public function highlight($file, $lang = 'php')
     {
-	$geshi = new \GeSHi(rtrim(file_get_contents($this->pagesFilePath($file))), $lang);
+        return $this->highlightString(rtrim(file_get_contents($this->pagesFilePath($file))), $lang);
+    }
+
+    /**
+     * Highlighting a string using GeShi
+     */
+    public function highlightString($str, $lang = 'php')
+    {
+        $geshi = new \GeSHi($str, $lang);
 	$geshi->enable_classes();
 	$geshi->enable_keyword_links(false);
 
