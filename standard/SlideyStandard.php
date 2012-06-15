@@ -56,7 +56,7 @@ class SlideyStandard extends SlideyBuilder
     /**
      * Managing 
      */
-    public function tex($formula, $density = 155)
+    public function tex($formula, $density = 350)
     {
         $tex = new \Gregwar\Tex2png\Tex2png($formula, $density);
         $tex->setCacheDirectory($this->cacheDirectory . '/tex/');
