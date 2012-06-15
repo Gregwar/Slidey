@@ -25,6 +25,7 @@ class SlideyStandard extends SlideyBuilder
      */
     public function build($targetDirectory = 'web')
     {
+        @mkdir($this->cacheDirectory);
         $this->copy($this->cacheDirectory);
 
         parent::build($targetDirectory);
