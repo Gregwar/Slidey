@@ -13,7 +13,7 @@ $slidey = new Gregwar\Slidey\SlideyStandard;
  */
 
 // Setting main title prefix
-$slidey->template->mainTitle = 'PHP';
+$slidey->template->mainTitle = 'My show';
 
 // Adding a CSS stylesheet
 $slidey->template->addCss('css/style.css');
