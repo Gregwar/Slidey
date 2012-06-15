@@ -6,7 +6,7 @@ include('slidey/slidey.php');
  * Include here your custom libraries
  */
 
-$slidey = new Gregwar\SlideyBuilder;
+$slidey = new Gregwar\Slidey\SlideyStandard;
 
 /**
  * Customizing template

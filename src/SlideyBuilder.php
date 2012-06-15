@@ -1,8 +1,8 @@
 <?php
 
-namespace Gregwar;
+namespace Gregwar\Slidey;
 
-require_once('SlideyTemplate.php');
+require_once(__DIR__ . '/SlideyTemplate.php');
 
 /**
  * Builds the slidey project
@@ -176,11 +176,6 @@ class SlideyBuilder
     {
 	$this->loadMeta();
 
-	echo "* Copying static files\n";
-	system('cp -R ' . __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'static' . DIRECTORY_SEPARATOR . '* ' . $this->targetFilePath(''));
-
-	$this->copyAllDirectories();
-
 	echo "* Crawling " . $this->pagesDirectory . "\n";
 
 	// Adding index
@@ -211,6 +206,12 @@ class SlideyBuilder
 
 	// Saving meta
 	$this->saveMeta();
+
+        // Copying static files
+	echo "* Copying static files\n";
+	system('cp -R ' . __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'static' . DIRECTORY_SEPARATOR . '* ' . $this->targetFilePath(''));
+
+	$this->copyAllDirectories();
     }
 
     /**
@@ -372,18 +373,6 @@ class SlideyBuilder
 	}
 
 	return '<h2 id="part' . $this->currentPart . '">' . $this->currentPart . ') ' . $title . '</h2>';
-    }
-
-    /**
-     * Highlighting a file
-     */
-    public function highlight($file, $lang='php')
-    {
-	$geshi = new \GeSHi(rtrim(file_get_contents($this->pagesFilePath($file))), $lang);
-	$geshi->enable_classes();
-	$geshi->enable_keyword_links(false);
-
-	return '<div class="highlight">' . $geshi->parse_code() . '</div>';
     }
 
     /**
