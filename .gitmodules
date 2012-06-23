@@ -1,6 +1,6 @@
 [submodule "tex2png"]
 	path = tex2png
-	url = git@github.com:Gregwar/Tex2png.git
+	url = https://github.com/Gregwar/Tex2png.git
 [submodule "image"]
 	path = image
-	url = git@github.com:Gregwar/Image.git
+	url = https://github.com/Gregwar/Image.git
