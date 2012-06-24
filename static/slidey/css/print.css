@@ -1,0 +1,4 @@
+
+.slideNumber, .menu, .slideMode, .prev, .next {
+    display: none !important;
+}
