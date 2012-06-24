@@ -358,3 +358,7 @@ td {
     color:black;
 }
 
+.slide hr {
+    border:0;
+    background-color:#aaa;
+}
