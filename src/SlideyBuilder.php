@@ -40,6 +40,11 @@ class SlideyBuilder
     protected $copies = array();
 
     /**
+     * Directories to create
+     */
+    protected $mkDirectories = array();
+
+    /**
      * Current annex
      */
     protected $annex;
@@ -211,7 +216,8 @@ class SlideyBuilder
 	echo "* Copying static files\n";
 	system('cp -R ' . __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'static' . DIRECTORY_SEPARATOR . '* ' . $this->targetFilePath(''));
 
-	$this->doCopy();
+        $this->doMkDir();
+        $this->doCopy();
     }
 
     /**
@@ -493,6 +499,14 @@ class SlideyBuilder
     }
 
     /**
+     * Creates a directory
+     */
+    public function mkdir($directory)
+    {
+        $this->mkDirectories[] = $directory;
+    }
+
+    /**
      * Copy directories
      */
     public function doCopy()
@@ -503,6 +517,22 @@ class SlideyBuilder
 	    $target = $this->targetFilePath($target);
 	    system('cp -R ' . $source . ' ' . $target);
 	}
+    }
+
+    /**
+     * Create directories
+     */
+    public function doMkDir()
+    {
+        foreach ($this->mkDirectories as $directory)
+        {
+            $directory = $this->targetFilePath($directory);
+
+            if (!is_dir($directory)) 
+            {
+                mkdir($directory);
+            }
+        }
     }
 
     /**
