@@ -9,6 +9,11 @@ body {
 .summary {
     font-size:24px;
     font-weight:bold;
+    color:#e6e4ff;
+}
+
+.summary li {
+    list-style:square;
 }
 
 .summary ul ul {
@@ -17,7 +22,7 @@ body {
 }
 
 .annexSummary a {
-    color:#9a620b;
+    color:#181080;
 }
 
 .annex {
@@ -27,7 +32,7 @@ body {
 }
 
 .annex a {
-    color:#9a620b;
+    color:#181080;
     font-weight:bold;
 }
 
