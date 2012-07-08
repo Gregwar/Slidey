@@ -97,6 +97,7 @@ $language_data = array(
 	    2 => array(
 	    '__construct', '__get', '__call', '__set', '__sleep', '__wakeup',
             'class','const','declare','extends','global','interface',
+            'implements', 'parent', 'static',
             'new','private','protected','public','self','var'
             ),
 	    3 => array(
