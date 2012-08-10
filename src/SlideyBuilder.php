@@ -181,7 +181,12 @@ class SlideyBuilder
     {
 	$this->loadMeta();
 
-	echo "* Crawling " . $this->pagesDirectory . "\n";
+        echo '* Crawling ' . $this->pagesDirectory . "\n";
+
+        if (!is_dir($this->targetDirectory)) {
+            echo '* Creating ' . $this->targetDirectory . "\n";
+            mkdir($this->targetDirectory);
+        }
 
 	// Adding index
 	$this->manifest['index'] = 'Table des matières';
