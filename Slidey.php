@@ -23,13 +23,12 @@ class Slidey extends SlideyBuilder
     /**
      * Runs the build, add the cache directory
      */
-    public function build($targetDirectory = 'web')
+    public function run()
     {
-        @mkdir($this->cacheDirectory);
-        $this->copy($this->cacheDirectory);
+        @mkdir($this->targetFilePath($this->cacheDirectory), 0755, true);
         $this->copy(__DIR__ . '/static/*', '');
 
-        parent::build($targetDirectory);
+        parent::run();
     }
 
     /**
@@ -59,6 +58,7 @@ class Slidey extends SlideyBuilder
     {
         $image = new \Gregwar\Image\Image($file);
         $image->setCacheDir($this->cacheDirectory . '/images/');
+        $image->setActualCacheDir($this->targetFilePath($this->cacheDirectory . '/images/'));
 
         return $image;
     }
@@ -70,6 +70,7 @@ class Slidey extends SlideyBuilder
     {
         $tex = new \Gregwar\Tex2png\Tex2png($formula, $density);
         $tex->setCacheDirectory($this->cacheDirectory . '/tex/');
+        $tex->setActualCacheDirectory($this->targetFilePath($this->cacheDirectory . '/tex/'));
 
         return $tex->generate();
     }
