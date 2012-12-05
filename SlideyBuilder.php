@@ -118,7 +118,7 @@ class SlideyBuilder
 	}
 
 	if (isset($argv[1])) {
-	    if ($argv[1] == 'clean') {
+	    if ($argv[1] == 'redo') {
 		$this->cleanCache();
 	    }
 	}
