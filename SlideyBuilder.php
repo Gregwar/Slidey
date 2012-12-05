@@ -118,12 +118,14 @@ class SlideyBuilder
 	}
 
 	if (isset($argv[1])) {
-	    if ($argv[1] == 'redo') {
+	    if ($argv[1] == 'redo' || $argv[1] == 'clean') {
 		$this->cleanCache();
-	    }
+            }
 	}
 
-	$this->run();
+        if ($argv[1] != 'clean') {
+            $this->run();
+        }
     }
 
     /**
