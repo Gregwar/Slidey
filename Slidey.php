@@ -27,7 +27,7 @@ class Slidey extends SlideyBuilder
     {
         @mkdir($this->cacheDirectory);
         $this->copy($this->cacheDirectory);
-        $this->copy(__DIR__ . 'static/*', '');
+        $this->copy(__DIR__ . '/static/*', '');
 
         parent::build($targetDirectory);
     }
