@@ -1,0 +1,26 @@
+{
+    "name": "gregwar/slidey",
+    "description": "The hybrid document & slide webapp builder",
+    "keywords": ["slidey", "slide", "show", "support"],
+    "homepage": "https://github.com/Gregwar/Slidey",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Grégoire Passault",
+            "email": "g.passault@gmail.com",
+            "homepage": "http://www.gregwar.com/"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.0",
+        "gregwar/image": "dev-master",
+        "gregwar/tex2png": "dev-master",
+        "easybook/geshi": "dev-master"
+    },
+    "target-dir": "Gregwar/Slidey",
+    "autoload": {
+        "psr-0": {
+            "Gregwar\\Slidey": ""
+        }
+    }
+}
