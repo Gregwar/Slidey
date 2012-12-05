@@ -123,7 +123,7 @@ class SlideyBuilder
             }
 	}
 
-        if ($argv[1] != 'clean') {
+        if (!isset($argv[1]) || $argv[1] != 'clean') {
             $this->run();
         }
     }
