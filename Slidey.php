@@ -12,11 +12,12 @@ class Slidey extends SlideyBuilder
      */
     public $cacheDirectory = 'cache';
 
-    /**
-     * Default behaviour is to copy the cache directory to the target
-     */
     public function __construct()
     {
+        $this->twigFunctions = array_merge($this->twigFunctions, array(
+            'image', 'highlight', 'highlightString', 'tex'
+        ));
+
         parent::__construct();
     }
 

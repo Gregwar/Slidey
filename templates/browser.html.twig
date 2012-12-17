@@ -1,0 +1,10 @@
+{% if before %}
+    <a class="prev" href="{{ before.slug }}.html">
+        &laquo; {% if before.number %}{{ before.number }} - {%endif %} {{ before.chapter }}
+    </a>
+{% endif %}
+{% if after %}
+    <a class="next" href="{{ after.slug }}.html">
+        {{ after.number }} - {{ after.chapter }} &raquo;
+    </a>
+{% endif %}

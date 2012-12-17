@@ -2,12 +2,10 @@
 
 namespace Gregwar\Slidey;
 
-require_once(__DIR__ . '/SlideyTemplate.php');
-
 /**
  * Builds the slidey project
  */
-class SlideyBuilder
+class SlideyBuilder extends \Twig_Extension
 {
     /**
      * The cache that is being geneated
@@ -18,6 +16,13 @@ class SlideyBuilder
     protected $slugs = array();
     protected $annexes = array();
     protected $annexFiles = array();
+
+    /**
+     * Functions available for Twig
+     */
+    protected $twigFunctions = array(
+        'chapter', 'part', 'annex'
+    );
 
     /**
      * Target directory for the build
@@ -86,7 +91,24 @@ class SlideyBuilder
 
     public function __construct()
     {
-	$this->template = new SlideyTemplate;
+        $this->template = new SlideyTemplate($this);
+        $this->template->addExtension($this);
+    }
+
+    public function getFunctions()
+    {
+        $functions = array();
+
+        foreach ($this->twigFunctions as $name) {
+            $functions[$name] = new \Twig_Function_Method($this, $name, array('is_safe' => array('html')));
+        }
+
+        return $functions;
+    }
+
+    public function getName()
+    {
+        return 'slidey';
     }
 
     /**
@@ -94,7 +116,7 @@ class SlideyBuilder
      */
     public function targetFilePath($file)
     {
-	return $this->targetDirectory . DIRECTORY_SEPARATOR . $file;
+	return $this->targetDirectory . '/' . $file;
     }
 
     /**
@@ -102,7 +124,7 @@ class SlideyBuilder
      */
     public function pagesFilePath($file)
     {
-	return $this->pagesDirectory . DIRECTORY_SEPARATOR . $file;
+	return $this->pagesDirectory . '/' . $file;
     }
 
     /**
@@ -111,7 +133,7 @@ class SlideyBuilder
     public function build($targetDirectory = 'web', $pagesDirectory = 'pages')
     {
 	$this->targetDirectory = $targetDirectory;
-	$this->pagesDirectory = $pagesDirectory;
+        $this->pagesDirectory = $pagesDirectory;
 
 	if (isset($_SERVER['argv'])) {
 	    $argv = $_SERVER['argv'];
@@ -189,6 +211,8 @@ class SlideyBuilder
             echo '* Creating ' . $this->targetDirectory . "\n";
             mkdir($this->targetDirectory);
         }
+        
+        $this->template->setDirectories(getcwd() . '/' . $this->pagesDirectory, getcwd() . '/' . $this->targetDirectory);
 
 	// Adding index
 	$this->manifest['index'] = 'Table des matières';
@@ -242,7 +266,7 @@ class SlideyBuilder
 	{
 	    while ($file = readdir($files))
 	    {
-		if (substr($file, -4) == '.php')
+		if (substr($file, -5) == '.twig')
 		{
 		    $this->process($file);
 		}
@@ -259,16 +283,19 @@ class SlideyBuilder
     {
 	$this->currentChapter = 0;
 	$this->currentPart = 0;
-	$this->mode = 'annexes';
+        $this->mode = 'annexes';
 
 	foreach ($this->annexFiles as $file => $depend) {
 	    $this->annex = $depend;
-	    $this->process($file);
+            $this->process($file);
 
-	    ob_start();
-	    $annex = $this->annexes[$this->slug];
-	    include(__DIR__.'/templates/annex.php');
-	    $link = ob_get_clean();
+            if (!$this->slug) {
+                continue;
+            }
+
+            $link = $this->template->render('annex.html.twig', array(
+                'annex' => $this->annexes[$this->slug]
+            ));
 
 	    $this->annexLinks[$file] = $link;
 
@@ -300,18 +327,14 @@ class SlideyBuilder
 	
 	echo "* Processing ".$file."\n";
 
-	ob_start();
-	$slidey = $this;
-	include($input);
-	$contents = ob_get_clean();
+        $contents = $this->template->render($file);
 
-	if ($this->mode == 'pages') {
-	    $contents .= '<?php echo $browser; ?' . '>';
-	}
+        $contents = $this->appendTwigLayout($contents);
 
-	$output = $this->targetFilePath($this->slug . '.tmp.php');
-
-	file_put_contents($output, $contents);
+        if ($this->slug) {
+            $output = $this->targetFilePath($this->slug . '.tmp.twig');
+            file_put_contents($output, $contents);
+        }
     }
 
     /**
@@ -413,27 +436,33 @@ class SlideyBuilder
 
         ksort($this->order);
 
-        $order = $this->order;
-	$summary = $this->summary;
+        $contents = $this->appendTwigLayout($this->template->render('summary.html.twig', array(
+            'order' => $this->order,
+            'summary' => $this->summary,
+        )));
 
-	ob_start();
-	include(__DIR__.'/templates/summary.php');
-	$contents = ob_get_clean();
-
-	$contents .= '<?php echo $browser; ?'.'>';
-
-	file_put_contents($this->targetFilePath('index.tmp.php'), $contents);
+	file_put_contents($this->targetFilePath('index.tmp.twig'), $contents);
     }
 
+    public function appendTwigLayout($contents)
+    {
+        return
+                "{% extends 'layout.html.twig' %}\n".
+                "{% block contents %}".$contents."\n".
+                "{% endblock %}\n"
+                ;
+    }
 
     /**
      * Generates a browser for a page
      */
     public function generateBrowser($before, $current, $after)
     {
-	ob_start();
-	include(__DIR__.'/templates/browser.php');
-	return ob_get_clean();
+        return $this->template->render('browser.html.twig', array(
+            'before' => $before,
+            'current' => $current,
+            'after' => $after
+        ));
     }
 
     /**
@@ -450,7 +479,7 @@ class SlideyBuilder
 	    $current = $this->summary[$slug];
 	    $after = ($k < count($this->order)-1 ? $this->summary[$this->order[$k+1]] : null);
 
-	    $tmpFile = $this->targetFilePath($slug . '.tmp.php');
+	    $tmpFile = $this->targetFilePath($slug . '.tmp.twig');
 
 	    if (file_exists($tmpFile)) {	
 		$variables = array(
@@ -465,7 +494,7 @@ class SlideyBuilder
 	// Rendering annexes
 	foreach ($this->annexes as $slug => $annex)
 	{
-	    $tmpFile = $this->targetFilePath($slug . '.tmp.php');
+	    $tmpFile = $this->targetFilePath($slug . '.tmp.twig');
 
 	    if (file_exists($tmpFile)) {
 		$this->renderLayout($slug, $tmpFile);
@@ -477,14 +506,11 @@ class SlideyBuilder
     {
 	$file = $this->targetFilePath($slug . '.html');
 
-	$this->template->title = $this->manifest[$slug];
-	$this->template->contentsFile = $tmpFile;
+	$this->template->set('title', $this->manifest[$slug]);
 
-	ob_start();
-	$this->template->render($variables);
-	$contents = ob_get_clean();
+        $contents = $this->template->render($slug . '.tmp.twig', $variables);
 
-	file_put_contents($file, $contents);
+	file_put_contents($this->targetFilePath($slug . '.html'), $contents);
 	unlink($tmpFile);
     }
 
@@ -545,6 +571,6 @@ class SlideyBuilder
     {
 	$this->annexFiles[$file] = $this->slug;
 
-	return '<?php echo $annexLinks["' . $file . '"]; ?' . '>';
+        return '{{ annexLinks["'.$file.'"]|raw }}';
     }
 }

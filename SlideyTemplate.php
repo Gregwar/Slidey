@@ -5,121 +5,50 @@ namespace Gregwar\Slidey;
 class SlideyTemplate
 {
     /**
-     * Main title
-     */
-    public $mainTitle = null;
-
-    /**
-     * Page title
-     */
-    public $title;
-
-    /**
-     * Page slug
-     */
-    public $slug;
-
-    /**
-     * Additionnal headers
-     */
-    public $header;
-
-    /**
-     * Page contents
-     */
-    public $contents = null;
-
-    /**
-     * Page footer
-     */
-    public $footer = null;
-
-    /**
-     * Page browser
-     */
-    public $browser = null;
-
-    /**
      * File contents
      */
     public $contentsFile;
 
     /**
-     * Template variables
+     * Variables
      */
-    public $variables = array();
-
-    public function render($variables = array())
-    {
-	$this->variables = $variables;
-	$slidey = $this;
-	include(__DIR__.'/templates/layout.php');
-    }
+    public $globals = array();
 
     /**
-     * Gets the title
+     * Twig
      */
-    public function title()
+    protected $twig;
+
+    public function __construct()
     {
-	$title = $this->title;
+        $this->globals = array(
+            'mainTitle' => '',
+            'footer' => '',
+            'css' => array()
+        );
 
-	if ($this->mainTitle)
-	{
-	    $title = $this->mainTitle . ' - ' . $title;
-	}
-
-	return $title;
+        $this->twig = new \Twig_Environment;
     }
 
-    /**
-     * Gets the page title
-     */
-    public function pageTitle()
+    public function addExtension(\Twig_Extension $extension)
     {
-	return '<h1>' . $this->title . '</h1>';
+        $this->twig->addExtension($extension);
+    }
+    
+    public function set($name, $value)
+    {
+        $this->globals[$name] = $value;
     }
 
-    /**
-     * Returns the contents
-     */
-    public function contents()
+    public function setDirectories()
     {
-	if ($this->contents) 
-	{
-	    return $this->contents;
-	}
-	else
-	{
-	    foreach ($this->variables as $variable => $value) {
-		$$variable = $value;
-	    }
-
-	    include($this->contentsFile);
-	}
+        $loader = new \Twig_Loader_Filesystem(array_merge(func_get_args(), array(__DIR__.'/templates/')));
+        $this->twig->setLoader($loader);
     }
 
-    /**
-     * Page footer
-     */
-    public function footer()
+    public function render($page, $variables = array())
     {
-	return $this->footer;
-    }
-
-    /**
-     * Page header
-     */
-    public function header()
-    {
-	return $this->header;
-    }
-
-    /**
-     * Page browser
-     */
-    public function browser()
-    {
-	return $this->browser;
+        return $this->twig->render($page, array_merge($this->globals, $variables));
     }
 
     /**
@@ -127,6 +56,6 @@ class SlideyTemplate
      */
     public function addCss($file)
     {
-	$this->header .= '<link type="text/css" media="screen" rel="stylesheet" href="' . $file .'" />';
+        $this->globals['css'][] .= $file;
     }
 }

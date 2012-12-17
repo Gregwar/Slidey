@@ -1,0 +1,31 @@
+<div class="summary">
+<ul>
+{% for slug in order %}
+{% set entry = summary[slug] %}
+    {% if entry.number != 0 %}
+    <div class="slide middleSlide summarySlide">
+    <li>
+	<a href="{{ entry.slug }}.html">{{ entry.number }} - {{ entry.chapter }}</a>
+	<ul>
+        {% for part in entry.parts %}
+            <li>
+		<a href="{{ entry.slug }}.html#part{{ part.number }}">
+                    {{ part.number }} {{ part.title }}
+		</a>
+	    </li>
+        {% endfor %}
+
+        {% for annex in entry.annexes %}
+	    <li class="annexSummary">
+		<a href="{{ annex.slug }}.html">
+		    Annexe&nbsp;: {{ annex.title }}
+		</a>
+	    </li>
+        {% endfor %}
+	</ul>
+    </li>
+    </div>
+    {% endif %}
+{% endfor %}
+</ul>
+</div>
