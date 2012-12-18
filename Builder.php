@@ -5,7 +5,7 @@ namespace Gregwar\Slidey;
 /**
  * Builds the slidey project
  */
-class SlideyBuilder extends \Twig_Extension
+class Builder extends \Twig_Extension
 {
     /**
      * Metas informations
@@ -56,7 +56,7 @@ class SlideyBuilder extends \Twig_Extension
 
     public function __construct()
     {
-        $this->template = new SlideyTemplate($this);
+        $this->template = new Template($this);
         $this->template->addExtension($this);
     }
 
@@ -137,7 +137,7 @@ class SlideyBuilder extends \Twig_Extension
      */
     protected function loadMeta()
     {
-        $this->metas = new SlideyMetas($this->metaFilename());
+        $this->metas = new Metas($this->metaFilename());
     }
 
     /**

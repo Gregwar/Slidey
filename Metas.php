@@ -5,7 +5,7 @@ namespace Gregwar\Slidey;
 /**
  * Metas manager
  */
-class SlideyMetas
+class Metas
 {
     const INDEX_SLUG = 'index';
 
@@ -25,7 +25,7 @@ class SlideyMetas
 
             if ($data) {
                 foreach ($data as $file => $entry) {
-                    $this->metas[$file] = new SlideyMeta($file, $entry);
+                    $this->metas[$file] = new Meta($file, $entry);
                 }
             }
         }
@@ -45,7 +45,7 @@ class SlideyMetas
     public function metaForFile($file)
     {
         if (!isset($this->metas[$file])) {
-            $this->metas[$file] = new SlideyMeta($file);
+            $this->metas[$file] = new Meta($file);
         }
 
         return $this->metas[$file];
@@ -56,7 +56,7 @@ class SlideyMetas
      */
     public function addIndex()
     {
-        $this->metas[self::INDEX_SLUG] = new SlideyMeta(self::INDEX_SLUG, array(
+        $this->metas[self::INDEX_SLUG] = new Meta(self::INDEX_SLUG, array(
             'number' => 0,
             'chapter' => 'Table des matières',
             'slug' => self::INDEX_SLUG,

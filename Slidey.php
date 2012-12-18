@@ -5,7 +5,7 @@ namespace Gregwar\Slidey;
 /**
  * Slidey standard package
  */
-class Slidey extends SlideyBuilder
+class Slidey extends Builder
 {
     /**
      * Target cache directory

@@ -5,7 +5,7 @@ namespace Gregwar\Slidey;
 /**
  * Meta-data for a file
  */
-class SlideyMeta
+class Meta
 {
     protected $file;
     protected $data;
