@@ -51,7 +51,7 @@ class Slidey extends Builder
 	$geshi->enable_classes();
 	$geshi->enable_keyword_links(false);
 
-	return '<div class="highlight">' . $geshi->parse_code() . '</div>';
+	return '<div class="highlight">{% raw %}' . $geshi->parse_code() . '{% endraw %}</div>';
     }
 
     /**
