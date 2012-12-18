@@ -37,6 +37,8 @@ class Slidey extends SlideyBuilder
      */
     public function highlight($file, $lang = 'php')
     {
+        $this->meta->add('depends', $this->pagesFilePath($file));
+
         return $this->highlightString(rtrim(file_get_contents($this->pagesFilePath($file))), $lang);
     }
 
@@ -60,6 +62,8 @@ class Slidey extends SlideyBuilder
         $image = new \Gregwar\Image\Image($file);
         $image->setCacheDir($this->cacheDirectory . '/images/');
         $image->setActualCacheDir($this->targetFilePath($this->cacheDirectory . '/images/'));
+
+        $this->meta->add('depends', $this->pagesFilePath($file));
 
         return $image;
     }

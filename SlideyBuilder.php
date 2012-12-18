@@ -8,14 +8,9 @@ namespace Gregwar\Slidey;
 class SlideyBuilder extends \Twig_Extension
 {
     /**
-     * The cache that is being geneated
+     * Metas informations
      */
-    protected $summary = array();
-    protected $manifest = array();
-    protected $order = array();
-    protected $slugs = array();
-    protected $annexes = array();
-    protected $annexFiles = array();
+    protected $metas;
 
     /**
      * Functions available for Twig
@@ -37,7 +32,7 @@ class SlideyBuilder extends \Twig_Extension
     /**
      * The current meta
      */
-    protected $meta = array();
+    protected $meta;
 
     /**
      * Files that need to be copied
@@ -50,39 +45,9 @@ class SlideyBuilder extends \Twig_Extension
     protected $mkDirectories = array();
 
     /**
-     * Current annex
-     */
-    protected $annex;
-
-    /**
      * Pretty links to annexes
      */
     protected $annexLinks = array();
-
-    /**
-     * Curent chapter
-     */
-    protected $currentChapter = 0;
-
-    /**
-     * Current part
-     */
-    protected $currentPart = 0;
-
-    /**
-     * Current slug
-     */
-    protected $slug;
-
-    /**
-     * Current mode (pages or annex)
-     */
-    protected $mode;
-
-    /**
-     * The current file
-     */
-    protected $file;
 
     /**
      * Template
@@ -172,30 +137,7 @@ class SlideyBuilder extends \Twig_Extension
      */
     protected function loadMeta()
     {
-	$metaFile = $this->metaFilename();
-
-	if (file_exists($metaFile)) {
-	    $this->meta = @include($metaFile);
-
-	    $this->summary = $this->meta['summary'];
-	    $this->order = $this->meta['order'];
-	    $this->manifest = $this->meta['manifest'];
-	    $this->slugs = $this->meta['slugs'];
-	    $this->annexes = $this->meta['annexes'];
-	    $this->annexFiles = $this->meta['annexFiles'];
-	}
-    }
-
-    /**
-     * Try to get the slug from metadata
-     */
-    protected function metaSlug($file)
-    {
-	if (isset($this->slugs[$file])) {
-	    return $this->slugs[$file];
-	}
-
-	return null;
+        $this->metas = new SlideyMetas($this->metaFilename());
     }
 
     /**
@@ -214,19 +156,8 @@ class SlideyBuilder extends \Twig_Extension
         
         $this->template->setDirectories(getcwd() . '/' . $this->pagesDirectory, getcwd() . '/' . $this->targetDirectory);
 
-	// Adding index
-	$this->manifest['index'] = 'Table des matières';
-
-	$this->summary['index'] = array(
-	    'number' => 0,
-	    'chapter' => 'Table des matières',
-	    'slug' => 'index',
-	    'parts' => array(),
-	);
-
-	if (!in_array('index', $this->order)) {
-	    $this->order[] = 'index';
-	}
+        // Adding index
+        $this->metas->addIndex();
 
 	// Processing files
 	$this->generatePages();
@@ -252,10 +183,6 @@ class SlideyBuilder extends \Twig_Extension
      */
     public function generatePages()
     {
-	$this->currentChapter = 0;
-	$this->currentPart = 0;
-	$this->mode = 'pages';
-
 	$files = opendir($this->pagesDirectory);
 
 	if (!$files)
@@ -268,7 +195,7 @@ class SlideyBuilder extends \Twig_Extension
 	    {
 		if (substr($file, -5) == '.twig')
 		{
-		    $this->process($file);
+		    $this->process($file, 'page');
 		}
 	    }
 	}
@@ -281,58 +208,74 @@ class SlideyBuilder extends \Twig_Extension
      */
     public function generateAnnexes()
     {
-	$this->currentChapter = 0;
-	$this->currentPart = 0;
-        $this->mode = 'annexes';
+        $annexes = array();
 
-	foreach ($this->annexFiles as $file => $depend) {
-	    $this->annex = $depend;
-            $this->process($file);
+        foreach ($this->metas->getAll() as $file => $meta) {
+            foreach ($meta->get('annexes', array()) as $annex) {
+                $annexes[$annex] = $file;
+            }
+        }
 
-            if (!$this->slug) {
+        foreach ($annexes as $file => $depend) {
+            $this->process($file, 'annex');
+
+            if (!$this->meta->getSlug()) {
                 continue;
             }
 
-            $link = $this->template->render('annex.html.twig', array(
-                'annex' => $this->annexes[$this->slug]
+            $this->annexLinks[$file] = $this->template->render('annex.html.twig', array(
+                'annex' => $this->meta->getAll()
             ));
-
-	    $this->annexLinks[$file] = $link;
-
-	    $this->summary[$depend]['annexes'][$this->slug] = array(
-		'slug' => $this->slug,
-		'title' => $this->annexes[$this->slug]['chapter'],
-	    );
 	}
     }
 
     /**
      * Processing a file
      */
-    public function process($file)
+    public function process($file, $type)
     {
-	$this->file = $file;
+        $this->meta = $this->metas->metaForFile($file);
 
-	$input = $this->pagesFilePath($this->file);
+	$input = $this->pagesFilePath($this->meta->getFile());
 
-	if ($this->slug = $this->metaSlug($file)) {
-	    $output = $this->targetFilePath($this->slug . '.html');
+        if ($this->meta->getSlug()) {
+            $time = null;
+            $output = $this->targetFilePath($this->meta->getSlug() . '.html');
+            $pass = true;
 
-	    if (file_exists($output) && filectime($output) >= filectime($input))
-	    {
-		echo "! Passing ".$file."\n";
-		return;
-	    }
+            if (file_exists($output)) {
+                $time = filectime($output);
+            }
+
+	    if ($time === null || $time < filectime($input))
+            {
+                $pass = false;
+            }
+
+            if ($pass) {
+                foreach ($this->meta->get('depends', array()) as $depend) {
+                    if (file_exists($depend) && $time < filectime($depend)) {
+                        $pass = false;
+                    }
+                }
+            }
+
+            if ($pass) {
+		echo '! Passing ' . $file . "\n";
+                return;
+            }
 	}
 	
-	echo "* Processing ".$file."\n";
+        echo '* Processing ' . $file . "\n";
+
+        $this->meta->clear();
+        $this->meta->set('type', $type);
 
         $contents = $this->template->render($file);
-
         $contents = $this->appendTwigLayout($contents);
 
-        if ($this->slug) {
-            $output = $this->targetFilePath($this->slug . '.tmp.twig');
+        if ($this->meta->getSlug()) {
+            $output = $this->targetFilePath($this->meta->getSlug() . '.tmp.twig');
             file_put_contents($output, $contents);
         }
     }
@@ -340,48 +283,20 @@ class SlideyBuilder extends \Twig_Extension
     /**
      * Adding a chapter
      */
-    public function chapter($chapter, $slug, $order = null)
+    public function chapter($chapter, $slug, $order = 0)
     {
-        if ($order != null) {
-            $this->currentChapter = $order;
-        } else {
-            $this->currentChapter++;
+        $this->meta->set('number', $order);
+        $this->meta->set('slug', $slug);
+        $this->meta->set('parts', array());
+        $this->meta->set('annexes', array());
+
+	if ($this->meta->get('type') == 'page') {
+	   $title = $order . ' - ' . $chapter;
+	} else {
+	   $title = $chapter;
         }
 
-	$this->currentPart = 0;
-
-	if ($this->mode == 'pages') {
-	   $this->manifest[$slug] = $this->currentChapter . ' - ' . $chapter;
-	} else {
-	   $this->manifest[$slug] = $chapter;
-	}
-
-	$this->slug = $slug;
-
-	$data = array(
-	    'number' => $this->currentChapter,
-	    'chapter' => $chapter,
-	    'slug' => $slug,
-	    'parts' => array(),
-	    'annexes' => array(),
-	);
-
-	if ($this->mode == 'pages') {
-	    $this->summary[$this->slug] = $data;
-	}
-
-	$this->slugs[$this->file] = $slug;
-
-	if ($this->mode == 'annexes') {
-	    $data['depend'] = $this->annex;
-	    $this->annexes[$this->slug] = $data;
-	}
-
-	if ($this->mode == 'pages') {
-	    if (!in_array($slug, $this->order)) {
-		$this->order[$this->currentChapter] = $slug;
-	    }
-	}
+        $this->meta->set('chapter', $title);
     }
 
     /**
@@ -389,22 +304,14 @@ class SlideyBuilder extends \Twig_Extension
      */
     public function part($title)
     {
-	$this->currentPart++;
-	
-	$data = array(
-	    'title' => $title,
-	    'number' => $this->currentPart,
-	);
+        $parts =$this->meta->get('parts');
+        $number = count($parts)+1;
 
-	if ($this->mode == 'pages') {
-	    $this->summary[$this->slug]['parts'][] = $data;
-	} 
+        $parts[$number] = $title;
 
-	if ($this->mode == 'annex') {
-	    $this->annexes[$this->slug]['parts'][] = $data;
-	}
+        $this->meta->set('parts', $parts);
 
-	return '<h2 id="part' . $this->currentPart . '">' . $this->currentPart . ') ' . $title . '</h2>';
+	return '<h2 id="part' . $number . '">' . $number . ') ' . $title . '</h2>';
     }
 
     /**
@@ -412,19 +319,9 @@ class SlideyBuilder extends \Twig_Extension
      */
     public function saveMeta()
     {
-	$cacheFile = $this->metaFilename();
-	echo '* Saving manifest to '.$cacheFile."\n";
+	echo '* Saving manifest to '.$this->metas->cacheFile."\n";
 
-	$meta = array(
-	    'manifest' => $this->manifest,
-	    'summary' => $this->summary,
-	    'order' => $this->order,
-	    'slugs' => $this->slugs,
-	    'annexes' => $this->annexes,
-	    'annexFiles' => $this->annexFiles,
-	);
-
-	file_put_contents($cacheFile, '<?php return '.var_export($meta, true).';');
+        $this->metas->save();
     }
 
     /**
@@ -434,11 +331,10 @@ class SlideyBuilder extends \Twig_Extension
     {
         echo "* Generating summary\n";
 
-        ksort($this->order);
+        $summary = $this->metas->generateSummary();
 
         $contents = $this->appendTwigLayout($this->template->render('summary.html.twig', array(
-            'order' => $this->order,
-            'summary' => $this->summary,
+            'summary' => $summary,
         )));
 
 	file_put_contents($this->targetFilePath('index.tmp.twig'), $contents);
@@ -470,47 +366,40 @@ class SlideyBuilder extends \Twig_Extension
      */
     public function generateLayouts()
     {
-	// Rendering pages
-	$before = $after = $current = null;
+        $order = array();
+        foreach ($this->metas->getAll() as $file => $meta) {
+            if ($meta->get('type') != 'annex') {
+                $order[$meta->get('order')] = $meta->get('number');
+            }
+        }
 
-	foreach ($this->order as $k => $slug)
-	{
-	    $before = ($k > 0 ? $this->summary[$this->order[$k-1]] : null);
-	    $current = $this->summary[$slug];
-	    $after = ($k < count($this->order)-1 ? $this->summary[$this->order[$k+1]] : null);
+        foreach ($this->metas->getAll() as $file => $meta) {
+            $current = $meta->get('order');
+            $before = isset($order[$current-1]) ? $order[$current-1] : null;
+            $after = isset($order[$current+1]) ? $order[$current+1] : null;
 
-	    $tmpFile = $this->targetFilePath($slug . '.tmp.twig');
+            $tmpFile = $this->targetFilePath($meta->getSlug() . '.tmp.twig');
 
-	    if (file_exists($tmpFile)) {	
+            if (file_exists($tmpFile)) {
 		$variables = array(
 		    'browser' => $this->generateBrowser($before, $current, $after),
 		    'annexLinks' => $this->annexLinks,
 		);
 		
-		$this->renderLayout($slug, $tmpFile, $variables);
-	    }
-	}
-
-	// Rendering annexes
-	foreach ($this->annexes as $slug => $annex)
-	{
-	    $tmpFile = $this->targetFilePath($slug . '.tmp.twig');
-
-	    if (file_exists($tmpFile)) {
-		$this->renderLayout($slug, $tmpFile);
-	    }
-	}
+		$this->renderLayout($meta, $tmpFile, $variables);
+            }
+        }
     }
 
-    protected function renderLayout($slug, $tmpFile, $variables = array())
+    protected function renderLayout($meta, $tmpFile, $variables = array())
     {
-	$file = $this->targetFilePath($slug . '.html');
+	$file = $this->targetFilePath($meta->getSlug() . '.html');
 
-	$this->template->set('title', $this->manifest[$slug]);
+        $this->template->set('title', $meta->get('chapter'));
 
-        $contents = $this->template->render($slug . '.tmp.twig', $variables);
+        $contents = $this->template->render($meta->getSlug() . '.tmp.twig', $variables);
 
-	file_put_contents($this->targetFilePath($slug . '.html'), $contents);
+	file_put_contents($this->targetFilePath($meta->getSlug() . '.html'), $contents);
 	unlink($tmpFile);
     }
 
@@ -569,7 +458,7 @@ class SlideyBuilder extends \Twig_Extension
      */
     public function annex($file)
     {
-	$this->annexFiles[$file] = $this->slug;
+        $this->meta->add('annexes', $file);
 
         return '{{ annexLinks["'.$file.'"]|raw }}';
     }

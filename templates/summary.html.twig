@@ -1,11 +1,10 @@
 <div class="summary">
 <ul>
-{% for slug in order %}
-{% set entry = summary[slug] %}
+{% for entry in summary %}
     {% if entry.number != 0 %}
     <div class="slide middleSlide summarySlide">
     <li>
-	<a href="{{ entry.slug }}.html">{{ entry.number }} - {{ entry.chapter }}</a>
+	<a href="{{ entry.slug }}.html">{{ entry.chapter }}</a>
 	<ul>
         {% for part in entry.parts %}
             <li>
@@ -18,7 +17,7 @@
         {% for annex in entry.annexes %}
 	    <li class="annexSummary">
 		<a href="{{ annex.slug }}.html">
-		    Annexe&nbsp;: {{ annex.title }}
+		    Annexe&nbsp;: {{ annex.chapter }}
 		</a>
 	    </li>
         {% endfor %}
