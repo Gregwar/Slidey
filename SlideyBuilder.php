@@ -219,7 +219,7 @@ class SlideyBuilder extends \Twig_Extension
         foreach ($annexes as $file => $depend) {
             $this->process($file, 'annex');
 
-            if (!$this->meta->getSlug()) {
+            if (!$this->meta->get('slug')) {
                 continue;
             }
 
@@ -238,9 +238,9 @@ class SlideyBuilder extends \Twig_Extension
 
 	$input = $this->pagesFilePath($this->meta->getFile());
 
-        if ($this->meta->getSlug()) {
+        if ($this->meta->get('slug')) {
             $time = null;
-            $output = $this->targetFilePath($this->meta->getSlug() . '.html');
+            $output = $this->targetFilePath($this->meta->get('slug') . '.html');
             $pass = true;
 
             if (file_exists($output)) {
@@ -274,8 +274,8 @@ class SlideyBuilder extends \Twig_Extension
         $contents = $this->template->render($file);
         $contents = $this->appendTwigLayout($contents);
 
-        if ($this->meta->getSlug()) {
-            $output = $this->targetFilePath($this->meta->getSlug() . '.tmp.twig');
+        if ($this->meta->get('slug')) {
+            $output = $this->targetFilePath($this->meta->get('slug') . '.tmp.twig');
             file_put_contents($output, $contents);
         }
     }
@@ -378,7 +378,7 @@ class SlideyBuilder extends \Twig_Extension
             $before = isset($order[$current-1]) ? $order[$current-1] : null;
             $after = isset($order[$current+1]) ? $order[$current+1] : null;
 
-            $tmpFile = $this->targetFilePath($meta->getSlug() . '.tmp.twig');
+            $tmpFile = $this->targetFilePath($meta->get('slug') . '.tmp.twig');
 
             if (file_exists($tmpFile)) {
 		$variables = array(
@@ -393,13 +393,13 @@ class SlideyBuilder extends \Twig_Extension
 
     protected function renderLayout($meta, $tmpFile, $variables = array())
     {
-	$file = $this->targetFilePath($meta->getSlug() . '.html');
+	$file = $this->targetFilePath($meta->get('slug') . '.html');
 
         $this->template->set('title', $meta->get('chapter'));
 
-        $contents = $this->template->render($meta->getSlug() . '.tmp.twig', $variables);
+        $contents = $this->template->render($meta->get('slug') . '.tmp.twig', $variables);
 
-	file_put_contents($this->targetFilePath($meta->getSlug() . '.html'), $contents);
+	file_put_contents($this->targetFilePath($meta->get('slug') . '.html'), $contents);
 	unlink($tmpFile);
     }
 

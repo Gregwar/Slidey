@@ -2,6 +2,9 @@
 
 namespace Gregwar\Slidey;
 
+/**
+ * Metas manager
+ */
 class SlideyMetas
 {
     const INDEX_SLUG = 'index';
@@ -10,6 +13,9 @@ class SlideyMetas
 
     protected $metas = array();
 
+    /**
+     * Creates a meta manager for the given filename
+     */
     public function __construct($filename)
     {
         $this->cacheFile = $filename;
@@ -25,11 +31,17 @@ class SlideyMetas
         }
     }
 
+    /**
+     * Get all metas
+     */
     public function getAll()
     {
         return $this->metas;
     }
 
+    /**
+     * Get the meta for the given file
+     */
     public function metaForFile($file)
     {
         if (!isset($this->metas[$file])) {
@@ -39,13 +51,9 @@ class SlideyMetas
         return $this->metas[$file];
     }
 
-    public function slugForFile($file)
-    {
-        if (isset($this->metas[$file])) {
-            return $this->metas[$file]->getSlug();
-        }
-    }
-
+    /**
+     * Adds the index
+     */
     public function addIndex()
     {
         $this->metas[self::INDEX_SLUG] = new SlideyMeta(self::INDEX_SLUG, array(
@@ -57,6 +65,9 @@ class SlideyMetas
         ));
     }
 
+    /**
+     * Save the meta to the cache file
+     */
     public function save()
     {
         $datas = array();
@@ -68,6 +79,9 @@ class SlideyMetas
         file_put_contents($this->cacheFile, '<?php return '.var_export($datas, true).';');
     }
 
+    /**
+     * Generates summary array
+     */
     public function generateSummary()
     {
         $summary = array();
