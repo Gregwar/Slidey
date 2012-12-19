@@ -179,7 +179,15 @@ class Builder extends \Twig_Extension
      */
     public function explore()
     {
-        $this->exploreQueue = array('index.html.twig');
+        $this->exploreQueue = array();
+
+        foreach ($this->metas->getAll() as $file => $meta) {
+            $this->exploreQueue[] = $file;
+        }
+
+        if (!$this->exploreQueue) {
+            $this->exploreQueue[] = 'index.html.twig';
+        }
 
         while ($this->exploreQueue) {
             $page = array_shift($this->exploreQueue);
