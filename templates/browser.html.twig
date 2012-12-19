@@ -5,6 +5,6 @@
 {% endif %}
 {% if after %}
     <a class="next" href="{{ after.slug }}.html">
-        {{ after.number }} - {{ after.chapter }} &raquo;
+        {% if after.number %}{{ after.number }} - {% endif %} {{ after.chapter }} &raquo;
     </a>
 {% endif %}

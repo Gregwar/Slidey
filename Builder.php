@@ -243,9 +243,8 @@ class Builder extends \Twig_Extension
     /**
      * Adding a chapter
      */
-    public function chapter($chapter, $slug, $order = 0)
+    public function chapter($chapter, $slug)
     {
-        $this->meta->set('number', $order);
         $this->meta->set('slug', $slug);
         $this->meta->set('parts', array());
         $this->meta->set('annexes', array());
@@ -348,10 +347,10 @@ class Builder extends \Twig_Extension
                 $toc = $meta->get('toc');
 
                 foreach ($toc as $k => $page) {
-                    $meta = $this->metas->metaForFile($page);
+                    $meta = $this->metas->metaForFile($page)->getAll();
 
-                    $after = isset($toc[$k+1]) ? $this->metas->metaForFile($toc[$k+1]) : null;
-                    $beforeAfter[$file] = array($before, $after);
+                    $after = isset($toc[$k+1]) ? $this->metas->metaForFile($toc[$k+1])->getAll() : null;
+                    $beforeAfter[$page] = array($before, $after);
                     $before = $meta;
                 }
             }

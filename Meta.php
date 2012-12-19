@@ -62,7 +62,7 @@ class Meta
      */
     public function has($key)
     {
-        return isset($this->metas[$key]);
+        return isset($this->data[$key]);
     }
 
     /**

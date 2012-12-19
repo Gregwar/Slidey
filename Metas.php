@@ -57,7 +57,6 @@ class Metas
     public function addIndex()
     {
         $this->metas[self::INDEX_SLUG] = new Meta(self::INDEX_SLUG, array(
-            'number' => 0,
             'chapter' => 'Table des matières',
             'slug' => self::INDEX_SLUG,
             'parts' => array(),
