@@ -199,9 +199,7 @@ class Builder extends \Twig_Extension
             $this->addToExploreQueue($file);
         }
 
-        if (!$this->exploreQueue) {
-            $this->addToExploreQueue('index.html.twig');
-        }
+        $this->addToExploreQueue('index.html.twig');
 
         while ($this->exploreQueue) {
             $page = array_shift($this->exploreQueue);
