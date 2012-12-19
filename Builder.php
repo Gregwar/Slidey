@@ -16,7 +16,7 @@ class Builder extends \Twig_Extension
      * Functions available for Twig
      */
     protected $twigFunctions = array(
-        'chapter', 'part', 'annex'
+        'chapter', 'part', 'annex', 'annexLink'
     );
 
     /**
@@ -222,10 +222,6 @@ class Builder extends \Twig_Extension
             if (!$this->meta->get('slug')) {
                 continue;
             }
-
-            $this->annexLinks[$file] = $this->template->render('annex.html.twig', array(
-                'annex' => $this->meta->getAll()
-            ));
 	}
     }
 
@@ -460,6 +456,16 @@ class Builder extends \Twig_Extension
     {
         $this->meta->add('annexes', $file);
 
-        return '{{ annexLinks["'.$file.'"]|raw }}';
+        return '{{ annexLink("'.$file.'") }}';
+    }
+
+    /**
+     * Returns a link to an annex
+     */
+    public function annexLink($file)
+    {
+        return $this->template->render('annex.html.twig', array(
+            'annex' => $this->metas->metaForFile($file)
+        ));
     }
 }
