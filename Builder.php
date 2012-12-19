@@ -337,10 +337,11 @@ class Builder extends \Twig_Extension
     public function appendTwigLayout($contents)
     {
         return
-                "{% extends 'layout.html.twig' %}\n".
-                "{% block contents %}".$contents."\n".
-                "{% endblock %}\n"
-                ;
+            "{% extends 'layout.html.twig' %}\n".
+            "{% block contents %}\n".
+            $contents . "\n".
+            "{% endblock %}\n"
+            ;
     }
 
     /**
