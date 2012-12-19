@@ -161,9 +161,6 @@ class Builder extends \Twig_Extension
         
         $this->template->setDirectories(getcwd() . '/' . $this->pagesDirectory, getcwd() . '/' . $this->targetDirectory);
 
-        // Adding index
-        $this->metas->addIndex();
-
 	// Processing files
 	$this->explore();
 
@@ -286,9 +283,9 @@ class Builder extends \Twig_Extension
     /**
      * Generates the summary
      */
-    public function summary($file)
+    public function summary($file, array $pages)
     {
-        $summary = $this->metas->generateSummary($file);
+        $summary = $this->metas->generateSummary($file, $pages);
 
         return $this->template->render('summary.html.twig', array(
             'summary' => $summary,
@@ -301,13 +298,17 @@ class Builder extends \Twig_Extension
     public function toc()
     {
         $pages = func_get_args();
-        $this->meta->set('toc', $pages);
+        $toc = $this->meta->get('toc', array());
 
         foreach ($pages as &$page) {
             $this->exploreQueue[] = $page;
+            $toc[] = $page;
+            $page = "'$page'";
         }
+        
+        $this->meta->set('toc', $toc);
 
-        return '{{ summary("' . $this->meta->getFile() . '") }}';
+        return '{{ summary("' . $this->meta->getFile() . '", [' . implode(', ', $pages) . ']) }}';
     }
 
     /**

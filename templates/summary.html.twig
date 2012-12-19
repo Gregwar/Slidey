@@ -3,12 +3,15 @@
 {% for entry in summary %}
 <div class="slide middleSlide summarySlide">
 <li>
-    <a href="{{ entry.slug }}.html">{{ entry.chapter }}</a>
+    <a href="{{ entry.slug }}.html">
+        {% if entry.number %}{{ entry.number }} - {% endif %}
+        {{ entry.chapter }}
+    </a>
     <ul>
     {% for part in entry.parts %}
         <li>
             <a href="{{ entry.slug }}.html#part{{ part.number }}">
-                {{ part.number }} {{ part.title }}
+                {{ part.number }} - {{ part.title }}
             </a>
         </li>
     {% endfor %}

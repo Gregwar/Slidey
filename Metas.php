@@ -7,8 +7,6 @@ namespace Gregwar\Slidey;
  */
 class Metas
 {
-    const INDEX_SLUG = 'index';
-
     public $cacheFile;
 
     protected $metas = array();
@@ -52,19 +50,6 @@ class Metas
     }
 
     /**
-     * Adds the index
-     */
-    public function addIndex()
-    {
-        $this->metas[self::INDEX_SLUG] = new Meta(self::INDEX_SLUG, array(
-            'chapter' => 'Table des matières',
-            'slug' => self::INDEX_SLUG,
-            'parts' => array(),
-            'type' => 'index',
-        ));
-    }
-
-    /**
      * Save the meta to the cache file
      */
     public function save()
@@ -81,14 +66,19 @@ class Metas
     /**
      * Generates summary array
      */
-    public function generateSummary($file)
+    public function generateSummary($file, array $pages)
     {
         $summary = array();
         $meta = $this->metaForFile($file);
         $toc = $meta->get('toc', array());
 
-        foreach ($toc as $tocFile) {
+        foreach ($toc as $number => $tocFile) {
+            if (!in_array($tocFile, $pages)) {
+                continue;
+            }
+
             $data = $this->metaForFile($tocFile)->getAll();
+            $data['number'] = $number+1;
 
             foreach ($data['parts'] as $k => &$part) {
                 $part = array(
