@@ -16,7 +16,7 @@ class Builder extends \Twig_Extension
      * Functions available for Twig
      */
     protected $twigFunctions = array(
-        'chapter', 'part', 'annex', 'annexLink'
+        'chapter', 'part', 'annex', 'annexLink', 'toc', 'summary'
     );
 
     /**
@@ -53,6 +53,11 @@ class Builder extends \Twig_Extension
      * Template
      */
     public $template;
+
+    /**
+     * Explore queue
+     */
+    public $exploreQueue;
 
     public function __construct()
     {
@@ -160,13 +165,7 @@ class Builder extends \Twig_Extension
         $this->metas->addIndex();
 
 	// Processing files
-	$this->generatePages();
-
-	// Generating annexes
-	$this->generateAnnexes();
-
-	// Generating summary
-	$this->generateSummary();
+	$this->explore();
 
 	// Generating layouts
 	$this->generateLayouts();
@@ -181,54 +180,20 @@ class Builder extends \Twig_Extension
     /**
      * Generating pages
      */
-    public function generatePages()
+    public function explore()
     {
-	$files = opendir($this->pagesDirectory);
+        $this->exploreQueue = array('index.html.twig');
 
-	if (!$files)
-	{
-	    die("! Unable to open " . $this->pagesDirectory . "\n");
-	}
-	else
-	{
-	    while ($file = readdir($files))
-	    {
-		if (substr($file, -5) == '.twig')
-		{
-		    $this->process($file, 'page');
-		}
-	    }
-	}
-
-	closedir($files);
-    }
-
-    /**
-     * Processing annexes
-     */
-    public function generateAnnexes()
-    {
-        $annexes = array();
-
-        foreach ($this->metas->getAll() as $file => $meta) {
-            foreach ($meta->get('annexes', array()) as $annex) {
-                $annexes[$annex] = $file;
-            }
+        while ($this->exploreQueue) {
+            $page = array_shift($this->exploreQueue);
+            $this->process($page);
         }
-
-        foreach ($annexes as $file => $depend) {
-            $this->process($file, 'annex');
-
-            if (!$this->meta->get('slug')) {
-                continue;
-            }
-	}
     }
 
     /**
      * Processing a file
      */
-    public function process($file, $type)
+    public function process($file)
     {
         $this->meta = $this->metas->metaForFile($file);
 
@@ -265,7 +230,6 @@ class Builder extends \Twig_Extension
         echo '* Processing ' . $file . "\n";
 
         $this->meta->clear();
-        $this->meta->set('type', $type);
 
         $contents = $this->template->render($file);
         $contents = $this->appendTwigLayout($contents);
@@ -323,19 +287,33 @@ class Builder extends \Twig_Extension
     /**
      * Generates the summary
      */
-    public function generateSummary()
+    public function summary($file)
     {
-        echo "* Generating summary\n";
+        $summary = $this->metas->generateSummary($file);
 
-        $summary = $this->metas->generateSummary();
-
-        $contents = $this->appendTwigLayout($this->template->render('summary.html.twig', array(
+        return $this->template->render('summary.html.twig', array(
             'summary' => $summary,
-        )));
-
-	file_put_contents($this->targetFilePath('index.tmp.twig'), $contents);
+        ));
     }
 
+    /**
+     * Handles table of contents in a page
+     */
+    public function toc()
+    {
+        $pages = func_get_args();
+        $this->meta->set('toc', $pages);
+
+        foreach ($pages as &$page) {
+            $this->exploreQueue[] = $page;
+        }
+
+        return '{{ summary("' . $this->meta->getFile() . '") }}';
+    }
+
+    /**
+     * Adds the Twig layout to contnts
+     */
     public function appendTwigLayout($contents)
     {
         return
@@ -348,11 +326,10 @@ class Builder extends \Twig_Extension
     /**
      * Generates a browser for a page
      */
-    public function generateBrowser($before, $current, $after)
+    public function generateBrowser($before, $after)
     {
         return $this->template->render('browser.html.twig', array(
             'before' => $before,
-            'current' => $current,
             'after' => $after
         ));
     }
@@ -362,23 +339,37 @@ class Builder extends \Twig_Extension
      */
     public function generateLayouts()
     {
-        $order = array();
+        $tocs = array();
+        $beforeAfter = array();
+        
         foreach ($this->metas->getAll() as $file => $meta) {
-            if ($meta->get('type') != 'annex') {
-                $order[$meta->get('order')] = $meta->get('number');
+            if ($meta->has('toc')) {
+                $before = $after = null;
+                $toc = $meta->get('toc');
+
+                foreach ($toc as $k => $page) {
+                    $meta = $this->metas->metaForFile($page);
+
+                    $after = isset($toc[$k+1]) ? $this->metas->metaForFile($toc[$k+1]) : null;
+                    $beforeAfter[$file] = array($before, $after);
+                    $before = $meta;
+                }
             }
         }
 
         foreach ($this->metas->getAll() as $file => $meta) {
-            $current = $meta->get('order');
-            $before = isset($order[$current-1]) ? $order[$current-1] : null;
-            $after = isset($order[$current+1]) ? $order[$current+1] : null;
+            $before = $after = null;
+
+            if (isset($beforeAfter[$file])) {
+                list($before, $after) = $beforeAfter[$file];
+            }
 
             $tmpFile = $this->targetFilePath($meta->get('slug') . '.tmp.twig');
 
             if (file_exists($tmpFile)) {
+
 		$variables = array(
-		    'browser' => $this->generateBrowser($before, $current, $after),
+		    'browser' => $this->generateBrowser($before, $after),
 		    'annexLinks' => $this->annexLinks,
 		);
 		
@@ -456,6 +447,8 @@ class Builder extends \Twig_Extension
     {
         $this->meta->add('annexes', $file);
 
+        $this->exploreQueue[] = $file;
+
         return '{{ annexLink("'.$file.'") }}';
     }
 
@@ -465,7 +458,7 @@ class Builder extends \Twig_Extension
     public function annexLink($file)
     {
         return $this->template->render('annex.html.twig', array(
-            'annex' => $this->metas->metaForFile($file)
+            'annex' => $this->metas->metaForFile($file)->getAll()
         ));
     }
 }

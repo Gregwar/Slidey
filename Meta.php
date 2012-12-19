@@ -58,6 +58,14 @@ class Meta
     }
 
     /**
+     * Does the meta has the key?
+     */
+    public function has($key)
+    {
+        return isset($this->metas[$key]);
+    }
+
+    /**
      * Get all the entries
      */
     public function getAll()

@@ -82,32 +82,30 @@ class Metas
     /**
      * Generates summary array
      */
-    public function generateSummary()
+    public function generateSummary($file)
     {
         $summary = array();
+        $meta = $this->metaForFile($file);
+        $toc = $meta->get('toc', array());
 
-        foreach ($this->metas as $file => $meta) {
-            if ($meta->get('type') != 'annex') {
-                $data = $meta->getAll();
+        foreach ($toc as $tocFile) {
+            $data = $this->metaForFile($tocFile)->getAll();
 
-                foreach ($data['parts'] as $k => &$part) {
-                    $part = array(
-                        'title' => $part,
-                        'number' => $k,
-                    );
-                }
-
-                if (isset($data['annexes'])) {
-                    foreach ($data['annexes'] as &$annex) {
-                        $annex = $this->metaForFile($annex)->getAll();
-                    }
-                }
-
-                $summary[$meta->get('number')] = $data;
+            foreach ($data['parts'] as $k => &$part) {
+                $part = array(
+                    'title' => $part,
+                    'number' => $k,
+                );
             }
-        }
 
-        ksort($summary);
+            if (isset($data['annexes'])) {
+                foreach ($data['annexes'] as &$annex) {
+                    $annex = $this->metaForFile($annex)->getAll();
+                }
+            }
+
+            $summary[] = $data;
+        }
 
         return $summary;
     }
