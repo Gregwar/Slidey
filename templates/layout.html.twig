@@ -7,15 +7,33 @@
         <link type="text/css" media="print" rel="stylesheet" href="slidey/css/print.css" />
         <link rel="shortcut icon" href="favicon.ico" />
 	<script type="text/javascript" src="slidey/js/jquery.js"></script>
+        <script type="text/javascript" src="slidey/js/slidey.menu.js"></script>
+        {% if interactive %}
+        <script type="text/javascript" src="slidey/js/slidey.interactive.js"></script>
+        {% endif %}
+        <script type="text/javascript" src="slidey/js/slidey.images.js"></script>
+        <script type="text/javascript" src="slidey/js/slidey.spoilers.js"></script>
         <script type="text/javascript" src="slidey/js/slidey.js"></script>
         {% for sheet in css %}
             <link type="text/css" media="screen" rel="stylesheet" href="{{ sheet }}" />
         {% endfor %}
     </head>
     <body>
+        {% if interactive %}
+        <div class="loginWindow interactiveWindow">
+            <form>
+                Mot de passe&nbsp;:<br />
+                <input type="password" name="password" />
+            </form>
+        </div>
+        {% endif %}
+
 	<div class="slideMode">
 	    <a href="javascript:void(0)" class="slideModeNormal slideModeEnabled"></a>
 	    <a href="javascript:void(0)" class="slideModeSlide"></a>
+            {% if interactive %}
+	    <a href="javascript:void(0)" class="followMode"></a>
+            {% endif %}
 	    <a href="index.html" class="goHome"></a>
 	</div>
 

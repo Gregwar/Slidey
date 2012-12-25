@@ -11,6 +11,11 @@ function Slidey()
     this.slideMode = false;
 
     /**
+     * Are the controls enabled ?
+     */
+    this.controlsEnabled = true;
+
+    /**
      * Slide count and current
      */
     this.slidesCount = 0;
@@ -23,65 +28,33 @@ function Slidey()
     this.currentDiscover = 0;
 
     /**
-     * Size of the page images
+     * Events
      */
-    this.imageSizes = {};
+    this.events = {};
 
     /**
-     * Generates the menu browser
+     * Add an event
      */
-    this.generateMenu = function()
+    this.on = function(evt, callback)
     {
-        var menuElements = '';
-
-        if ($('h1, h2, h3').length < 2) {
-            return;
+        if (this.events[evt] == undefined) {
+            this.events[evt] = [];
         }
 
-        $('h1, h2, h3').each(function() {
-            if ($(this).is(':visible')) {
-                html = '<div id="menu_for_'+$(this).attr('id')+'" rel="'+$(this).attr('id')+'" class="menuItem menu'+$(this)[0].tagName.toLowerCase()+'">'+$(this).html()+'</div>';
-                menuElements += html;
-            }
-        });
-
-        $('.menu').html(menuElements);
-
-        $('.menuItem').click(function() {
-            var titleId = $(this).attr('rel');
-
-            if (!slidey.slideMode) {
-                $('html,body').animate({scrollTop:$('#' + titleId).offset().top}, 300, 0);
-            } else {
-                slidey.currentSlide = $('#' + titleId).closest('.slideWrapper').attr('rel');
-                slidey.scrollTo(slidey.currentSlide);
-                slidey.updateDiscovers(0);
-            }
-        });
+        this.events[evt].push(callback);
     };
 
     /**
-     * Updates the position in the browser
+     * Invoke an event
      */
-    this.updateMenuPosition = function()
+    this.dispatch = function(evt)
     {
-        var scrollTop = $('html').scrollTop();
-
-        $('h1, h2, h3').each(function() {
-            if ($(this).is(':visible')) {
-                var menuElement = $('#menu_for_' + $(this).attr('id'));
-
-                if ($(this).offset().top < scrollTop) {
-                    if (!menuElement.hasClass('menuPassed')) {
-                        menuElement.addClass('menuPassed');
-                    }
-                } else {
-                    if (menuElement.hasClass('menuPassed')) {
-                        menuElement.removeClass('menuPassed');
-                    }
-                }
+        if (this.events[evt] != undefined) {
+            var callbacks = this.events[evt];
+            for (k in callbacks) {
+                callbacks[k]();
             }
-        });
+        }
     };
 
     /**
@@ -105,6 +78,23 @@ function Slidey()
                 $(this).css('margin-left', width + $(this).width() - 20);
                 $(this).css('margin-top', 5);
             });
+        }
+    };
+
+    /**
+     * Go to the given slide & discover
+     */
+    this.goTo = function(slide, discover)
+    {
+        if (slidey.currentSlide != slide) {
+            slidey.currentSlide = slide;
+            slidey.scrollTo(slidey.currentSlide);
+        }
+            
+        $('#slide' + this.currentSlide + ' .discover').hide();
+
+        for (i=0; i<discover; i++) {
+            $('#discover_' + slide + '_' + i).show();
         }
     };
 
@@ -169,7 +159,7 @@ function Slidey()
             this.currentSlide--;
             this.scrollToCurrentSlide();
             this.updateCurrentDiscover(1);
-
+            this.dispatch('moved');
             return 1;
         }
 
@@ -185,7 +175,7 @@ function Slidey()
             this.currentSlide++;
             this.scrollToCurrentSlide();
             this.updateCurrentDiscover(1);
-
+            this.dispatch('moved');
             return 1;
         }
 
@@ -205,6 +195,8 @@ function Slidey()
             this.currentDiscover--;
             $('#discover_' + this.currentSlide + '_' + this.currentDiscover).hide();
         }
+            
+        this.dispatch('moved');
     };
 
     /**
@@ -220,44 +212,17 @@ function Slidey()
             $('#discover_' + this.currentSlide + '_' + this.currentDiscover).show();
             this.currentDiscover++;
         }
-    };
-
-    /**
-     * Initialize spoilers
-     */
-    this.initSpoilers = function()
-    {
-        var spoilerId = 0;
-
-        $('.spoiler').each(function() {
-            $(this).attr('id', 'spoiler'+spoilerId);
-
-            $(this).wrap('<div class="spoilerWrapper" id="spoilerWrapper'+spoilerId+'"></div>');
-            $('#spoilerWrapper'+spoilerId).prepend('<a rel="'+spoilerId+'" class="spoilerLink" href="javascript:void(0);">Afficher/masquer le contenu</a>');
-
-            spoilerId++;
-        });
-
-        $('.spoilerLink').click(function() {
-            var spoiler = $('#spoiler' + $(this).attr('rel'));
-
-            if (spoiler.is(':visible')) {
-                spoiler.slideUp();
-            } else {
-                spoiler.slideDown();
-            }
-        });
-
-        $('.spoiler').hide();
+        
+        this.dispatch('moved');
     };
 
     /**
      * Initializes IDs
      */
-    this.initIds = function()
+    this.on('init', function()
     {
         var id = 0;
-        this.slidesCount = $('.slide').length;
+        slidey.slidesCount = $('.slide').length;
 
         $('.slide').each(function() {
             $(this).wrap('<div class="slideWrapper" rel="' + id + '" id="slide' + id + '"></div>');	
@@ -280,49 +245,7 @@ function Slidey()
                 $(this).attr('id', 'title'+(titleId++));
             }
         });
-
-        var imageId = 0;
-        $('.contents img').each(function() {
-            var myId = $(this).attr('id');
-
-            if (!myId) {
-                myId = 'image' + (imageId++);
-                $(this).attr('id', myId);
-            }
-
-            $(this).load(function() {
-                slidey.imageSizes[myId] = [$(this).width(), $(this).height()];
-                slidey.updateImage(myId);
-            });
-        });
-    };
-
-    /**
-     * Updates all image sizes
-     */
-    this.updateImages = function()
-    {
-        for (id in this.imageSizes) {
-            this.updateImage(id);
-        }
-    };
-
-    /**
-     * Updates a specific image size
-     */
-    this.updateImage = function(imageId)
-    {
-        var image = $('#' + imageId);
-        var size = this.imageSizes[imageId];
-
-        if (this.slideMode) {
-            image.width(size[0]);
-            image.height(size[1]);
-        } else {
-            image.width(size[0]/2.0);
-            image.height(size[1]/2.0);
-        }
-    };
+    });
 
     /**
      * Go to slide mode
@@ -337,8 +260,8 @@ function Slidey()
         $('.slideWrapper').addClass('slideEnabled');
         this.resizeSlides();
         this.updateDiscovers();
-        this.generateMenu();
-        this.updateImages();
+        this.dispatch('slideMode');
+        this.dispatch('moved');
     };
 
     /**
@@ -356,24 +279,26 @@ function Slidey()
         $('.slideEnabled').height('auto');
         this.resizeSlides();
         $('.slideWrapper').removeClass('slideEnabled');
-        this.generateMenu();
-        this.updateImages();
+        this.dispatch('textMode');
     };
 
     /**
      * Called on each tick
      */
-    this.tick = function()
+    this.on('tick', function()
     {
         slidey.resizeSlides();
-        slidey.updateMenuPosition();
+    });
+
+    this.tick = function()
+    {
+        slidey.dispatch('tick');
     };
 
     this.init = function() {
         $(document).ready(function()
         {
-            slidey.initSpoilers();
-            slidey.initIds();
+            slidey.dispatch('init');
 
             setInterval(slidey.tick, 500);
             
@@ -407,12 +332,12 @@ function Slidey()
 
             slidey.runSlideMode();
             slidey.runTextMode();
-            slidey.resizeSlides();
-            slidey.updateMenuPosition();
+
+            slidey.dispatch('tick');
         });
 
         $(document).keydown(function(e){
-            if (!slidey.slideMode) 
+            if (!slidey.slideMode || !slidey.controlsEnabled)
             {
                 return;
             }
@@ -436,4 +361,8 @@ function Slidey()
 };
 
 var slidey = new Slidey();
+new SlideyMenuExtension(slidey);
+new SlideyImagesExtension(slidey);
+new SlideySpoilersExtension(slidey);
+new SlideyInteractiveExtension(slidey);
 slidey.init();

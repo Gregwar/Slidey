@@ -12,6 +12,11 @@ class Slidey extends Builder
      */
     public $cacheDirectory = 'cache';
 
+    /**
+     * Interactive mode
+     */
+    protected $interactive = null;
+
     public function __construct()
     {
         $this->twigFunctions = array_merge($this->twigFunctions, array(
@@ -22,12 +27,31 @@ class Slidey extends Builder
     }
 
     /**
+     * Enable the interactive mode
+     */
+    public function enableInteractive($password, $directory = 'data')
+    {
+        $this->copy(__DIR__ . '/static/interactive.php');
+        $this->interactive =array(
+            'password' => sha1($password),
+            'directory' => $directory
+        );
+
+        $this->template->set('interactive', true);
+    }
+
+    /**
      * Runs the build, add the cache directory
      */
     public function run()
     {
         @mkdir($this->targetFilePath($this->cacheDirectory), 0755, true);
-        $this->copy(__DIR__ . '/static/*', '');
+        $this->copy(__DIR__ . '/static/slidey/', 'slidey/');
+
+        if ($this->interactive !== null) {
+            $config = '<?php return '.var_export($this->interactive, true).';';
+            file_put_contents($this->targetFilePath('config.php'), $config);
+        }
 
         parent::run();
     }

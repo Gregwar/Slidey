@@ -232,14 +232,14 @@ a.prev, a.next {
 }
 
 .slideMode {
-    width:192px;
+    width:256px;
     height:64px;
     position:fixed;
     right:20px;
     bottom:20px;
 }
 
-.slideModeNormal, .slideModeSlide, .goHome {
+.slideModeNormal, .slideModeSlide, .goHome, .followMode {
     width:64px;
     height:64px;
     float:left;
@@ -248,7 +248,7 @@ a.prev, a.next {
 }
 
 .slideModeNormal:hover, .slideModeSlide:hover,
-.goHome:hover,
+.goHome:hover, .followModeEnabled,
 .slideModeEnabled {
     opacity:1.0;
     filter:alpha(opacity=100);
@@ -256,6 +256,10 @@ a.prev, a.next {
 
 .slideModeSlide {
     background-image:url('gfx/projector.png');
+}
+
+.followMode {
+    background-image:url('gfx/clock.png');
 }
 
 .slideModeNormal {
@@ -366,4 +370,24 @@ td {
 .slide hr {
     border:0;
     background-color:#aaa;
+}
+
+/**
+ * Interactive
+ */
+.interactiveWindow {
+    display: none;
+    position:fixed;
+    top:15%;
+    left:50%;
+    background-color:#3441a2;
+    padding:10px;
+    font-size:30px; 
+    color:white;
+    width:800px;
+    margin-left:-400px;
+}
+
+.loginWindow input {
+    font-size:30px; 
 }
