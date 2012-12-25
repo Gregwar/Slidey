@@ -365,4 +365,5 @@ new SlideyMenuExtension(slidey);
 new SlideyImagesExtension(slidey);
 new SlideySpoilersExtension(slidey);
 new SlideyInteractiveExtension(slidey);
+new SlideyMobileExtension(slidey);
 slidey.init();

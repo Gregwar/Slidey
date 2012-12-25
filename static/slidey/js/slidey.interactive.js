@@ -51,7 +51,7 @@ function SlideyInteractiveExtension(slidey)
         }
 
         $.getJSON(path + 'current', function(current) {
-            if (current[0] != extension.currentPage()) {
+            if (current[0] && current[0] != extension.currentPage()) {
                 document.location.href = current[0];
             }
 
@@ -79,6 +79,22 @@ function SlideyInteractiveExtension(slidey)
 
         return page[0];
     };
+
+    this.login = function()
+    {
+        if (!extension.isAdmin) {
+            $('.loginWindow').show();
+            $('.loginWindow input').val('');
+            $('.loginWindow input').focus();
+        } else {
+            alert('Vous êtes déjà admin');
+        }
+    };
+
+    slidey.on('login', function()
+    {
+        extension.login();
+    });
 
     slidey.on('moved', function()
     {
@@ -133,13 +149,7 @@ function SlideyInteractiveExtension(slidey)
             }
 
             if (e.keyCode == 76) {
-                if (!extension.isAdmin) {
-                    $('.loginWindow').show();
-                    $('.loginWindow input').val('');
-                    $('.loginWindow input').focus();
-                } else {
-                    alert('Vous êtes déjà admin');
-                }
+                extension.login();
                 return false;
             }
 

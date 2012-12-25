@@ -7,10 +7,11 @@
         <link type="text/css" media="print" rel="stylesheet" href="slidey/css/print.css" />
         <link rel="shortcut icon" href="favicon.ico" />
 	<script type="text/javascript" src="slidey/js/jquery.js"></script>
-        <script type="text/javascript" src="slidey/js/slidey.menu.js"></script>
         {% if interactive %}
         <script type="text/javascript" src="slidey/js/slidey.interactive.js"></script>
         {% endif %}
+        <script type="text/javascript" src="slidey/js/slidey.menu.js"></script>
+        <script type="text/javascript" src="slidey/js/slidey.mobile.js"></script>
         <script type="text/javascript" src="slidey/js/slidey.images.js"></script>
         <script type="text/javascript" src="slidey/js/slidey.spoilers.js"></script>
         <script type="text/javascript" src="slidey/js/slidey.js"></script>
@@ -28,6 +29,15 @@
         </div>
         {% endif %}
 
+        <div class="mobileControls">
+            <a href="javascript:void(0)" class="left"></a>
+            <a href="javascript:void(0)" class="right"></a>
+            <a href="javascript:void(0)" class="up"></a>
+            <a href="javascript:void(0)" class="down"></a>
+            {% if interactive %}
+            <a href="javascript:void(0)" class="login"></a>
+            {% endif %}
+        </div>
 	<div class="slideMode">
 	    <a href="javascript:void(0)" class="slideModeNormal slideModeEnabled"></a>
 	    <a href="javascript:void(0)" class="slideModeSlide"></a>

@@ -239,6 +239,37 @@ a.prev, a.next {
     bottom:20px;
 }
 
+.mobileControls {
+    width:320px;
+    height:64px;
+    position:fixed;
+    right:20px;
+    bottom:94px;
+    display:none;
+}
+
+.mobileControls a {
+    float:left;
+    width:64px;
+    height:64px;
+}
+
+.mobileControls .left {
+    background-image:url('gfx/left.png');
+}
+.mobileControls .right {
+    background-image:url('gfx/right.png');
+}
+.mobileControls .up {
+    background-image:url('gfx/up.png');
+}
+.mobileControls .down {
+    background-image:url('gfx/down.png');
+}
+.mobileControls .login {
+    background-image:url('gfx/login.png');
+}
+
 .slideModeNormal, .slideModeSlide, .goHome, .followMode {
     width:64px;
     height:64px;
