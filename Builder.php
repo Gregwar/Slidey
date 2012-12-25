@@ -59,6 +59,11 @@ class Builder extends \Twig_Extension
      */
     public $exploreQueue;
 
+    /**
+     * Already explored
+     */
+    public $explored;
+
     public function __construct()
     {
         $this->template = new Template($this);
@@ -174,20 +179,27 @@ class Builder extends \Twig_Extension
         $this->doCopy();
     }
 
+    public function addToExploreQueue($page)
+    {
+        if (!isset($this->explored[$page])) {
+            $this->explored[$page] = true;
+            $this->exploreQueue[] = $page;
+        }
+    }
+
     /**
      * Generating pages
      */
     public function explore()
     {
+        $this->explored = array();
         $this->exploreQueue = array();
 
         foreach ($this->metas->getAll() as $file => $meta) {
-            $this->exploreQueue[] = $file;
+            $this->addToExploreQueue($file);
         }
 
-        if (!$this->exploreQueue) {
-            $this->exploreQueue[] = 'index.html.twig';
-        }
+        $this->addToExploreQueue('index.html.twig');
 
         while ($this->exploreQueue) {
             $page = array_shift($this->exploreQueue);
@@ -309,7 +321,7 @@ class Builder extends \Twig_Extension
         $toc = $this->meta->get('toc', array());
 
         foreach ($pages as &$page) {
-            $this->exploreQueue[] = $page;
+            $this->addToExploreQueue($page);
             $toc[] = $page;
             $page = "'$page'";
         }
@@ -325,10 +337,11 @@ class Builder extends \Twig_Extension
     public function appendTwigLayout($contents)
     {
         return
-                "{% extends 'layout.html.twig' %}\n".
-                "{% block contents %}".$contents."\n".
-                "{% endblock %}\n"
-                ;
+            "{% extends 'layout.html.twig' %}\n".
+            "{% block contents %}\n".
+            $contents . "\n".
+            "{% endblock %}\n"
+            ;
     }
 
     /**
@@ -455,7 +468,7 @@ class Builder extends \Twig_Extension
     {
         $this->meta->add('annexes', $file);
 
-        $this->exploreQueue[] = $file;
+        $this->addToExploreQueue($file);
 
         return '{{ annexLink("'.$file.'") }}';
     }
