@@ -59,6 +59,13 @@ function SlideyInteractiveExtension(slidey)
         });
     };
 
+    this.logout = function()
+    {
+        $.getJSON(path + 'logout', function(status) {
+            extension.updateStatus(status);
+        });
+    };
+
     this.toggleFollow = function()
     {
         if (!extension.follow) {
@@ -66,9 +73,7 @@ function SlideyInteractiveExtension(slidey)
                 extension.updateStatus(status);
             });
         } else {
-            $.getJSON(path + 'logout', function(status) {
-                extension.updateStatus(status);
-            });
+            extension.logout();
         }
     };
 
@@ -93,7 +98,11 @@ function SlideyInteractiveExtension(slidey)
 
     slidey.on('login', function()
     {
-        extension.login();
+        if (extension.isAdmin) {
+            extension.logout();
+        } else {
+            extension.login();
+        }
     });
 
     slidey.on('moved', function()
