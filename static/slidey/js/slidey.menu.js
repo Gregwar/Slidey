@@ -34,6 +34,7 @@ function SlideyMenuExtension(slidey)
                 slidey.currentSlide = $('#' + titleId).closest('.slideWrapper').attr('rel');
                 slidey.scrollTo(slidey.currentSlide);
                 slidey.updateDiscovers(0);
+                slidey.dispatch('moved');
             }
         });
     };

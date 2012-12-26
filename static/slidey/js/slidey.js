@@ -345,6 +345,7 @@ function Slidey()
                     slidey.runTextMode();
                 }
                 slidey.scrollToCurrentSlide();
+                slidey.dispatch('moved');
             });
 
             slidey.runSlideMode();
