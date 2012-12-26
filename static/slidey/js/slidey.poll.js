@@ -91,6 +91,10 @@ function SlideyPollExtension(slidey, interactive)
         
     slidey.on('init', function()
     {
+        $('.poll').each(function() {
+            $(this).addClass('interactiveWindow');
+        });
+
         // Assigning IDs to poll & options
         var pollId = 0;
         $('.poll').each(function() {
