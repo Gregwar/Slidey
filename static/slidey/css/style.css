@@ -403,15 +403,43 @@ td {
     background-color:#aaa;
 }
 
+.poll {
+    display:none;
+}
+
+.poll .option {
+    cursor:pointer;
+    padding:5px;
+    border-radius:5px;
+}
+
+.poll .option:hover {
+    background-color:#666;
+}
+
+.poll .result {
+    float:right;
+}
+
+.poll .result .bar {
+    height:30px;
+    background-color:#006cff;
+    float:right;
+    margin:5px;
+    border-radius:10px;
+}
+
 /**
  * Interactive
  */
 .interactiveWindow {
-    display: none;
+    border:2px solid #999;
+    border-radius:5px;
+    display:none;
     position:fixed;
     top:15%;
     left:50%;
-    background-color:#3441a2;
+    background-color:#222;
     padding:10px;
     font-size:30px; 
     color:white;

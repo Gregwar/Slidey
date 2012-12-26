@@ -3,9 +3,10 @@
  */
 function SlideyInteractiveExtension(slidey)
 {
-    var path = 'interactive.php/';
     var extension = this;
 
+    this.path = 'interactive.php/';
+    this.extraCurrent = false;
     this.isAdmin = false;
     this.follow = false;
     this.ignore = false;
@@ -46,26 +47,37 @@ function SlideyInteractiveExtension(slidey)
             slidey.runSlideMode();
         }
 
-        $.getJSON(path + 'current', function(current) {
+        $.getJSON(extension.path + 'current', function(current) {
             if (!extension.ignoreOrder) {
                 extension.ignore = true;
-                if (!current[0]) {
-                    current[0] = 'index.html';
+                if (!current.page) {
+                    current.page = 'index.html';
                 }
 
-                if (current[0] != extension.currentPage()) {
-                    document.location.href = current[0];
+                if (current.page != extension.currentPage()) {
+                    document.location.href = current.page;
                 }
 
-                slidey.goTo(current[1], current[2]);
+                slidey.goTo(current.slide, current.discover);
                 extension.ignore = false;
+
+                slidey.dispatch('updateCurrent', current);
             }
+        });
+    };
+
+    this.sendCurrent = function()
+    {
+        extension.ignoreOrder = true;
+        $.getJSON(extension.path + 'update?page=' + extension.currentPage() + '&slide=' + slidey.currentSlide + '&discover=' + slidey.currentDiscover + '&' + extension.extraCurrent, function(status) {
+            extension.ignoreOrder = false;
+            extension.updateStatus(status);
         });
     };
 
     this.logout = function()
     {
-        $.getJSON(path + 'logout', function(status) {
+        $.getJSON(extension.path + 'logout', function(status) {
             extension.updateStatus(status);
         });
     };
@@ -73,7 +85,7 @@ function SlideyInteractiveExtension(slidey)
     this.toggleFollow = function()
     {
         if (!extension.follow) {
-            $.getJSON(path + 'follow', function(status) {
+            $.getJSON(extension.path + 'follow', function(status) {
                 extension.updateStatus(status);
             });
         } else {
@@ -112,16 +124,13 @@ function SlideyInteractiveExtension(slidey)
     slidey.on('moved', function()
     {
         if (extension.isAdmin && !extension.ignore) {
-            extension.ignoreOrder = true;
-            $.getJSON(path + 'update?page=' + extension.currentPage() + '&slide=' + slidey.currentSlide + '&discover=' + slidey.currentDiscover, function(status) {
-                extension.ignoreOrder = false;
-                extension.updateStatus(status);
-            });
+            extension.sendCurrent();
         }
     });
 
     slidey.on('tick', function()
     {
+        // Update the position
         if (extension.follow) {
             extension.updateCurrent();
         }
@@ -132,12 +141,13 @@ function SlideyInteractiveExtension(slidey)
      */
     slidey.on('init', function()
     {
-        $.getJSON(path + 'getStatus', function(data) {
+        $.getJSON(extension.path + 'getStatus', function(data) {
             extension.updateStatus(data);
         });
 
+        // Logging
         $('.loginWindow form').submit(function() {
-            $.getJSON(path + 'login?password=' + $('.loginWindow input').val(), function(status) {
+            $.getJSON(extension.path + 'login?password=' + $('.loginWindow input').val(), function(status) {
                 extension.updateStatus(status);
 
                 if (extension.isAdmin) {
@@ -150,6 +160,7 @@ function SlideyInteractiveExtension(slidey)
             return false;
         });
 
+        // Following/Unfollowing
         $('.followMode').click(function() {
             extension.toggleFollow();
         });
@@ -169,7 +180,7 @@ function SlideyInteractiveExtension(slidey)
             }
 
             if (e.keyCode == 68) {
-                $.getJSON(path + 'logout', function(status) {
+                $.getJSON(extension.path + 'logout', function(status) {
                     alert('Vous êtes déconnectés');
                     extension.updateStatus(status);
                 });

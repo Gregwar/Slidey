@@ -52,12 +52,12 @@ function Slidey()
     /**
      * Invoke an event
      */
-    this.dispatch = function(evt)
+    this.dispatch = function(evt, argument)
     {
         if (this.events[evt] != undefined) {
             var callbacks = this.events[evt];
             for (k in callbacks) {
-                callbacks[k]();
+                callbacks[k](argument);
             }
         }
     };
@@ -381,6 +381,7 @@ var slidey = new Slidey();
 new SlideyMenuExtension(slidey);
 new SlideyImagesExtension(slidey);
 new SlideySpoilersExtension(slidey);
-new SlideyInteractiveExtension(slidey);
 new SlideyMobileExtension(slidey);
+interactive = new SlideyInteractiveExtension(slidey);
+new SlideyPollExtension(slidey, interactive);
 slidey.init();

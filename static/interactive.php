@@ -27,10 +27,69 @@ class State
 
         $this->current = @include($directory . '/current.php');
         if (!$this->current) {
-            $this->current = array('', 0, 0);
+            $this->current = array(
+                'page' => '',
+                'slide' => 0,
+                'discover' => 0,
+                'poll' => null
+            );
         }
 
         $this->directory = $directory;
+    }
+
+    /**
+     * Add vote
+     */
+    public function addVote($option)
+    {
+        $file = $this->directory . '/poll/' . uniqid('vote_', true);
+        file_put_contents($file, $option);
+    }
+
+    /**
+     * Clear the poll
+     */
+    public function clearPoll()
+    {
+        $directory = $this->directory . '/poll';
+
+        if (!is_dir($directory)) {
+            @mkdir($directory, 0755, true);
+        }
+
+        $dir = opendir($directory);
+        while (($file = readdir($dir)) !== false) {
+            if ($file != '.' && $file != '..') {
+                unlink($this->directory . '/poll/' . $file);
+            }
+        }
+    }
+
+    /**
+     * Gets the poll stats
+     */
+    public function getStats()
+    {
+        $stats = array();
+        $directory = $this->directory . '/poll';
+
+        if (is_dir($directory)) {
+            $dir = opendir($directory);
+            while (($file = readdir($dir)) !== false) {
+                if ($file != '.' && $file != '..') {
+                    $value = (int)file_get_contents($this->directory . '/poll/' . $file);
+
+                    if (isset($stats[$value])) {
+                        $stats[$value]++;
+                    } else {
+                        $stats[$value] = 1;
+                    }
+                }
+            }
+        }
+
+        return $stats;
     }
 
     /**
@@ -66,6 +125,23 @@ class Interactive
     }
 
     /**
+     * Vote for an option
+     */
+    public function vote($option)
+    {
+        $option = (int)$option;
+
+        if ($this->state->current['poll'] === null) {
+            return;
+        }
+
+        if ($this->status['lastPoll'] != $this->state->current['poll']) {
+            $this->state->addVote($option);
+            $this->status['lastPoll'] = $this->state->current['poll'];
+        }
+    }
+
+    /**
      * Process the interactive request
      */
     public function run()
@@ -85,18 +161,40 @@ class Interactive
                 $this->status['follower'] = true;
                 break;
             case '/update':
-                $page = isset($_GET['page']) ? $_GET['page'] : 'index.html';
-                $slide = isset($_GET['slide']) ? $_GET['slide'] : 0;
-                $discover = isset($_GET['discover']) ? $_GET['discover'] : 0;
+                $current = array();
 
-                $this->state->current = array($page, $slide, $discover);
+                foreach (array('page', 'slide', 'discover', 'poll') as $key) {
+                    $current[$key] = isset($_GET[$key]) ? $_GET[$key] : null;
+                    if ($current[$key] == 'null') {
+                        $current[$key] = null;
+                    }
+                }
+
+                if ($this->state->current['poll'] != $current['poll']) {
+                    $this->state->clearPoll();
+                }
+
+                $this->state->current = $current;
                 $this->state->persist();
 
                 break;
             case '/current':
                 $response = $this->state->current;
+                $response['status'] = $this->status;
                 break;
-            case '/getStatus':
+            case '/vote':
+                $option = isset($_GET['option']) ? $_GET['option'] : null;
+
+                if ($option !== null) {
+                    $this->vote($option);
+                }
+                break;
+            case '/getStats':
+                if (isset($this->status['admin'])) {
+                    $response = $this->state->getStats();
+                } else {
+                    $response = array();
+                }
                 break;
             case '/logout':
                 $this->status = array();
