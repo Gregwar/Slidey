@@ -40,7 +40,7 @@ function SlideyPollExtension(slidey, interactive)
             }
         }
 
-        interactive.extraCurrent = 'poll='+this.currentPoll;
+        interactive.extraCurrent = 'poll='+this.pollNumber;
 
         interactive.sendCurrent();
     };
