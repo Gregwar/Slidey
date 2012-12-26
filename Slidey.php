@@ -34,7 +34,8 @@ class Slidey extends Builder
         $this->copy(__DIR__ . '/static/interactive.php');
         $this->interactive =array(
             'password' => sha1($password),
-            'directory' => $directory
+            'directory' => $directory,
+            'key' => uniqid('slidey_'),
         );
 
         $this->template->set('interactive', true);

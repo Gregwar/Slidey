@@ -1,11 +1,24 @@
 <?php
 session_start();
 
+/**
+ * The show state
+ */
 class State
 {
+    /**
+     * Current state data
+     */
     public $current = array();
+
+    /**
+     * Directory to use for reading & writing state
+     */
     protected $directory;
 
+    /**
+     * Build and load the state
+     */
     public function __construct($directory)
     {
         if (!is_dir($directory)) {
@@ -20,23 +33,34 @@ class State
         $this->directory = $directory;
     }
 
+    /**
+     * Persist the data
+     */
     public function persist()
     {
         file_put_contents($this->directory . '/current.php', '<?php return '.var_export($this->current, true).';');
     }
 }
 
+/**
+ * Manage interactions
+ */
 class Interactive
 {
     /**
      * Configuration
      */
     protected $config;
+
+    /**
+     * State
+     */
     protected $state;
 
     public function __construct(array $config)
     {
-        $this->status = isset($_SESSION['slidey']) ? $_SESSION['slidey'] : '';
+        $this->key = $config['key'];
+        $this->status = isset($_SESSION[$this->key]) ? $_SESSION[$this->key] : '';
         $this->config = $config;
         $this->state = new State($config['directory']);
     }
@@ -83,7 +107,7 @@ class Interactive
             $response = $this->status;
         }
 
-        $_SESSION['slidey'] = $this->status;
+        $_SESSION[$this->key] = $this->status;
         return $response;
     }
 }
