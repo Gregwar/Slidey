@@ -51,7 +51,11 @@ function SlideyInteractiveExtension(slidey)
         }
 
         $.getJSON(path + 'current', function(current) {
-            if (current[0] && current[0] != extension.currentPage()) {
+            if (!current[0]) {
+                current[0] = 'index.html';
+            }
+
+            if (current[0] != extension.currentPage()) {
                 document.location.href = current[0];
             }
 
