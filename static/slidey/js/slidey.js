@@ -28,6 +28,11 @@ function Slidey()
     this.currentDiscover = 0;
 
     /**
+     * Ticking interval
+     */
+    this.interval = null;
+
+    /**
      * Events
      */
     this.events = {};
@@ -295,12 +300,24 @@ function Slidey()
         slidey.dispatch('tick');
     };
 
+    this.stopInterval = function()
+    {
+        if (this.interval) {
+            clearInterval(this.interval);
+        }
+    };
+
+    this.resetInterval = function()
+    {
+        this.stopInterval();
+        this.interval = setInterval(slidey.tick, 500);
+    };
+
     this.init = function() {
         $(document).ready(function()
         {
             slidey.dispatch('init');
-
-            setInterval(slidey.tick, 500);
+            slidey.resetInterval();
             
             if (window.location.hash) {
                 obj = $(window.location.hash);

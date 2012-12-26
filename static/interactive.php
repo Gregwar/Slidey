@@ -27,7 +27,7 @@ class State
 
         $this->current = @include($directory . '/current.php');
         if (!$this->current) {
-            $this->current = array(0, 0);
+            $this->current = array('', 0, 0);
         }
 
         $this->directory = $directory;
@@ -60,7 +60,7 @@ class Interactive
     public function __construct(array $config)
     {
         $this->key = $config['key'];
-        $this->status = isset($_SESSION[$this->key]) ? $_SESSION[$this->key] : '';
+        $this->status = isset($_SESSION[$this->key]) ? $_SESSION[$this->key] : array();
         $this->config = $config;
         $this->state = new State($config['directory']);
     }
@@ -78,11 +78,11 @@ class Interactive
                 $password = isset($_GET['password']) ? $_GET['password'] : null;
 
                 if ($password && sha1($password) == $this->config['password']) {
-                    $this->status = 'admin';
+                    $this->status['admin'] = true;
                 }
                 break;
             case '/follow':
-                $this->status = 'follower';
+                $this->status['follower'] = true;
                 break;
             case '/update':
                 $page = isset($_GET['page']) ? $_GET['page'] : 'index.html';
@@ -99,7 +99,7 @@ class Interactive
             case '/getStatus':
                 break;
             case '/logout':
-                $this->status = '';
+                $this->status = array();
                 break;
         }
 

@@ -5,20 +5,17 @@ function SlideyInteractiveExtension(slidey)
 {
     var path = 'interactive.php/';
     var extension = this;
-    var isAdmin = false;
-    var follow = false;
+
+    this.isAdmin = false;
+    this.follow = false;
+    this.ignore = false;
+    this.ignoreOrder = false;
 
     this.updateStatus = function(status)
     {
         var lastFollow = this.follow;
-        this.isAdmin = (status == 'admin');
-        this.follow = (status == 'follower');
-
-        if (this.isAdmin) {
-            $('.followMode').hide();
-        } else {
-            $('.followMode').show();
-        }
+        this.isAdmin = (status.admin != undefined);
+        this.follow = (status.follower != undefined);
 
         if (!lastFollow && this.follow) {
             $('.followMode').addClass('followModeEnabled');
@@ -26,8 +23,9 @@ function SlideyInteractiveExtension(slidey)
         }
         if (lastFollow && !this.follow) {
             $('.followMode').removeClass('followModeEnabled');
-            slidey.controlsEnabled = true;
         }
+
+        slidey.controlsEnabled = (this.isAdmin || !this.follow);
     };
 
     /**
@@ -40,26 +38,28 @@ function SlideyInteractiveExtension(slidey)
 
     this.updateCurrent = function()
     {
-        if (this.isAdmin || !this.follow) {
+        if (!this.follow) {
             return;
         }
             
-        slidey.controlsEnabled = false;
-
         if (!slidey.slideMode) {
             slidey.runSlideMode();
         }
 
         $.getJSON(path + 'current', function(current) {
-            if (!current[0]) {
-                current[0] = 'index.html';
-            }
+            if (!extension.ignoreOrder) {
+                extension.ignore = true;
+                if (!current[0]) {
+                    current[0] = 'index.html';
+                }
 
-            if (current[0] != extension.currentPage()) {
-                document.location.href = current[0];
-            }
+                if (current[0] != extension.currentPage()) {
+                    document.location.href = current[0];
+                }
 
-            slidey.goTo(current[1], current[2]);
+                slidey.goTo(current[1], current[2]);
+                extension.ignore = false;
+            }
         });
     };
 
@@ -111,8 +111,10 @@ function SlideyInteractiveExtension(slidey)
 
     slidey.on('moved', function()
     {
-        if (extension.isAdmin) {
+        if (extension.isAdmin && !extension.ignore) {
+            extension.ignoreOrder = true;
             $.getJSON(path + 'update?page=' + extension.currentPage() + '&slide=' + slidey.currentSlide + '&discover=' + slidey.currentDiscover, function(status) {
+                extension.ignoreOrder = false;
                 extension.updateStatus(status);
             });
         }
