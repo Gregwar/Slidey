@@ -157,8 +157,6 @@ class Builder extends \Twig_Extension
     {
 	$this->loadMeta();
 
-        echo '* Crawling ' . $this->pagesDirectory . "\n";
-
         if (!is_dir($this->targetDirectory)) {
             echo '* Creating ' . $this->targetDirectory . "\n";
             mkdir($this->targetDirectory);
@@ -166,7 +164,8 @@ class Builder extends \Twig_Extension
         
         $this->template->setDirectories(getcwd() . '/' . $this->pagesDirectory, getcwd() . '/' . $this->targetDirectory);
 
-	// Processing files
+        // Processing files
+        echo "* Exploring\n";
 	$this->explore();
 
 	// Generating layouts
