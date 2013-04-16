@@ -417,8 +417,12 @@ class Builder extends \Twig_Extension
     public function copy($source, $target = null)
     {
 	if ($target === null)
-	{
-	    $target = '';
+        {
+            if (is_dir($source)) {
+                $target = $source;
+            } else {
+                $target = '';
+            }
 	}
 	
 	$this->copies[] = array($source, $target);
