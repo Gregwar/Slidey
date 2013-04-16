@@ -16,7 +16,7 @@ class Builder extends \Twig_Extension
      * Functions available for Twig
      */
     protected $twigFunctions = array(
-        'chapter', 'part', 'annex', 'annexLink', 'toc', 'summary'
+        'chapter', 'part', 'annex', 'annexLink', 'toc', 'summary', 'ref', 'anchor'
     );
 
     /**
@@ -157,8 +157,6 @@ class Builder extends \Twig_Extension
     {
 	$this->loadMeta();
 
-        echo '* Crawling ' . $this->pagesDirectory . "\n";
-
         if (!is_dir($this->targetDirectory)) {
             echo '* Creating ' . $this->targetDirectory . "\n";
             mkdir($this->targetDirectory);
@@ -166,7 +164,8 @@ class Builder extends \Twig_Extension
         
         $this->template->setDirectories(getcwd() . '/' . $this->pagesDirectory, getcwd() . '/' . $this->targetDirectory);
 
-	// Processing files
+        // Processing files
+        echo "* Exploring\n";
 	$this->explore();
 
 	// Generating layouts
@@ -480,6 +479,22 @@ class Builder extends \Twig_Extension
         $this->addToExploreQueue($file);
 
         return '{{ annexLink("'.$file.'") }}';
+    }
+
+    /**
+     * Reference
+     */
+    public function ref($targetSlug, $anchor = '')
+    {
+        return $targetSlug . '.html#'.$anchor;
+    }
+
+    /**
+     * Place that can be referenced
+     */
+    public function anchor($name)
+    {
+        return '<a name="'.$name.'"></a>';
     }
 
     /**

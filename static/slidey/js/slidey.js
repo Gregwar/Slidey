@@ -345,6 +345,7 @@ function Slidey()
                     slidey.runTextMode();
                 }
                 slidey.scrollToCurrentSlide();
+                slidey.dispatch('moved');
             });
 
             slidey.runSlideMode();
@@ -383,6 +384,10 @@ new SlideyImagesExtension(slidey);
 new SlideySpoilersExtension(slidey);
 new SlideyMobileExtension(slidey);
 new SlideyStepsExtension(slidey);
-interactive = new SlideyInteractiveExtension(slidey);
-new SlideyPollExtension(slidey, interactive);
+if (typeof(SlideyInteractiveExtension) != 'undefined') {
+    interactive = new SlideyInteractiveExtension(slidey);
+}
+if (typeof(SlideyPollExtension) != 'undefined') {
+    new SlideyPollExtension(slidey, interactive);
+}
 slidey.init();

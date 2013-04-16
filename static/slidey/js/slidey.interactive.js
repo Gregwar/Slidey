@@ -152,6 +152,7 @@ function SlideyInteractiveExtension(slidey)
 
                 if (extension.isAdmin) {
                     alert('Vous êtes maintenant identifiés !');
+                    extension.sendCurrent();
                 } else {
                     alert('Mauvais mot de passe');
                 }

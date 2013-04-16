@@ -411,6 +411,8 @@ td {
     cursor:pointer;
     padding:5px;
     border-radius:5px;
+    border:1px solid #555;
+    margin-top:1px;
 }
 
 .poll .option:hover {
@@ -445,6 +447,10 @@ td {
     color:white;
     width:800px;
     margin-left:-400px;
+}
+
+.interactiveWindow a:hover {
+    color:white;
 }
 
 .loginWindow input {
