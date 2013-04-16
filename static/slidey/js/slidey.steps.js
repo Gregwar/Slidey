@@ -27,6 +27,7 @@ function SlideyStepsExtension(slidey)
     slidey.on('init', function() {
         self.key = document.location+'/steps';
         var stepId = 0;
+        var numSteps = $('.step').length;
 
         if (typeof(localStorage) != 'undefined') {
             var value = localStorage.getItem(self.key);
@@ -45,7 +46,7 @@ function SlideyStepsExtension(slidey)
             contents.wrap('<div class="stepContainer stepContainer'+myStepId+'"></div>');
             var container = $('.stepContainer'+myStepId);
 
-            container.prepend('<div class="stepChecker"><input type="checkbox" rel="'+myStepId+'" /></div>');
+            container.prepend('<div class="stepChecker"><input type="checkbox" rel="'+myStepId+'" /><br />'+(myStepId+1)+'/'+numSteps+'</div>');
             var checkbox = container.find('.stepChecker input[type=checkbox]');
 
             checkbox.change(function() {

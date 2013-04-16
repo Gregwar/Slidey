@@ -460,6 +460,9 @@ td {
 .stepChecker {
     position:absolute;
     margin-left:-40px;
+    font-size:13px;
+    color:#aaa;
+    text-align:center;
 }
 
 .stepChecker input[type=checkbox] {
