@@ -322,6 +322,7 @@ class Builder extends \Twig_Extension
         foreach ($pages as &$page) {
             $this->addToExploreQueue($page);
             $toc[] = $page;
+            $this->meta->add('depends', $this->pagesDirectory . '/' . $page);
             $page = "'$page'";
         }
         
