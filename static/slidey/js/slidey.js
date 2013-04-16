@@ -383,6 +383,10 @@ new SlideyMenuExtension(slidey);
 new SlideyImagesExtension(slidey);
 new SlideySpoilersExtension(slidey);
 new SlideyMobileExtension(slidey);
-interactive = new SlideyInteractiveExtension(slidey);
-new SlideyPollExtension(slidey, interactive);
+if (typeof(SlideyInteractiveExtension) != 'undefined') {
+    interactive = new SlideyInteractiveExtension(slidey);
+}
+if (typeof(SlideyPollExtension) != 'undefined') {
+    new SlideyPollExtension(slidey, interactive);
+}
 slidey.init();
