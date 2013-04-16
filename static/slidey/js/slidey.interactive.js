@@ -175,20 +175,16 @@ function SlideyInteractiveExtension(slidey)
                 extension.closeWindows();
             }
 
-            if (e.keyCode == 76) {
+            if (e.keyCode == 164) {
                 extension.login();
                 return false;
             }
 
-            if (e.keyCode == 68) {
+            if (e.keyCode == 170) {
                 $.getJSON(extension.path + 'logout', function(status) {
                     alert('Vous êtes déconnectés');
                     extension.updateStatus(status);
                 });
-            }
-
-            if (e.keyCode == 70) {
-                extension.toggleFollow();
             }
         });
     });
