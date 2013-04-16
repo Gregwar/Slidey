@@ -450,3 +450,16 @@ td {
 .loginWindow input {
     font-size:30px; 
 }
+
+.stepChecker {
+    position:absolute;
+    margin-left:-40px;
+}
+
+.stepChecker input[type=checkbox] {
+  -ms-transform: scale(1.3); /* IE */
+  -moz-transform: scale(1.3); /* FF */
+  -webkit-transform: scale(1.3); /* Safari and Chrome */
+  -o-transform: scale(1.3); /* Opera */
+  padding: 10px;
+}
