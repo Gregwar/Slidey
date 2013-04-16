@@ -440,8 +440,17 @@ class Builder extends \Twig_Extension
 	foreach ($this->copies as $copy)
 	{
 	    list($source, $target) = $copy;
-	    $target = $this->targetFilePath($target);
-	    system('cp -R ' . $source . ' ' . $target);
+            $target = $this->targetFilePath($target);
+
+            if (is_dir($source)) {
+                if (!is_dir($target)) {
+                    @mkdir($target);
+                }
+
+                $source .= '/*';
+            }
+
+            system('cp -R ' . $source . ' ' . $target);
 	}
     }
 
