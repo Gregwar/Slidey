@@ -99,7 +99,7 @@ a:hover {
     text-decoration:underline;
 }
 
-.highlight { line-height:17px; }
+.highlight { line-height:1; }
 .highlight .hll { background-color: #ffffcc; }
 .highlight  { background: #000000; color: white; font-size: 16px; border-radius: 10px; -moz-border-radius:10px;  }
 .highlight pre { padding:5px; }
@@ -210,7 +210,6 @@ a.prev, a.next {
 
 .slideEnabled .highlight {
     font-size:30px;
-    line-height:27px;
     padding-top:3px;
     padding-bottom:3px;
     overflow:hidden;
