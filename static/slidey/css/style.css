@@ -471,3 +471,12 @@ td {
   -o-transform: scale(1.3); /* Opera */
   padding: 10px;
 }
+
+code {
+    color:#292929;
+    border:1px solid #bdbdbd;
+    border-radius:3px;
+    font-size:80%;
+    margin:2px;
+    background-color:#fdfdfd;
+}
