@@ -14,6 +14,7 @@ class Slidey
     protected $title;
     protected $builder;
     protected $interactive = null;
+    protected $mkdirs = array();
 
     public function __construct()
     {
@@ -79,12 +80,21 @@ class Slidey
         $this->builder->copy($source, $destination);
     }
 
+    public function mkdir($directory)
+    {
+        $this->mkdirs[] = $directory;
+    }
+
     /**
      * Runs the slidey builder on the $source directory and put all the output
      * in the $destination directory
      */
     public function build($destination = 'web', $source = 'pages')
     {
+        foreach ($this->mkdirs as $mkdir) {
+            mkdir($destination . '/' . $mkdir, 0755, true);
+        }
+
         $this->builder->addHook(function($document) {
             $document->addCss('/slidey/css/style.css');
 
