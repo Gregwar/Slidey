@@ -6,19 +6,24 @@ body {
     margin-top:0px;
 }
 
-.summary {
+.toc {
     font-size:24px;
     font-weight:bold;
     color:#e6e4ff;
 }
 
-.summary li {
+.toc li {
     list-style:square;
 }
 
-.summary ul ul {
+.toc ul ul {
     font-size: 20px;
     font-weight:normal;
+}
+
+.toc > ul > li {
+    margin-top:20px;
+    margin-bottom:5px;
 }
 
 .annexSummary a {
@@ -300,11 +305,11 @@ a.prev, a.next {
     background-image:url('gfx/home.png');
 }
 
-.slideEnabled .summarySlide {
+.slideEnabled .tocSlide {
     font-size: 60px;
 }
 
-.slideEnabled .summarySlide ul {
+.slideEnabled .tocSlide ul {
     font-size: 45px;
 }
 

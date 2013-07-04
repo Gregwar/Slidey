@@ -2,106 +2,81 @@
 
 namespace Gregwar\Slidey;
 
+use Gregwar\RST\Builder;
+
+use Gregwar\RST\Nodes\RawNode;
+
 /**
  * Slidey standard package
  */
-class Slidey extends Builder
+class Slidey
 {
-    /**
-     * Target cache directory
-     */
-    public $cacheDirectory = 'cache';
-
-    /**
-     * Interactive mode
-     */
+    protected $builder;
     protected $interactive = null;
 
     public function __construct()
     {
-        $this->twigFunctions = array_merge($this->twigFunctions, array(
-            'image', 'highlight', 'highlightString', 'tex'
-        ));
-
-        parent::__construct();
+        $this->builder = new Builder(new Factory);
+        $this->builder->copy(__DIR__.'/static/slidey', 'slidey');
     }
 
-    /**
-     * Enable the interactive mode
-     */
     public function enableInteractive($password, $directory = 'data')
     {
-        $this->copy(__DIR__ . '/static/interactive.php');
-        $this->interactive =array(
+        $this->builder->copy(__DIR__.'/static/interactive.php');
+
+        $this->builder->addHook(function($document) {
+            $jss = array('slidey.interactive.js', 'slidey.poll.js');
+
+            foreach ($jss as $js) {
+                $document->addJs('/slidey/js/'.$js);
+            }
+        });
+
+        $this->interactive = array(
             'password' => sha1($password),
             'directory' => $directory,
             'key' => uniqid('slidey_'),
         );
+    }
 
-        $this->template->set('interactive', true);
+    public function addCss($css)
+    {
+        $this->builder->addHook(function($document) use ($css) {
+            $document->addCss('/'.$css);
+        });
+    }
+
+    public function copy($source, $destination = null)
+    {
+        $this->builder->copy($source, $destination);
     }
 
     /**
-     * Runs the build, add the cache directory
+     * Runs the slidey builder on the $source directory and put all the output
+     * in the $destination directory
      */
-    public function run()
+    public function build($source = 'pages', $destination = 'web')
     {
-        @mkdir($this->targetFilePath($this->cacheDirectory), 0755, true);
-        $this->copy(__DIR__ . '/static/slidey/', 'slidey/');
+        $this->builder->addHook(function($document) {
+            $document->addCss('/slidey/css/style.css');
 
-        if ($this->interactive !== null) {
+            $jss = array('jquery.js', 'slidey.images.js',
+                'slidey.menu.js', 'slidey.mobile.js', 'slidey.spoilers.js', 'slidey.steps.js',
+                'slidey.js');
+
+            foreach ($jss as $js) {
+                $document->addJs('/slidey/js/'.$js);
+            }
+
+            $document->prependNode(new RawNode(file_get_contents(__DIR__.'/static/top.html')));
+            $document->addNode(new RawNode(file_get_contents(__DIR__.'/static/bottom.html')));
+        });
+
+        $this->builder->build($source, $destination);
+
+        if ($this->interactive) {
             $config = '<?php return '.var_export($this->interactive, true).';';
-            file_put_contents($this->targetFilePath('config.php'), $config);
+            file_put_contents($this->builder->getTargetFile('config.php'), $config);
         }
-
-        parent::run();
-    }
-
-    /**
-     * Highlighting a file using GeSHi
-     */
-    public function highlight($file, $lang = 'php')
-    {
-        $this->meta->add('depends', $this->pagesFilePath($file));
-
-        return $this->highlightString(rtrim(file_get_contents($this->pagesFilePath($file))), $lang);
-    }
-
-    /**
-     * Highlighting a string using GeShi
-     */
-    public function highlightString($str, $lang = 'php')
-    {
-        $geshi = new \GeSHi($str, $lang);
-	$geshi->enable_classes();
-	$geshi->enable_keyword_links(false);
-
-	return '<div class="highlight">{% raw %}' . $geshi->parse_code() . '{% endraw %}</div>';
-    }
-
-    /**
-     * Managing an image
-     */
-    public function image($file)
-    {
-        $image = new \Gregwar\Image\Image($file);
-        $image->setCacheDir($this->cacheDirectory . '/images/');
-        $image->setActualCacheDir($this->targetFilePath($this->cacheDirectory . '/images/'));
-
-        $this->meta->add('depends', $this->pagesFilePath($file));
-
-        return $image;
-    }
-
-    /**
-     * Managing 
-     */
-    public function tex($formula, $density = 350)
-    {
-        $tex = new \Gregwar\Tex2png\Tex2png($formula, $density);
-        $tex->setCacheDirectory($this->cacheDirectory . '/tex/');
-        $tex->setActualCacheDirectory($this->targetFilePath($this->cacheDirectory . '/tex/'));
-
-        return $tex->generate();
     }
 }
