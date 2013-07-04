@@ -83,7 +83,7 @@ class Slidey
      * Runs the slidey builder on the $source directory and put all the output
      * in the $destination directory
      */
-    public function build($source = 'pages', $destination = 'web')
+    public function build($destination = 'web', $source = 'pages')
     {
         $this->builder->addHook(function($document) {
             $document->addCss('/slidey/css/style.css');
