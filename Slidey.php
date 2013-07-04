@@ -11,6 +11,7 @@ use Gregwar\RST\Nodes\RawNode;
  */
 class Slidey
 {
+    protected $title;
     protected $builder;
     protected $interactive = null;
 
@@ -18,6 +19,21 @@ class Slidey
     {
         $this->builder = new Builder(new Factory);
         $this->builder->copy(__DIR__.'/static/slidey', 'slidey');
+    }
+
+    public function setTitle($prefix)
+    {
+        $this->builder->addHook(function($document) use ($prefix) {
+            $title = $document->getTitle();
+
+            if ($title) {
+                $title = $prefix . ' - ' . $title;
+            } else {
+                $title = $prefix;
+            }
+
+            $document->addHeaderNode(new RawNode('<title>'.htmlspecialchars($title).'</title>'));
+        });
     }
 
     public function enableInteractive($password, $directory = 'data')
