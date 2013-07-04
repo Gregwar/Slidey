@@ -21,6 +21,9 @@ class Slidey
         $this->builder->copy(__DIR__.'/static/slidey', 'slidey');
     }
 
+    /**
+     * Sets the document title prefix
+     */
     public function setTitle($prefix)
     {
         $this->builder->addHook(function($document) use ($prefix) {
@@ -36,6 +39,9 @@ class Slidey
         });
     }
 
+    /**
+     * Enable the interactive mode
+     */
     public function enableInteractive($password, $directory = 'data')
     {
         $this->builder->copy(__DIR__.'/static/interactive.php');
@@ -55,6 +61,9 @@ class Slidey
         );
     }
 
+    /**
+     * Adds a stylesheet to the final document
+     */
     public function addCss($css)
     {
         $this->builder->addHook(function($document) use ($css) {
@@ -62,6 +71,9 @@ class Slidey
         });
     }
 
+    /**
+     * Copy some files from the original tree to the final document
+     */
     public function copy($source, $destination = null)
     {
         $this->builder->copy($source, $destination);
