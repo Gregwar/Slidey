@@ -92,7 +92,11 @@ class Slidey
     public function build($destination = 'web', $source = 'pages')
     {
         foreach ($this->mkdirs as $mkdir) {
-            mkdir($destination . '/' . $mkdir, 0755, true);
+            $dir = $destination . '/' . $mkdir;
+
+            if (!is_dir($dir)) {
+                mkdir($destination . '/' . $mkdir, 0755, true);
+            }
         }
 
         $this->builder->addHook(function($document) {
