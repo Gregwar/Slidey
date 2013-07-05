@@ -14,6 +14,7 @@ class Slidey
     protected $title;
     protected $builder;
     protected $interactive = null;
+    protected $mkdirs = array();
 
     public function __construct()
     {
@@ -21,6 +22,9 @@ class Slidey
         $this->builder->copy(__DIR__.'/static/slidey', 'slidey');
     }
 
+    /**
+     * Sets the document title prefix
+     */
     public function setTitle($prefix)
     {
         $this->builder->addHook(function($document) use ($prefix) {
@@ -36,6 +40,9 @@ class Slidey
         });
     }
 
+    /**
+     * Enable the interactive mode
+     */
     public function enableInteractive($password, $directory = 'data')
     {
         $this->builder->copy(__DIR__.'/static/interactive.php');
@@ -55,6 +62,9 @@ class Slidey
         );
     }
 
+    /**
+     * Adds a stylesheet to the final document
+     */
     public function addCss($css)
     {
         $this->builder->addHook(function($document) use ($css) {
@@ -62,17 +72,33 @@ class Slidey
         });
     }
 
+    /**
+     * Copy some files from the original tree to the final document
+     */
     public function copy($source, $destination = null)
     {
         $this->builder->copy($source, $destination);
+    }
+
+    public function mkdir($directory)
+    {
+        $this->mkdirs[] = $directory;
     }
 
     /**
      * Runs the slidey builder on the $source directory and put all the output
      * in the $destination directory
      */
-    public function build($source = 'pages', $destination = 'web')
+    public function build($destination = 'web', $source = 'pages')
     {
+        foreach ($this->mkdirs as $mkdir) {
+            $dir = $destination . '/' . $mkdir;
+
+            if (!is_dir($dir)) {
+                mkdir($destination . '/' . $mkdir, 0755, true);
+            }
+        }
+
         $this->builder->addHook(function($document) {
             $document->addCss('/slidey/css/style.css');
 
