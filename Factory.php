@@ -13,6 +13,7 @@ class Factory extends Base
         $directives = parent::getDirectives();
         $directives[] = new Directives\Slide;
         $directives[] = new Directives\Math;
+        $directives[] = new Directives\DiscoverList;
         $directives[] = new Wrap('textOnly');
         $directives[] = new Wrap('slideOnly');
         $directives[] = new Wrap('discover');
@@ -22,7 +23,7 @@ class Factory extends Base
 
     public function getClass($name)
     {
-        $nodes = array('CodeNode', 'TocNode');
+        $nodes = array('CodeNode', 'TocNode', 'ListNode');
 
         if (in_array($name, $nodes)) {
             return '\\Gregwar\\Slidey\\Nodes\\'.$name;
