@@ -14,9 +14,13 @@ class Factory extends Base
         $directives[] = new Directives\Slide;
         $directives[] = new Directives\Math;
         $directives[] = new Directives\DiscoverList;
-        $directives[] = new Wrap('textOnly');
-        $directives[] = new Wrap('slideOnly');
-        $directives[] = new Wrap('discover');
+
+        $classes = array('textOnly', 'slideOnly', 'discover',
+            'step', 'note', 'tip', 'warning');
+
+        foreach ($classes as $class) {
+            $directives[] = new Wrap($class);
+        }
 
         return $directives;
     }
