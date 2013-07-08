@@ -65,7 +65,7 @@ function Slidey()
     /**
      * Resizes the slide to fit the screen size
      */
-    this.resizeSlides = function()
+    this.resizeSlides = function(force)
     {
         var width = $(document.body).width();
         var height = $(window).height();
@@ -79,10 +79,12 @@ function Slidey()
                 $(this).css('margin-top', height-$(this).height()-5);
             });
         } else {
-            $('.slideNumber').each(function() {
-                $(this).css('margin-left', width + $(this).width() - 20);
-                $(this).css('margin-top', 5);
-            });
+            if (force) {
+                $('.slideNumber').each(function() {
+                    $(this).css('margin-left', width + $(this).width() - 20);
+                    $(this).css('margin-top', 5);
+                });
+            }
         }
     };
 
@@ -263,7 +265,7 @@ function Slidey()
         $('.textOnly').hide();
         this.slideMode = true;
         $('.slideWrapper').addClass('slideEnabled');
-        this.resizeSlides();
+        this.resizeSlides(true);
         this.updateDiscovers();
         this.dispatch('slideMode');
         this.dispatch('moved');
@@ -282,7 +284,7 @@ function Slidey()
         $('.textOnly').show();
         this.slideMode = false;
         $('.slideEnabled').height('auto');
-        this.resizeSlides();
+        this.resizeSlides(true);
         $('.slideWrapper').removeClass('slideEnabled');
         this.dispatch('textMode');
     };
@@ -292,7 +294,7 @@ function Slidey()
      */
     this.on('tick', function()
     {
-        slidey.resizeSlides();
+        slidey.resizeSlides(false);
     });
 
     this.tick = function()
