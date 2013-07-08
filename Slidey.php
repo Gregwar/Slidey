@@ -110,7 +110,10 @@ class Slidey
                 $document->addJs('/slidey/js/'.$js);
             }
 
-            $document->prependNode(new RawNode(file_get_contents(__DIR__.'/static/top.html')));
+            $environment = $document->getEnvironment();
+            $home = $environment->resolve('/index');
+            $home = $home['url'];
+            $document->prependNode(new RawNode(str_replace('%home%', $home, file_get_contents(__DIR__.'/static/top.html'))));
             $document->addNode(new RawNode(file_get_contents(__DIR__.'/static/bottom.html')));
             $document->addNode(new Nodes\BrowserNode($document->getEnvironment()));
             $document->addFavicon();
