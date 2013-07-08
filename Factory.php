@@ -16,7 +16,7 @@ class Factory extends Base
         $directives[] = new Directives\DiscoverList;
 
         $classes = array('textOnly', 'slideOnly', 'discover',
-            'step', 'note', 'tip', 'warning');
+            'step', 'note', 'tip', 'warning', 'spoiler');
 
         foreach ($classes as $class) {
             $directives[] = new Wrap($class);
