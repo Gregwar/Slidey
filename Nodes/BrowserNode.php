@@ -16,7 +16,7 @@ class BrowserNode extends Base
 
     protected function reference($file)
     {
-        $meta = $this->environment->resolve($file);
+        $meta = $this->environment->resolve('/'.$file);
 
         return '<a href="'.$meta['url'].'">'.$meta['title'].'</a>';
     }
