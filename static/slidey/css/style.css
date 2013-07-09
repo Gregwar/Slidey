@@ -145,6 +145,11 @@ code {
     float:left;
 }
 
+.parent {
+    width:100%;
+    text-align:center;
+}
+
 .next {
     float:right;
 }

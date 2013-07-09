@@ -16,7 +16,11 @@ class BrowserNode extends Base
 
     protected function reference($file)
     {
-        $meta = $this->environment->resolve('/'.$file);
+        if (!is_array($file)) {
+            $meta = $this->environment->resolve('/'.$file);
+        } else {
+            $meta = $file;
+        }
 
         return '<a href="'.$meta['url'].'">'.$meta['title'].'</a>';
     }
@@ -27,8 +31,14 @@ class BrowserNode extends Base
 
         $prev = $before ? $this->reference($before[count($before)-1]) : null;
         $next = $after ? $this->reference($after[0]) : null;
+        $parent = $this->environment->getParent();
 
         $html = '';
+
+        if ($parent) {
+            $ref = $this->reference($parent);
+            $html .= '<div class="parent">'.$ref.'</div>';
+        }
 
         if ($prev) {
             $html .= '<div class="prev">&laquo; '.$prev.'</div>';
@@ -37,7 +47,7 @@ class BrowserNode extends Base
         if ($next) {
             $html .= '<div class="next">'.$next.' &raquo;</div>';
         }
-
+ 
         return $html;
     }
 }
