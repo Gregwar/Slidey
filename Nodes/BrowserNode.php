@@ -17,7 +17,7 @@ class BrowserNode extends Base
     protected function reference($file)
     {
         if (!is_array($file)) {
-            $meta = $this->environment->resolve('/'.$file);
+            $meta = $this->environment->resolve('doc', '/'.$file);
         } else {
             $meta = $file;
         }
