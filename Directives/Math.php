@@ -28,6 +28,11 @@ class Math extends Directive
         $tex->setActualCacheDirectory($environment->getTargetDirectory().'/cache/tex/');
 
         $node = new RawNode('<img src="'.$tex->generate().'" />');
-        $document->addNode($node);
+
+        if ($variable) {
+            $environment->setVariable($variable, $node);
+        } else {
+            $document->addNode($node);
+        }
     }
 }

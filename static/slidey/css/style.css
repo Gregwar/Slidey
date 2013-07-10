@@ -314,9 +314,13 @@ a.prev, a.next {
 }
 
 img {
-    margin:20px;
     border:0px;
     vertical-align:middle;
+    margin:20px;
+}
+
+p img {
+    margin:0px;
 }
 
 img.formula {
