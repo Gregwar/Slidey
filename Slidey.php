@@ -9,17 +9,16 @@ use Gregwar\RST\Nodes\RawNode;
 /**
  * Slidey standard package
  */
-class Slidey
+class Slidey extends Builder
 {
     protected $title;
-    protected $builder;
     protected $interactive = null;
     protected $mkdirs = array();
 
     public function __construct()
     {
-        $this->builder = new Builder(new Factory);
-        $this->builder->copy(__DIR__.'/static/slidey', 'slidey');
+        $this->factory = new Factory;
+        $this->copy(__DIR__.'/static/slidey', 'slidey');
     }
 
     /**
@@ -27,7 +26,7 @@ class Slidey
      */
     public function setTitle($prefix)
     {
-        $this->builder->addHook(function($document) use ($prefix) {
+        $this->addHook(function($document) use ($prefix) {
             $title = $document->getTitle();
 
             if ($title) {
@@ -45,9 +44,9 @@ class Slidey
      */
     public function enableInteractive($password, $directory = 'data')
     {
-        $this->builder->copy(__DIR__.'/static/interactive.php');
+        $this->copy(__DIR__.'/static/interactive.php');
 
-        $this->builder->addHook(function($document) {
+        $this->addHook(function($document) {
             $jss = array('slidey.interactive.js', 'slidey.poll.js');
 
             foreach ($jss as $js) {
@@ -67,17 +66,9 @@ class Slidey
      */
     public function addCss($css)
     {
-        $this->builder->addHook(function($document) use ($css) {
+        $this->addHook(function($document) use ($css) {
             $document->addCss('/'.$css);
         });
-    }
-
-    /**
-     * Copy some files from the original tree to the final document
-     */
-    public function copy($source, $destination = null)
-    {
-        $this->builder->copy($source, $destination);
     }
 
     public function mkdir($directory)
@@ -99,7 +90,7 @@ class Slidey
             }
         }
 
-        $this->builder->addHook(function($document) {
+        $this->addHook(function($document) {
             $document->addCss('/slidey/css/style.css');
 
             $jss = array('jquery.js', 'slidey.images.js',
@@ -119,11 +110,11 @@ class Slidey
             $document->addFavicon();
         });
 
-        $this->builder->build($source, $destination);
+        parent::build($source, $destination);
 
         if ($this->interactive) {
             $config = '<?php return '.var_export($this->interactive, true).';';
-            file_put_contents($this->builder->getTargetFile('config.php'), $config);
+            file_put_contents($this->getTargetFile('config.php'), $config);
         }
     }
 }
