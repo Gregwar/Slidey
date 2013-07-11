@@ -103,7 +103,7 @@ class Slidey extends Builder
 
             $environment = $document->getEnvironment();
             $home = $environment->resolve('doc', '/index');
-            $home = $environment->relativeUrl('/'.$home['url']);
+            $home = $home['url'];
             $document->prependNode(new RawNode(str_replace('%home%', $home, file_get_contents(__DIR__.'/static/top.html'))));
             $document->addNode(new RawNode(file_get_contents(__DIR__.'/static/bottom.html')));
             $document->addNode(new Nodes\BrowserNode($document->getEnvironment()));
