@@ -13,8 +13,18 @@ class ListNode extends Base
         $this->discover = true;
     }
 
-    public function createElement($text)
+    public function createElement($text, $prefix)
     {
-        return '<li class="'.($this->discover ? 'discover' : '').'">'.$text.'</li>';
+        $classes = array();
+
+        if ($prefix == '-') {
+            $classes[] = 'dash';
+        }
+
+        if ($this->discover) {
+            $classes[] = 'discover';
+        }
+        
+        return '<li class="'.implode(' ', $classes).'">'.$text.'</li>';
     }
 }

@@ -486,3 +486,15 @@ code {
     margin:2px;
     background-color:#fdfdfd;
 }
+
+ul li.dash:before {
+    content:"-";
+    position:relative;
+    left:-15px;
+}
+
+ul li.dash {
+    text-indent:-5px;
+    list-style:none;
+}
+
