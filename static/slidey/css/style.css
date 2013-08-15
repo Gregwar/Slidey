@@ -2,7 +2,7 @@ body {
     width: 900px;
     font-family: sans-serif;
     margin:auto;
-    font-size:18px;
+    font-size:15px;
     margin-top:0px;
     margin-bottom:20px;
 }
@@ -55,16 +55,18 @@ h1 {
 }
 
 h2 {
-    border:1px solid #ccc;
     margin: 2px;
     background-color:white;
     padding:2px;
-    border-radius:10px;
-    font-size:22px;
+    font-size:28px;
     margin-bottom:0px;
+    font-family:Serif;
+    text-shadow:2px 2px 1px #eee;
+    border-bottom:2px solid #eee;
 }
 
 h3 {
+    font-family:Serif;
     font-size:18px;
     text-align:left;
     margin-left:12px;
@@ -72,14 +74,7 @@ h3 {
     margin-top:10px;
     margin-bottom:10px;
     padding-bottom:1px;
-    border-bottom:2px solid #ddd;
-}
-
-h2:before {
-    content:'» ';
-    color:#70c600;
-    font-size:25px;    
-    font-family:sans-serif;
+    border-bottom:2px dotted #eee;
 }
 
 li {
