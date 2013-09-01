@@ -357,8 +357,9 @@ function Slidey()
         });
 
         $(document).keydown(function(e){
-            if (!slidey.slideMode || !slidey.controlsEnabled)
-            {
+            slidey.dispatch('keypress', e.keyCode);
+
+            if (!slidey.slideMode || !slidey.controlsEnabled) {
                 return;
             }
 

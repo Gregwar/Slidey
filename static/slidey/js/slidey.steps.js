@@ -6,6 +6,7 @@ function SlideyStepsExtension(slidey)
     var self = this;
     this.key = null;
     this.checklist = [];
+    this.cleanCounter = 0;
 
     this.updateCheckbox = function(checkbox)
     {
@@ -62,5 +63,24 @@ function SlideyStepsExtension(slidey)
                 self.checklist[myStepId] = 0;
             }
         });
+    });
+
+    slidey.on('keypress', function(code) {
+        if (code == 161) {
+            self.cleanCounter++;
+
+            if (self.cleanCounter >= 3) {
+                self.checklist = [];
+                $('.stepContainer').each(function() {
+                    var checkbox = $(this).find('.stepChecker input[type=checkbox]');
+                    if (checkbox.is(':checked')) {
+                        checkbox.attr('checked', false);
+                    }
+                    self.updateCheckbox(checkbox);
+                });
+            }
+        } else {
+            self.cleanCounter = 0;
+        }
     });
 };
