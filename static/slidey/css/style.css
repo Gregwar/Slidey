@@ -373,7 +373,6 @@ td {
     font-weight:bold;
 }
 
-
 .menu {
     font-weight:bold;
     position:fixed;
@@ -382,7 +381,9 @@ td {
     width:180px;
     padding:3px;
     border-radius:8px;
-    background-color:black;
+    background-color:#eee;
+    border:2px solid #ccc;
+    z-index:9;
 }
 
 .menuh2 {
@@ -398,22 +399,22 @@ td {
 }
 
 .menuItem {
-    color:#aaa;
+    color:#666;
     cursor:pointer;
 }
 
 .menu .menuPassed {
     text-decoration:line-through;
-    color:#666;
+    color:#aaa;
 }
 
 .menu .menuItem:hover {
-    color:#fff;
+    color:#000;
 }
 
 .slide hr {
     border:0;
-    background-color:#aaa;
+    background-color:black;
 }
 
 .poll {
