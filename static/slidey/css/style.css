@@ -248,6 +248,11 @@ a.prev, a.next {
     position:absolute;
 }
 
+.slideNumber:hover {
+    color:#eee;
+    background-color:#000;
+}
+
 .slideEnabled .slideNumber {
     position:absolute;
     font-size:50px;
@@ -393,9 +398,10 @@ td {
     margin-top:30px;
     width:180px;
     padding:3px;
-    border-radius:8px;
-    background-color:#eee;
-    border:2px solid #ccc;
+    border-radius:12px;
+    background-color:#000;
+    background-image:url('gfx/fade.png');
+    background-repeat:repeat-y;
     z-index:9;
 }
 
@@ -412,17 +418,17 @@ td {
 }
 
 .menuItem {
-    color:#666;
+    color:#ddd;
     cursor:pointer;
 }
 
 .menu .menuPassed {
     text-decoration:line-through;
-    color:#aaa;
+    color:#777;
 }
 
 .menu .menuItem:hover {
-    color:#000;
+    color:#fff;
 }
 
 .slide hr {
