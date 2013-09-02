@@ -405,6 +405,13 @@ td {
     z-index:9;
 }
 
+.menu code {
+    font-size:15px;
+    color:white;
+    background:transparent;
+    border:0;
+}
+
 .menuh2 {
     font-weight:bold;
     font-size:85%;
