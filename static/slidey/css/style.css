@@ -397,7 +397,7 @@ td {
     font-size:17px;
     margin-top:30px;
     width:180px;
-    padding:3px;
+    padding:5px;
     border-radius:12px;
     background-color:#000;
     background-image:url('gfx/fade.png');
@@ -431,9 +431,10 @@ td {
     color:#fff;
 }
 
-.slide hr {
+hr {
     border:0;
-    background-color:black;
+    height:1px;
+    background-color:#aaa;
 }
 
 .poll {
