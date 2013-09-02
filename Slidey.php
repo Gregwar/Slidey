@@ -105,8 +105,8 @@ class Slidey extends Builder
             $home = $environment->resolve('doc', '/index');
             $home = $home['url'];
             $document->prependNode(new RawNode(str_replace('%home%', $home, file_get_contents(__DIR__.'/static/top.html'))));
-            $document->addNode(new RawNode(file_get_contents(__DIR__.'/static/bottom.html')));
             $document->addNode(new Nodes\BrowserNode($document->getEnvironment()));
+            $document->addNode(new RawNode(file_get_contents(__DIR__.'/static/bottom.html')));
             $document->addFavicon();
         });
 
