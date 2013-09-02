@@ -15,6 +15,22 @@ body {
 
 .toc li {
     list-style:square;
+    margin-left:30px;
+}
+
+.toc .slide {
+    margin-top:10px;
+}
+
+.toc ul {
+    margin-left:0;
+    margin-bottom:9px;
+    padding:0;
+}
+
+.toc ul ul {
+    margin-left:30px;
+    margin-bottom:2px;
 }
 
 .toc ul ul {
@@ -220,10 +236,6 @@ a.prev, a.next {
     overflow:hidden;
 }
 
-.slideEnabled .highlight pre {
-    margin:10px;
-}
-
 .slideNumber {
     color:#aaa;
     font-size:18px;
@@ -233,6 +245,7 @@ a.prev, a.next {
     width:60px;
     border:1px solid #ddd;
     text-align:center;
+    position:absolute;
 }
 
 .slideEnabled .slideNumber {
