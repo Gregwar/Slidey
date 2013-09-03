@@ -47,7 +47,7 @@ class Slidey extends Builder
         $this->copy(__DIR__.'/static/interactive.php');
 
         $this->addHook(function($document) {
-            $jss = array('slidey.interactive.js', 'slidey.poll.js');
+            $jss = array('slidey.interactive.js');
 
             foreach ($jss as $js) {
                 $document->addJs('/slidey/js/'.$js);
