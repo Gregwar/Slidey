@@ -100,7 +100,7 @@ function Slidey()
             $('.contents').css('width', $('.core').width());
         } else {
             $('.contents').css('margin-left', 200);
-            $('.menu').css('margin-left', 0);
+            $('.menu').css('margin-left', -30);
             $('.contents').css('width', 750);
         }
     }

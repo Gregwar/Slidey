@@ -102,6 +102,11 @@ module.exports = function(grunt) {
         expand: true,
         src: ["fonts/*"],
         dest: 'dist/'
+      },
+
+      gfx: {
+        src: ["gfx/*"],
+        dest: 'dist/css/'
       }
     },
 

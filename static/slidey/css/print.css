@@ -1,6 +1,0 @@
-/**
- * Hide some things for printing
- */
-.slideNumber, .menu, .slideMode, .prev, .next {
-    display: none !important;
-}
