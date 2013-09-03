@@ -31,65 +31,10 @@ class State
                 'page' => '',
                 'slide' => 0,
                 'discover' => 0,
-                'poll' => null
             );
         }
 
         $this->directory = $directory;
-    }
-
-    /**
-     * Add vote
-     */
-    public function addVote($option)
-    {
-        $file = $this->directory . '/poll/' . uniqid('vote_', true);
-        file_put_contents($file, $option);
-    }
-
-    /**
-     * Clear the poll
-     */
-    public function clearPoll()
-    {
-        $directory = $this->directory . '/poll';
-
-        if (!is_dir($directory)) {
-            @mkdir($directory, 0755, true);
-        }
-
-        $dir = opendir($directory);
-        while (($file = readdir($dir)) !== false) {
-            if ($file != '.' && $file != '..') {
-                unlink($this->directory . '/poll/' . $file);
-            }
-        }
-    }
-
-    /**
-     * Gets the poll stats
-     */
-    public function getStats()
-    {
-        $stats = array();
-        $directory = $this->directory . '/poll';
-
-        if (is_dir($directory)) {
-            $dir = opendir($directory);
-            while (($file = readdir($dir)) !== false) {
-                if ($file != '.' && $file != '..') {
-                    $value = (int)file_get_contents($this->directory . '/poll/' . $file);
-
-                    if (isset($stats[$value])) {
-                        $stats[$value]++;
-                    } else {
-                        $stats[$value] = 1;
-                    }
-                }
-            }
-        }
-
-        return $stats;
     }
 
     /**
@@ -125,23 +70,6 @@ class Interactive
     }
 
     /**
-     * Vote for an option
-     */
-    public function vote($option)
-    {
-        $option = (int)$option;
-
-        if ($this->state->current['poll'] === null) {
-            return;
-        }
-
-        if ($this->status['lastPoll'] != $this->state->current['poll']) {
-            $this->state->addVote($option);
-            $this->status['lastPoll'] = $this->state->current['poll'];
-        }
-    }
-
-    /**
      * Process the interactive request
      */
     public function run()
@@ -163,15 +91,11 @@ class Interactive
             case '/update':
                 $current = array();
 
-                foreach (array('page', 'slide', 'discover', 'poll') as $key) {
+                foreach (array('page', 'slide', 'discover') as $key) {
                     $current[$key] = isset($_GET[$key]) ? $_GET[$key] : null;
                     if ($current[$key] == 'null') {
                         $current[$key] = null;
                     }
-                }
-
-                if ($this->state->current['poll'] != $current['poll']) {
-                    $this->state->clearPoll();
                 }
 
                 $this->state->current = $current;
@@ -181,20 +105,6 @@ class Interactive
             case '/current':
                 $response = $this->state->current;
                 $response['status'] = $this->status;
-                break;
-            case '/vote':
-                $option = isset($_GET['option']) ? $_GET['option'] : null;
-
-                if ($option !== null) {
-                    $this->vote($option);
-                }
-                break;
-            case '/getStats':
-                if (isset($this->status['admin'])) {
-                    $response = $this->state->getStats();
-                } else {
-                    $response = array();
-                }
                 break;
             case '/logout':
                 $this->status = array();

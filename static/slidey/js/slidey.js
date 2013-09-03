@@ -413,7 +413,4 @@ new SlideyStepsExtension(slidey);
 if (typeof(SlideyInteractiveExtension) != 'undefined') {
     interactive = new SlideyInteractiveExtension(slidey);
 }
-if (typeof(SlideyPollExtension) != 'undefined') {
-    new SlideyPollExtension(slidey, interactive);
-}
 slidey.init();

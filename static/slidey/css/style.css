@@ -286,6 +286,11 @@ img.formula {
 
 .contents {
     text-align:justify;
+    background-color:white;
+    float:left;
+    padding:10px;
+    border-left:3px solid #ddd;
+    border-right:3px solid #ddd;
 }
 
 table {
@@ -364,34 +369,6 @@ hr {
     background-color:#aaa;
 }
 
-.poll {
-    display:none;
-}
-
-.poll .option {
-    cursor:pointer;
-    padding:5px;
-    border-radius:5px;
-    border:1px solid #555;
-    margin-top:1px;
-}
-
-.poll .option:hover {
-    background-color:#666;
-}
-
-.poll .result {
-    float:right;
-}
-
-.poll .result .bar {
-    height:30px;
-    background-color:#006cff;
-    float:right;
-    margin:5px;
-    border-radius:10px;
-}
-
 .stepChecker {
     position:absolute;
     margin-left:-40px;
@@ -432,10 +409,3 @@ html {
     background-image:url('gfx/texture.png');
 }
 
-.contents {
-    background-color:white;
-    float:left;
-    padding:10px;
-    border-left:3px solid #ddd;
-    border-right:3px solid #ddd;
-}
