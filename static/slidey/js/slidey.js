@@ -384,15 +384,19 @@ function Slidey()
 
             switch (e.keyCode) {
                 case 37: // Left
+                    e.preventDefault();
                     slidey.precDiscover();
                    break;
                 case 39: // Right
+                    e.preventDefault();
                     slidey.nextDiscover();
                     break;
                 case 38: // Up
+                    e.preventDefault();
                     slidey.precSlide();
                 break;
                 case 40: // Down
+                    e.preventDefault();
                     slidey.nextSlide();
                 break;
             }
