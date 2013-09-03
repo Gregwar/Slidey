@@ -6888,61 +6888,14 @@ a.next {
   font-weight: bold;
 }
 
-.slideEnabled {
-  display: table;
-  width: 900px;
-  font-size: 25px;
-}
-
 .slide {
   width: 100%;
   background-color: white;
 }
 
-.slideEnabled .slide {
-  width: 870px;
-}
-
-.slideEnabled .middleSlide {
-  display: table-cell;
-  text-align: left;
-  vertical-align: middle;
-}
-
-.slideEnabled h1 {
-  font-size: 60px;
-}
-
-.slideEnabled h2 {
-  font-size: 45px;
-  border: none;
-  border-bottom: 3px solid #aaa;
-}
-
-.slideEnabled h2:before {
-  content: '';
-}
-
-.slideEnabled h3 {
-  font-size: 35px;
-}
-
-.slideEnabled .highlight {
-  padding-top: 3px;
-  padding-bottom: 3px;
-  overflow: hidden;
-  font-size: 20px;
-}
-
 .slideNumber {
   position: absolute;
   z-index: 5;
-}
-
-.slideEnabled .slideNumber {
-  position: absolute;
-  width: auto;
-  font-size: 50px;
 }
 
 .mobileControls {
@@ -6958,14 +6911,6 @@ a.next {
   right: 10px;
   bottom: 10px;
   z-index: 100;
-}
-
-.slideEnabled .tocSlide {
-  font-size: 60px;
-}
-
-.slideEnabled .tocSlide ul {
-  font-size: 45px;
 }
 
 img {
@@ -7043,6 +6988,65 @@ ul li.dash {
 
 html {
   background-image: url('gfx/texture.png');
+}
+
+/**
+ * Contains all changes applied by the slide mode
+ */
+
+.slideEnabled {
+  display: table;
+  width: 900px;
+  font-size: 25px;
+}
+
+.slideEnabled .slideNumber {
+  position: absolute;
+  width: auto;
+  font-size: 50px;
+}
+
+.slideEnabled .slide {
+  width: 870px;
+}
+
+.slideEnabled .middleSlide {
+  display: table-cell;
+  text-align: left;
+  vertical-align: middle;
+}
+
+.slideEnabled h1 {
+  font-size: 60px;
+}
+
+.slideEnabled h2 {
+  font-size: 45px;
+  border: none;
+  border-bottom: 3px solid #aaa;
+}
+
+.slideEnabled h2:before {
+  content: '';
+}
+
+.slideEnabled h3 {
+  font-size: 35px;
+}
+
+.slideEnabled .highlight {
+  padding-top: 3px;
+  padding-bottom: 3px;
+  overflow: hidden;
+  font-size: 20px;
+}
+
+.slideEnabled .tocSlide {
+  font-size: 60px;
+}
+
+.slideEnabled .tocSlide ul {
+  font-size: 45px;
 }
 
 .menu {
