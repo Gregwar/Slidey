@@ -101,6 +101,7 @@ class Slidey extends Builder
             foreach ($jss as $js) {
                 $document->addJs('/slidey/js/'.$js);
             }
+            $document->addJs('/slidey/bootstrap/dist/js/bootstrap.min.js');
 
             $environment = $document->getEnvironment();
             $home = $environment->resolve('doc', '/index');

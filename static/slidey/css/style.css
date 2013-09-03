@@ -1,4 +1,15 @@
 body {
+    margin:0;
+    padding:0;
+}
+
+html {
+    margin:0;
+}
+
+.core {
+    height:1px;
+    padding:0px;
     width: 1000px;
     margin:auto;
     font-family: sans-serif;
@@ -229,6 +240,7 @@ a.prev, a.next {
 }
 
 .mobileControls {
+    display:none;
     position:fixed;
     right:10px;
     bottom:60px;
@@ -378,10 +390,6 @@ hr {
     float:right;
     margin:5px;
     border-radius:10px;
-}
-
-.loginWindow input {
-    font-size:30px; 
 }
 
 .stepChecker {

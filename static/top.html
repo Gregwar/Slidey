@@ -1,10 +1,21 @@
-<div class="loginWindow interactiveWindow">
-    <form>
-        Mot de passe&nbsp;:<br />
-        <input type="password" name="password" />
-    </form>
+<div class="modal fade" id="loginWindow">
+  <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title">Log-in</h4>
+        </div>
+        <div class="modal-body">
+            <form>
+                Mot de passe&nbsp;:<br />
+                <input class="form-control" type="password" name="password" />
+            </form>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
 </div>
 
+<div class="core">
 <div class="mobileControls">
     <div class="btn-group">
         <a href="javascript:void(0)" class="left btn btn-default btn-lg"><span class="glyphicon glyphicon-arrow-left"></span></a>

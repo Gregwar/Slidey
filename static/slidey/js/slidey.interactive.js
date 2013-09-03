@@ -104,9 +104,11 @@ function SlideyInteractiveExtension(slidey)
     this.login = function()
     {
         if (!extension.isAdmin) {
-            $('.loginWindow').show();
-            $('.loginWindow input').val('');
-            $('.loginWindow input').focus();
+            $('#loginWindow').on('shown.bs.modal', function() {
+                $('#loginWindow input').val('');
+                $('#loginWindow input').focus();
+            });
+            $('#loginWindow').modal('show');
         } else {
             alert('Vous êtes déjà admin');
         }
@@ -146,8 +148,9 @@ function SlideyInteractiveExtension(slidey)
         });
 
         // Logging
-        $('.loginWindow form').submit(function() {
-            $.getJSON(extension.path + 'login?password=' + $('.loginWindow input').val(), function(status) {
+        $('#loginWindow form').submit(function() {
+            $('#loginWindow').modal('hide');
+            $.getJSON(extension.path + 'login?password=' + $('#loginWindow input').val(), function(status) {
                 extension.updateStatus(status);
 
                 if (extension.isAdmin) {
