@@ -13,7 +13,7 @@ function SlideyMobileExtension(slidey)
 
     slidey.on('init', function()
     {
-        if (extension.isMobile()) {
+        if (true || extension.isMobile()) {
             $('.mobileControls').show();
         }
 

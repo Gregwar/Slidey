@@ -19,11 +19,11 @@ function SlideyInteractiveExtension(slidey)
         this.follow = (status.follower != undefined);
 
         if (!lastFollow && this.follow) {
-            $('.followMode').addClass('followModeEnabled');
+            $('.followMode').addClass('active');
             this.updateCurrent();
         }
         if (lastFollow && !this.follow) {
-            $('.followMode').removeClass('followModeEnabled');
+            $('.followMode').removeClass('active');
         }
 
         slidey.controlsEnabled = (this.isAdmin || !this.follow);
@@ -164,6 +164,7 @@ function SlideyInteractiveExtension(slidey)
         // Following/Unfollowing
         $('.followMode').click(function() {
             extension.toggleFollow();
+            return true;
         });
 
         $(document).keydown(function(e){

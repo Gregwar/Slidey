@@ -75,8 +75,8 @@ function Slidey()
             $('.slideEnabled').height(height);
 
             $('.slideNumber').each(function() {
-                $(this).css('margin-left', width-$(this).width()-5);
-                $(this).css('margin-top', height-$(this).height()-5);
+                $(this).css('margin-left', width-$(this).width()+20);
+                $(this).css('margin-top', height-$(this).height()-100);
             });
         } else {
             if (force) {
@@ -251,7 +251,7 @@ function Slidey()
         $('.slide').each(function() {
             $(this).wrap('<div class="slideWrapper" rel="' + id + '" id="slide' + id + '"></div>');	
 
-            $('#slide' + id).prepend('<div class="slideNumber" rel="' + id + '">' + (id+1) + '/' + slidey.slidesCount + '</div>');
+            $('#slide' + id).prepend('<div class="btn btn-default slideNumber" rel="' + id + '">' + (id+1) + '/' + slidey.slidesCount + '</div>');
 
             var discover_id = 0;
 
@@ -276,8 +276,8 @@ function Slidey()
      */
     this.runSlideMode = function()
     {
-        $('.slideModeNormal').removeClass('slideModeEnabled');
-        $('.slideModeSlide').addClass('slideModeEnabled');
+        $('.slideModeNormal').removeClass('active');
+        $('.slideModeSlide').addClass('active');
         $('.slideOnly').show();
         $('.textOnly').hide();
         this.slideMode = true;
@@ -295,8 +295,8 @@ function Slidey()
     this.runTextMode = function()
     {
         $('body').css('background-color', 'transparent');
-        $('.slideModeSlide').removeClass('slideModeEnabled');
-        $('.slideModeNormal').addClass('slideModeEnabled');
+        $('.slideModeSlide').removeClass('active');
+        $('.slideModeNormal').addClass('active');
         $('.discover').show();
         $('.slideOnly').hide();
         $('.textOnly').show();
