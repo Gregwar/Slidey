@@ -46,19 +46,10 @@ body {
     text-align:center;
 }
 
-.annexSummary a {
-    color:#cc3a00;
-}
-
 .annex {
     padding-top:10px;
     padding-bottom:10px;
     font-size:25px;
-}
-
-.annex a {
-    color:#cc3a00;
-    font-weight:bold;
 }
 
 h1 {
@@ -97,16 +88,6 @@ li {
 
 b {
     text-shadow:2px 2px 1px #eee;
-}
-
-a {
-    color:#cc3a00;
-    text-decoration:none;
-}
-
-a:hover {
-    color: black;
-    text-decoration:underline;
 }
 
 .highlight .hll { background-color: #ffffcc; }
@@ -397,28 +378,6 @@ hr {
     float:right;
     margin:5px;
     border-radius:10px;
-}
-
-/**
- * Interactive
- */
-.interactiveWindow {
-    border:2px solid #999;
-    border-radius:5px;
-    display:none;
-    position:fixed;
-    top:15%;
-    left:50%;
-    background-color:#222;
-    padding:10px;
-    font-size:30px; 
-    color:white;
-    width:800px;
-    margin-left:-400px;
-}
-
-.interactiveWindow a:hover {
-    color:white;
 }
 
 .loginWindow input {
