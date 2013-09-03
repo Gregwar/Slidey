@@ -246,6 +246,7 @@ a.prev, a.next {
     border:1px solid #ddd;
     text-align:center;
     position:absolute;
+    z-index:5;
 }
 
 .slideNumber:hover {
@@ -265,6 +266,7 @@ a.prev, a.next {
     position:fixed;
     right:20px;
     bottom:20px;
+    z-index:100;
 }
 
 .mobileControls {
@@ -402,7 +404,6 @@ td {
     background-color:#000;
     background-image:url('gfx/fade.png');
     background-repeat:repeat-y;
-    z-index:9;
 }
 
 .menu code {
