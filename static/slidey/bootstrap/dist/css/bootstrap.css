@@ -7208,9 +7208,10 @@ code {
   padding: 2px;
   font-family: courier;
   font-size: 90%;
-  color: #666;
+  color: #333;
   white-space: nowrap;
   background-color: #f9f2f4;
+  border: 1px solid #aaa;
   border-radius: 4px;
 }
 
