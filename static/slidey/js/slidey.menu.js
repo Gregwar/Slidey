@@ -5,6 +5,7 @@ function SlideyMenuExtension(slidey)
 {
     var extension = this;
     var currentTitle = '';
+    var allSubPassed = false;
 
     /**
      * Generates the menu browser
@@ -67,10 +68,12 @@ function SlideyMenuExtension(slidey)
 
         var lastTitle = currentTitle;
         if ($('.menuh2').length) {
-            if ($('.menuh2:not(.menuPassed)').length) {
+            if ($('.menuh2.menuPassed').length) {
+                // Some titles are not visibles
                 currentTitle = $('.menuh2.menuPassed').last().attr('rel');
             } else {
-                currentTitle = $('.menuh2').first().attr('rel');
+                // All the titles are visible
+                currentTitle = $('.menuh2:not(.menuPassed)').first().attr('rel');
             }
 
             if (lastTitle != currentTitle) {
