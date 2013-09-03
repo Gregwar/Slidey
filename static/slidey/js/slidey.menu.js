@@ -61,6 +61,10 @@ function SlideyMenuExtension(slidey)
      */
     slidey.on('tick', function() 
     {
+        if ($('h1, h2, h3').length < 2) {
+            $('.menu').hide();
+        }
+
         var scrollTop = $('html').scrollTop();
         if (!scrollTop) {
             scrollTop = $('body').scrollTop();
