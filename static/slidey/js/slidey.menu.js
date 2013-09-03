@@ -4,6 +4,7 @@
 function SlideyMenuExtension(slidey)
 {
     var extension = this;
+    var currentTitle = '';
 
     /**
      * Generates the menu browser
@@ -16,10 +17,17 @@ function SlideyMenuExtension(slidey)
             return;
         }
 
+        var lastTitle = '';
         $('h1, h2, h3').each(function() {
+            var tagName = $(this)[0].tagName.toLowerCase();
+            if (tagName == 'h2') {
+                lastTitle = $(this).attr('id');
+            }
             if ($(this).is(':visible')) {
-                html = '<div id="menu_for_'+$(this).attr('id')+'" rel="'+$(this).attr('id')+'" class="menuItem menu'+$(this)[0].tagName.toLowerCase()+'">'+$(this).html()+'</div>';
-                menuElements += html;
+                if (tagName != 'h3' || lastTitle == currentTitle) {
+                    html = '<div id="menu_for_'+$(this).attr('id')+'" rel="'+$(this).attr('id')+'" class="menuItem menu'+tagName+'">'+$(this).html()+'</div>';
+                    menuElements += html;
+                }
             }
         });
 
@@ -55,6 +63,19 @@ function SlideyMenuExtension(slidey)
         var scrollTop = $('html').scrollTop();
         if (!scrollTop) {
             scrollTop = $('body').scrollTop();
+        }
+
+        var lastTitle = currentTitle;
+        if ($('.menuh2').length) {
+            if ($('.menuh2:not(.menuPassed)').length) {
+                currentTitle = $('.menuh2.menuPassed').last().attr('rel');
+            } else {
+                currentTitle = $('.menuh2').first().attr('rel');
+            }
+
+            if (lastTitle != currentTitle) {
+                extension.generateMenu();
+            }
         }
 
         $('h1, h2, h3').each(function() {
