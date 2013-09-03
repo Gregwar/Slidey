@@ -67,7 +67,7 @@ function Slidey()
      */
     this.resizeSlides = function(force)
     {
-        var width = $(document.body).width();
+        var width = $('.core').width();
         var height = $(window).height();
 
         if (this.slideMode)
@@ -97,7 +97,7 @@ function Slidey()
         if (this.slideMode) {
             $('.contents').css('margin-left', 0);
             $('.menu').css('margin-left', -250);
-            $('.contents').css('width', $('body').width());
+            $('.contents').css('width', $('.core').width());
         } else {
             $('.contents').css('margin-left', 200);
             $('.menu').css('margin-left', 0);
