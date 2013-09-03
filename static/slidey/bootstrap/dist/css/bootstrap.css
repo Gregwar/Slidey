@@ -7007,7 +7007,7 @@ html {
 }
 
 .slideEnabled .slide {
-  width: 870px;
+  width: 970px;
 }
 
 .slideEnabled .middleSlide {
@@ -7038,7 +7038,7 @@ html {
   padding-top: 3px;
   padding-bottom: 3px;
   overflow: hidden;
-  font-size: 20px;
+  font-size: 28px;
 }
 
 .slideEnabled .tocSlide {
