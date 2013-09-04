@@ -7091,7 +7091,7 @@ html {
 .slideEnabled {
   display: table;
   width: 900px;
-  font-size: 25px;
+  font-size: 250%;
 }
 
 .slideEnabled .slideNumber {
@@ -7110,12 +7110,16 @@ html {
   vertical-align: middle;
 }
 
+.slideEnabled h2,
+.slideEnabled h3 {
+  font-size: 170% !important;
+}
+
 .slideEnabled h1 {
   font-size: 60px;
 }
 
 .slideEnabled h2 {
-  font-size: 45px;
   border: none;
   border-bottom: 3px solid #aaa;
 }
