@@ -22,7 +22,7 @@ class BrowserNode extends Base
             $meta = $file;
         }
 
-        return '<a href="'.$meta['url'].'">'.$meta['title'].'</a>';
+        return array($meta['url'], $meta['title']);
     }
 
     public function render()
@@ -35,18 +35,23 @@ class BrowserNode extends Base
 
         $html = '';
 
-        if ($parent) {
-            $ref = $this->reference($parent);
-            $html .= '<div class="parent">'.$ref.'</div>';
-        }
+        $html .= '<ul class="pager">';
 
         if ($prev) {
-            $html .= '<div class="prev">&laquo; '.$prev.'</div>';
+            $html .= '<li class="previous"><a href="'.$prev[0].'">&larr; '.$prev[1].'</a></li>';
+        }
+
+
+        if ($parent) {
+            $ref = $this->reference($parent);
+            $html .= '<li><a href="'.$ref[0].'">'.$ref[1].'</a></li>';
         }
 
         if ($next) {
-            $html .= '<div class="next">'.$next.' &raquo;</div>';
+            $html .= '<li class="next"><a href="'.$next[0].'">'.$next[1].' &rarr;</a></li>';
         }
+        
+        $html .= '</ul>';
  
         return $html;
     }
