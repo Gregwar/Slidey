@@ -383,10 +383,12 @@ function Slidey()
             }
 
             switch (e.keyCode) {
+                case 33: // Page up
                 case 37: // Left
                     e.preventDefault();
                     slidey.precDiscover();
                    break;
+                case 34: // Page down
                 case 39: // Right
                     e.preventDefault();
                     slidey.nextDiscover();
