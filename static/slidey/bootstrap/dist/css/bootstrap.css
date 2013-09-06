@@ -7084,6 +7084,10 @@ html {
   color: #2d6987;
 }
 
+a.permalink {
+  color: #aaa;
+}
+
 /**
  * Contains all changes applied by the slide mode
  */

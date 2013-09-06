@@ -26,7 +26,14 @@ function SlideyMenuExtension(slidey)
             }
             if ($(this).is(':visible')) {
                 if (tagName != 'h3' || lastTitle == currentTitle) {
-                    html = '<div id="menu_for_'+$(this).attr('id')+'" rel="'+$(this).attr('id')+'" class="menuItem menu'+tagName+'">'+$(this).html()+'</div>';
+                    var titleText = $(this).find('.titleText');
+                    var contents;
+                    if (titleText.length) {
+                        contents = titleText.html();
+                    } else {
+                        contents = $(this).html();
+                    }
+                    html = '<div id="menu_for_'+$(this).attr('id')+'" rel="'+$(this).attr('id')+'" class="menuItem menu'+tagName+'">'+contents+'</div>';
                     menuElements += html;
                 }
             }

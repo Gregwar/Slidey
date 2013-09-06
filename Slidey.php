@@ -93,7 +93,7 @@ class Slidey extends Builder
         $this->addHook(function($document) {
             $document->addCss('/slidey/bootstrap/dist/css/bootstrap.css');
 
-            $jss = array('jquery.js', 'slidey.images.js',
+            $jss = array('jquery.js', 'slidey.images.js', 'slidey.permalink.js',
                 'slidey.menu.js', 'slidey.mobile.js', 'slidey.spoilers.js', 'slidey.steps.js',
                 'slidey.js');
 

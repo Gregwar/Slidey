@@ -8,6 +8,7 @@ function SlideyImagesExtension(slidey)
      */
     this.imageSizes = {};
 
+    var ratio = 1.8;
     var extension = this;
 
     /**
@@ -53,8 +54,8 @@ function SlideyImagesExtension(slidey)
             image.width(size[0]);
             image.height(size[1]);
         } else {
-            image.width(size[0]/2.0);
-            image.height(size[1]/2.0);
+            image.width(size[0]/ratio);
+            image.height(size[1]/ratio);
         }
     };
 
