@@ -20,6 +20,7 @@ class BrowserNode extends Base
             $meta = $this->environment->resolve('doc', '/'.$file);
         } else {
             $meta = $file;
+            $meta['url'] = $this->environment->relativeUrl('/' . $meta['url']);
         }
 
         return array($meta['url'], $meta['title']);
