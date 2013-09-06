@@ -4,7 +4,7 @@
 function SlideyPermalinkExtension(slidey)
 {
     slidey.on('init', function() {
-        $('.contents h1, .contents h2, .contents h3').each(function() {
+        $('.contents h2, .contents h3').each(function() {
             var prev = $(this).prev();
 
             if (prev.length && prev[0].tagName.toLowerCase() == 'a' && prev.attr('id')) {
