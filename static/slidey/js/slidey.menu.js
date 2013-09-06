@@ -6,16 +6,21 @@ function SlideyMenuExtension(slidey)
     var extension = this;
     var allSubPassed = false;
 
+    this.shouldBeDisplayed = function()
+    {
+        return $('h2, h3').length >= 2;
+    }
+
     /**
      * Generates the menu browser
      */
     this.generateMenu = function()
     {
-        var menuElements = '';
-
-        if ($('h1, h2, h3').length < 2) {
+        if (!this.shouldBeDisplayed()) {
             return;
         }
+
+        var menuElements = '';
 
         var currentH2 = '';
         $('h1, h2, h3').each(function() {
@@ -65,7 +70,7 @@ function SlideyMenuExtension(slidey)
      */
     slidey.on('tick', function() 
     {
-        if ($('h1, h2, h3').length < 2) {
+        if (!extension.shouldBeDisplayed()) {
             $('.menu').hide();
         }
 
