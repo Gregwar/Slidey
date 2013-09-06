@@ -4,7 +4,6 @@
 function SlideyMenuExtension(slidey)
 {
     var extension = this;
-    var currentTitle = '';
     var allSubPassed = false;
 
     /**
@@ -18,24 +17,22 @@ function SlideyMenuExtension(slidey)
             return;
         }
 
-        var lastTitle = '';
+        var currentH2 = '';
         $('h1, h2, h3').each(function() {
             var tagName = $(this)[0].tagName.toLowerCase();
             if (tagName == 'h2') {
-                lastTitle = $(this).attr('id');
+                currentH2 = $(this).attr('id');
             }
             if ($(this).is(':visible')) {
-                if (tagName != 'h3' || lastTitle == currentTitle) {
-                    var titleText = $(this).find('.titleText');
-                    var contents;
-                    if (titleText.length) {
-                        contents = titleText.html();
-                    } else {
-                        contents = $(this).html();
-                    }
-                    html = '<div id="menu_for_'+$(this).attr('id')+'" rel="'+$(this).attr('id')+'" class="menuItem menu'+tagName+'">'+contents+'</div>';
-                    menuElements += html;
+                var titleText = $(this).find('.titleText');
+                var contents;
+                if (titleText.length) {
+                    contents = titleText.html();
+                } else {
+                    contents = $(this).html();
                 }
+                html = '<div id="menu_for_'+$(this).attr('id')+'" rel="'+$(this).attr('id')+'" class="menuItem menuh2of'+currentH2+' menu'+tagName+'">'+contents+'</div>';
+                menuElements += html;
             }
         });
 
@@ -77,24 +74,16 @@ function SlideyMenuExtension(slidey)
             scrollTop = $('body').scrollTop();
         }
 
-        var lastTitle = currentTitle;
-        if ($('.menuh2').length) {
-            if ($('.menuh2.menuPassed').length) {
-                // Some titles are not visibles
-                currentTitle = $('.menuh2.menuPassed').last().attr('rel');
-            } else {
-                // All the titles are visible
-                currentTitle = $('.menuh2:not(.menuPassed)').first().attr('rel');
-            }
-
-            if (lastTitle != currentTitle) {
-                extension.generateMenu();
-            }
-        }
-
+        var currentH2 = '';
+        var hasH3 = null;
         $('h1, h2, h3').each(function() {
             if ($(this).is(':visible')) {
+                var tagName = $(this)[0].tagName.toLowerCase();
                 var menuElement = $('#menu_for_' + $(this).attr('id'));
+
+                if (tagName == 'h2') {
+                    currentH2 = $(this).attr('id');
+                }
 
                 if ($(this).offset().top < scrollTop) {
                     if (!menuElement.hasClass('menuPassed')) {
@@ -104,8 +93,16 @@ function SlideyMenuExtension(slidey)
                     if (menuElement.hasClass('menuPassed')) {
                         menuElement.removeClass('menuPassed');
                     }
+                    if (tagName == 'h3' && hasH3 == null) {
+                        hasH3 = currentH2;
+                    }
                 }
             }
         });
+
+        $('.menuh3').hide();
+        if (hasH3) {
+            $('.menuh2of'+hasH3).show();
+        }
     });
 }
