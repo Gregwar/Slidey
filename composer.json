@@ -14,8 +14,7 @@
     "require": {
         "php": ">=5.3.0",
         "gregwar/rst": "dev-master",
-        "gregwar/tex2png": "dev-master",
-        "easybook/geshi": "dev-master"
+        "gregwar/tex2png": "dev-master"
     },
     "target-dir": "Gregwar/Slidey",
     "autoload": {

@@ -101,6 +101,7 @@ class Slidey extends Builder
                 $document->addJs('/slidey/js/'.$js);
             }
             $document->addJs('/slidey/bootstrap/dist/js/bootstrap.min.js');
+            $document->addJs('/slidey/highlight/highlight.pack.js');
 
             $environment = $document->getEnvironment();
             $home = $environment->resolve('doc', '/index');
