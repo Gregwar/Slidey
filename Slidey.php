@@ -15,6 +15,9 @@ class Slidey extends Builder
     protected $interactive = null;
     protected $mkdirs = array();
 
+    /**
+     * Create a Slidey instance, using the slidey factory
+     */
     public function __construct()
     {
         $this->factory = new Factory;
@@ -23,6 +26,8 @@ class Slidey extends Builder
 
     /**
      * Sets the document title prefix
+     *
+     * @param $title the title prefix
      */
     public function setTitle($prefix)
     {
@@ -43,6 +48,9 @@ class Slidey extends Builder
 
     /**
      * Enable the interactive mode
+     *
+     * @param $password the password for the admin
+     * @param $directory the target directory for data
      */
     public function enableInteractive($password, $directory = 'data')
     {
@@ -62,11 +70,15 @@ class Slidey extends Builder
             'key' => uniqid('slidey_'),
         );
 
+        $this->mkdir($directory);
+
         return $this;
     }
 
     /**
      * Adds a stylesheet to the final document
+     *
+     * @param $css the stylesheet to add
      */
     public function addCss($css)
     {
@@ -77,19 +89,16 @@ class Slidey extends Builder
         return $this;
     }
 
-    public function mkdir($directory)
-    {
-        $this->mkdirs[] = $directory;
-
-        return $this;
-    }
-
     /**
      * Runs the slidey builder on the $source directory and put all the output
      * in the $destination directory
+     *
+     * @param $destination the destination folder
+     * @param $source the source folder, containing all pages
      */
     public function build($destination = 'web', $source = 'pages')
     {
+        // Handle cleaning
         global $argv;
         if (count($argv) > 1) {
             if ($argv[1] == 'clean') {
@@ -99,17 +108,12 @@ class Slidey extends Builder
             }   
         }
 
-        foreach ($this->mkdirs as $mkdir) {
-            $dir = $destination . '/' . $mkdir;
-
-            if (!is_dir($dir)) {
-                mkdir($destination . '/' . $mkdir, 0755, true);
-            }
-        }
-
+        // Add the main hooks
         $this->addHook(function($document) {
+            // Adding CSS
             $document->addCss('/slidey/bootstrap/dist/css/bootstrap.css');
 
+            // Adding JS
             $jss = array('jquery.js', 'slidey.images.js', 'slidey.permalink.js',
                 'slidey.menu.js', 'slidey.mobile.js', 'slidey.spoilers.js', 'slidey.steps.js',
                 'slidey.js');
@@ -123,14 +127,19 @@ class Slidey extends Builder
             $environment = $document->getEnvironment();
             $home = $environment->resolve('doc', '/index');
             $home = $home['url'];
+            // Adding header
             $document->prependNode(new RawNode(str_replace('%home%', $home, file_get_contents(__DIR__.'/static/top.html'))));
+            // Browser
             $document->addNode(new Nodes\BrowserNode($document->getEnvironment()));
+            // And bottom
             $document->addNode(new RawNode(file_get_contents(__DIR__.'/static/bottom.html')));
             $document->addFavicon();
         });
 
+        // Run the build
         parent::build($source, $destination);
 
+        // Write the interactive file
         if ($this->interactive) {
             $config = '<?php return '.var_export($this->interactive, true).';';
             file_put_contents($this->getTargetFile('config.php'), $config);
