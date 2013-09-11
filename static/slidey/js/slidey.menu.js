@@ -12,6 +12,30 @@ function SlideyMenuExtension(slidey)
     }
 
     /**
+     * Move the menu in slide mode
+     */
+    this.moveMenu = function()
+    {
+        if (slidey.slideMode || !extension.shouldBeDisplayed()) {
+            $('.contents').css('margin-left', 0);
+            $('.menu').css('margin-left', -250);
+            $('.contents').css('width', $('.core').width());
+        } else {
+            $('.contents').css('margin-left', 200);
+            $('.menu').css('margin-left', -30);
+            $('.contents').css('width', 750);
+        }
+    }
+
+    slidey.on('changeMode', this.moveMenu);
+
+    slidey.on('init', function() {
+        if (!extension.shouldBeDisplayed()) {
+            $('.menu').hide();
+        }
+    });
+
+    /**
      * Generates the menu browser
      */
     this.generateMenu = function()

@@ -9,12 +9,12 @@ class CodeNode extends Base
     public function render()
     {
         $language = $this->language ?: 'php';
-        $code = trim($this->value);
+        $code = htmlspecialchars(trim($this->value));
 
-        $geshi = new \GeSHi($code, $language);
-        $geshi->enable_classes();
-        $geshi->enable_keyword_links(false);
+        if ($language == 'text') {
+            $language = 'no-highlight';
+        }
 
-        return '<div class="highlight">' . $geshi->parse_code() . '</div>';
+        return '<pre><code class="' . $language . '">' . $code . '</code></pre>';
     }
 }

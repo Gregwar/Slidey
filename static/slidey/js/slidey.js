@@ -90,22 +90,6 @@ function Slidey()
     };
 
     /**
-     * Move the menu in slide mode
-     */
-    this.moveMenu = function()
-    {
-        if (this.slideMode) {
-            $('.contents').css('margin-left', 0);
-            $('.menu').css('margin-left', -250);
-            $('.contents').css('width', $('.core').width());
-        } else {
-            $('.contents').css('margin-left', 200);
-            $('.menu').css('margin-left', -30);
-            $('.contents').css('width', 750);
-        }
-    }
-
-    /**
      * Go to the given slide & discover
      */
     this.goTo = function(slide, discover)
@@ -281,8 +265,8 @@ function Slidey()
         $('.slideOnly').show();
         $('.textOnly').hide();
         this.slideMode = true;
+        this.dispatch('changeMode');
         $('.slideWrapper').addClass('slideEnabled');
-        this.moveMenu();
         this.resizeSlides(true);
         this.updateDiscovers();
         this.dispatch('slideMode');
@@ -301,8 +285,8 @@ function Slidey()
         $('.slideOnly').hide();
         $('.textOnly').show();
         this.slideMode = false;
+        this.dispatch('changeMode');
         $('.slideEnabled').height('auto');
-        this.moveMenu();
         this.resizeSlides(true);
         $('.slideWrapper').removeClass('slideEnabled');
         this.dispatch('textMode');
