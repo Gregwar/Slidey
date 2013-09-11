@@ -37,7 +37,7 @@ class Slidey extends Builder
 
             $document->addHeaderNode(new RawNode('<title>'.htmlspecialchars($title).'</title>'));
         });
-        
+
         return $this;
     }
 
@@ -73,14 +73,14 @@ class Slidey extends Builder
         $this->addHook(function($document) use ($css) {
             $document->addCss('/'.$css);
         });
-        
+
         return $this;
     }
 
     public function mkdir($directory)
     {
         $this->mkdirs[] = $directory;
-        
+
         return $this;
     }
 
@@ -90,6 +90,15 @@ class Slidey extends Builder
      */
     public function build($destination = 'web', $source = 'pages')
     {
+        global $argv;
+        if (count($argv) > 1) {
+            if ($argv[1] == 'clean') {
+                echo "Cleaning $destination...\n";
+                `rm -rf $destination`;
+                exit(0);
+            }   
+        }
+
         foreach ($this->mkdirs as $mkdir) {
             $dir = $destination . '/' . $mkdir;
 
