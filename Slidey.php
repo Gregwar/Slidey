@@ -37,6 +37,8 @@ class Slidey extends Builder
 
             $document->addHeaderNode(new RawNode('<title>'.htmlspecialchars($title).'</title>'));
         });
+        
+        return $this;
     }
 
     /**
@@ -59,6 +61,8 @@ class Slidey extends Builder
             'directory' => $directory,
             'key' => uniqid('slidey_'),
         );
+
+        return $this;
     }
 
     /**
@@ -69,11 +73,15 @@ class Slidey extends Builder
         $this->addHook(function($document) use ($css) {
             $document->addCss('/'.$css);
         });
+        
+        return $this;
     }
 
     public function mkdir($directory)
     {
         $this->mkdirs[] = $directory;
+        
+        return $this;
     }
 
     /**
