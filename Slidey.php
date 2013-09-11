@@ -136,4 +136,12 @@ class Slidey extends Builder
             file_put_contents($this->getTargetFile('config.php'), $config);
         }
     }
+
+    /**
+     * Creates an instance of slidey
+     */
+    public static function create()
+    {
+        return new self;
+    }
 }
