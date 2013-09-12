@@ -7127,6 +7127,11 @@ a.permalink {
   color: #aaa;
 }
 
+.youtube {
+  width: 560px;
+  height: 315px;
+}
+
 /**
  * Contains all changes applied by the slide mode
  */
@@ -7187,6 +7192,11 @@ a.permalink {
 
 .slideEnabled .tocSlide ul {
   font-size: 45px;
+}
+
+.slideEnabled .youtube {
+  width: 800px;
+  height: 470px;
 }
 
 .menu {
