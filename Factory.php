@@ -14,6 +14,7 @@ class Factory extends Base
         $directives[] = new Directives\Slide;
         $directives[] = new Directives\Math;
         $directives[] = new Directives\DiscoverList;
+        $directives[] = new Directives\Youtube;
 
         $classes = array('textOnly', 'slideOnly', 'discover',
             'step', 'note', 'tip', 'warning', 'spoiler', 'center', 'important', 'success');
