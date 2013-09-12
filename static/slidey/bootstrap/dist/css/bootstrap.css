@@ -7130,6 +7130,7 @@ a.permalink {
 .youtube {
   width: 560px;
   height: 315px;
+  margin: 5px;
 }
 
 /**
