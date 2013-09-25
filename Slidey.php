@@ -17,11 +17,11 @@ class Slidey extends Builder
     protected $mkdirs = array();
 
     /**
-     * Create a Slidey instance, using the slidey factory
+     * Create a Slidey instance, using the slidey kernel
      */
     public function __construct()
     {
-        $this->factory = new Factory;
+        $this->kernel = new Kernel;
         $this->copy(__DIR__.'/static/slidey', 'slidey');
     }
 
