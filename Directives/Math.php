@@ -35,4 +35,9 @@ class Math extends Directive
             $document->addNode($node);
         }
     }
+
+    public function wantCode()
+    {
+        return true;
+    }
 }
