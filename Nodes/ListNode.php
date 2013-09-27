@@ -2,7 +2,7 @@
 
 namespace Gregwar\Slidey\Nodes;
 
-use Gregwar\RST\HTML\ListNode as Base;
+use Gregwar\RST\HTML\Nodes\ListNode as Base;
 
 class ListNode extends Base
 {

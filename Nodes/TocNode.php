@@ -2,7 +2,7 @@
 
 namespace Gregwar\Slidey\Nodes;
 
-use Gregwar\RST\HTML\TocNode as Base;
+use Gregwar\RST\HTML\Nodes\TocNode as Base;
 
 class TocNode extends Base
 {

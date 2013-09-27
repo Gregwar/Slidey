@@ -30,8 +30,10 @@ class Kernel extends Base
     {
         $nodes = array('CodeNode', 'TocNode', 'ListNode');
 
-        if (in_array($name, $nodes)) {
-            return '\\Gregwar\\Slidey\\Nodes\\'.$name;
+        foreach ($nodes as $node) {
+            if ($name == 'Nodes\\'.$node) {
+                return '\\Gregwar\\Slidey\\Nodes\\'.$node;
+            }
         }
 
         return parent::getClass($name);
