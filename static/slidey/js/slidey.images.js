@@ -3,13 +3,17 @@
  */
 function SlideyImagesExtension(slidey)
 {
+    var extension = this;
+    
     /**
      * Size of the page images
      */
     this.imageSizes = {};
 
-    var ratio = 1.8;
-    var extension = this;
+    /**
+     * Ratio
+     */
+    this.ratio = 1.8;
 
     /**
      * Initializes
@@ -33,33 +37,6 @@ function SlideyImagesExtension(slidey)
     });
 
     /**
-     * Updates all image sizes
-     */
-    this.updateImages = function()
-    {
-        for (id in this.imageSizes) {
-            this.updateImage(id);
-        }
-    };
-
-    /**
-     * Updates a specific image size
-     */
-    this.updateImage = function(imageId)
-    {
-        var image = $('#' + imageId);
-        var size = this.imageSizes[imageId];
-
-        if (slidey.slideMode) {
-            image.width(size[0]);
-            image.height(size[1]);
-        } else {
-            image.width(size[0]/ratio);
-            image.height(size[1]/ratio);
-        }
-    };
-
-    /**
      * Go to slide mode
      */
     slidey.on('slideMode', function()
@@ -74,4 +51,33 @@ function SlideyImagesExtension(slidey)
     {
         extension.updateImages();
     });
+};
+
+SlideyImagesExtension.prototype = {
+    /**
+     * Updates all image sizes
+     */
+    updateImages: function()
+    {
+        for (id in this.imageSizes) {
+            this.updateImage(id);
+        }
+    },
+
+    /**
+     * Updates a specific image size
+     */
+    updateImage: function(imageId)
+    {
+        var image = $('#' + imageId);
+        var size = this.imageSizes[imageId];
+
+        if (slidey.slideMode) {
+            image.width(size[0]);
+            image.height(size[1]);
+        } else {
+            image.width(size[0]/this.ratio);
+            image.height(size[1]/this.ratio);
+        }
+    },
 };

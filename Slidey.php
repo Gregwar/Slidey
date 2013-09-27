@@ -117,7 +117,7 @@ class Slidey extends Builder
             // Adding JS
             $jss = array('jquery.js', 'slidey.images.js', 'slidey.permalink.js',
                 'slidey.menu.js', 'slidey.mobile.js', 'slidey.spoilers.js', 'slidey.steps.js',
-                'slidey.js');
+                'slidey.js', 'main.js');
 
             foreach ($jss as $js) {
                 $document->addJs('/slidey/js/'.$js);

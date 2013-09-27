@@ -12,108 +12,6 @@ function SlideyInteractiveExtension(slidey)
     this.ignore = false;
     this.ignoreOrder = false;
 
-    this.updateStatus = function(status)
-    {
-        var lastFollow = this.follow;
-        this.isAdmin = (status.admin != undefined);
-        this.follow = (status.follower != undefined);
-
-        if (!lastFollow && this.follow) {
-            $('.followMode').addClass('active');
-            this.updateCurrent();
-        }
-        if (lastFollow && !this.follow) {
-            $('.followMode').removeClass('active');
-        }
-
-        slidey.controlsEnabled = (this.isAdmin || !this.follow);
-    };
-
-    /**
-     * Closes all the windows
-     */
-    this.closeWindows = function()
-    {
-        $('.interactiveWindow').hide();
-    };
-
-    this.updateCurrent = function()
-    {
-        if (!this.follow) {
-            return;
-        }
-            
-        if (!slidey.slideMode) {
-            slidey.runSlideMode();
-        }
-
-        $.getJSON(extension.path + 'current', function(current) {
-            if (!extension.ignoreOrder) {
-                extension.ignore = true;
-                if (!current.page) {
-                    current.page = 'index.html';
-                }
-
-                if (current.page != extension.currentPage()) {
-                    document.location.href = current.page;
-                }
-
-                slidey.goTo(current.slide, current.discover);
-                extension.ignore = false;
-
-                slidey.dispatch('updateCurrent', current);
-            }
-        });
-    };
-
-    this.sendCurrent = function()
-    {
-        extension.ignoreOrder = true;
-        $.getJSON(extension.path + 'update?page=' + extension.currentPage() + '&slide=' + slidey.currentSlide + '&discover=' + slidey.currentDiscover + '&' + extension.extraCurrent, function(status) {
-            extension.ignoreOrder = false;
-            extension.updateStatus(status);
-        });
-    };
-
-    this.logout = function()
-    {
-        $.getJSON(extension.path + 'logout', function(status) {
-            extension.updateStatus(status);
-        });
-    };
-
-    this.toggleFollow = function()
-    {
-        if (!extension.follow) {
-            $.getJSON(extension.path + 'follow', function(status) {
-                extension.updateStatus(status);
-            });
-        } else {
-            extension.logout();
-        }
-    };
-
-    this.currentPage = function()
-    {
-        var url = document.URL.split('/');
-        var page = url[url.length-1].split('#');
-
-        return page[0];
-    };
-
-    this.login = function()
-    {
-        if (!extension.isAdmin) {
-            $('#loginWindow').on('shown.bs.modal', function() {
-                $('#loginWindow input').val('');
-                $('#loginWindow input').focus();
-            });
-            $('#loginWindow').modal('show');
-        } else {
-            alert('Vous êtes déjà admin');
-        }
-    };
-
     slidey.on('login', function()
     {
         if (extension.isAdmin) {
@@ -192,4 +90,112 @@ function SlideyInteractiveExtension(slidey)
             }
         });
     });
-}
+};
+
+SlideyInteractiveExtension.prototype = {
+    updateStatus: function(status)
+    {
+        var lastFollow = this.follow;
+        this.isAdmin = (status.admin != undefined);
+        this.follow = (status.follower != undefined);
+
+        if (!lastFollow && this.follow) {
+            $('.followMode').addClass('active');
+            this.updateCurrent();
+        }
+        if (lastFollow && !this.follow) {
+            $('.followMode').removeClass('active');
+        }
+
+        slidey.controlsEnabled = (this.isAdmin || !this.follow);
+    },
+
+    /**
+     * Closes all the windows
+     */
+    closeWindows: function()
+    {
+        $('.interactiveWindow').hide();
+    },
+
+    updateCurrent: function()
+    {
+        if (!this.follow) {
+            return;
+        }
+            
+        if (!slidey.slideMode) {
+            slidey.runSlideMode();
+        }
+
+        var extension = this;
+        $.getJSON(this.path + 'current', function(current) {
+            if (!extension.ignoreOrder) {
+                extension.ignore = true;
+                if (!current.page) {
+                    current.page = 'index.html';
+                }
+
+                if (current.page != extension.currentPage()) {
+                    document.location.href = current.page;
+                }
+
+                slidey.goTo(current.slide, current.discover);
+                extension.ignore = false;
+
+                slidey.dispatch('updateCurrent', current);
+            }
+        });
+    },
+
+    sendCurrent: function()
+    {
+        var extension = this;
+        extension.ignoreOrder = true;
+        $.getJSON(extension.path + 'update?page=' + extension.currentPage() + '&slide=' + slidey.currentSlide + '&discover=' + slidey.currentDiscover + '&' + extension.extraCurrent, function(status) {
+            extension.ignoreOrder = false;
+            extension.updateStatus(status);
+        });
+    },
+
+    logout: function()
+    {
+        var extension = this;
+        $.getJSON(extension.path + 'logout', function(status) {
+            extension.updateStatus(status);
+        });
+    },
+
+    toggleFollow: function()
+    {
+        var extension = this;
+        if (!extension.follow) {
+            $.getJSON(extension.path + 'follow', function(status) {
+                extension.updateStatus(status);
+            });
+        } else {
+            extension.logout();
+        }
+    },
+
+    currentPage: function()
+    {
+        var url = document.URL.split('/');
+        var page = url[url.length-1].split('#');
+
+        return page[0];
+    },
+
+    login: function()
+    {
+        if (!this.isAdmin) {
+            $('#loginWindow').on('shown.bs.modal', function() {
+                $('#loginWindow input').val('');
+                $('#loginWindow input').focus();
+            });
+            $('#loginWindow').modal('show');
+        } else {
+            alert('Vous êtes déjà admin');
+        }
+    }
+};
