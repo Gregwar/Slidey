@@ -5,6 +5,7 @@ namespace Gregwar\Slidey;
 use Gregwar\RST\Builder;
 use Gregwar\RST\Reference;
 use Gregwar\RST\Environment;
+use Gregwar\RST\Parser;
 use Gregwar\RST\Nodes\RawNode;
 
 /**
@@ -157,7 +158,8 @@ class Slidey extends Builder
 
     public function addReference(Reference $ref)
     {
-        $this->addEnvironmentHook(function (Environment $environment) use ($ref) {
+        $this->addBeforeHook(function (Parser $parser) use ($ref) {
+            $environment = $parser->getEnvironment();
             $environment->registerReference($ref);
         });
 
