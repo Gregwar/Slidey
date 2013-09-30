@@ -22,7 +22,7 @@ class Slidey extends Builder
      */
     public function __construct()
     {
-        $this->kernel = new Kernel;
+        parent::__construct(new Kernel);
         $this->copy(__DIR__.'/static/slidey', 'slidey');
     }
 
