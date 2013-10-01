@@ -63,6 +63,7 @@ function SlideyInteractiveExtension(slidey)
         });
 
         // Following/Unfollowing
+        $('.followMode').show();
         $('.followMode').click(function() {
             extension.toggleFollow();
             return true;
