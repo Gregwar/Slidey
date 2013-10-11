@@ -6766,6 +6766,12 @@ html {
   margin: 0;
 }
 
+@font-face {
+  font-family: 'MonacoWebFont';
+  src: url('../fonts/monaco-webfont.eot');
+  src: url('../fonts/monaco-webfont.eot?#iefix') format('embedded-opentype'), url('../fonts/monaco-webfont.woff') format('woff'), url('../fonts/monaco-webfont.ttf') format('truetype'), url('../fonts/monaco-webfont.svg') format('svg');
+}
+
 .core {
   width: 1000px;
   height: 1px;
@@ -7263,11 +7269,15 @@ pre.code {
   display: block;
   padding: 3px;
   margin: 5px;
-  font-family: courier;
   background-color: white;
   border: 1px solid #aaa;
   border: 0;
   border-radius: 3px;
+}
+
+code,
+pre.code {
+  font-family: "MonacoWebFont", Menlo, Consolas, "Courier New", monospace !important;
 }
 
 .stepChecker {
