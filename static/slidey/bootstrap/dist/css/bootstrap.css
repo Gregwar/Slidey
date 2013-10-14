@@ -7422,3 +7422,8 @@ pre .xml .css,
 pre .xml .cdata {
   opacity: 0.5;
 }
+
+.fullSlide {
+    position:absolute;
+    left:0;
+}

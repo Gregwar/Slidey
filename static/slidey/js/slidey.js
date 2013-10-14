@@ -115,6 +115,10 @@ Slidey.prototype = {
         {
             $('.slideEnabled').height(height);
 
+            $('.fullSlide').width(width);
+            $('.fullSlide').height(height);
+            $('.slide.fullSlide').width($('body').width());
+
             $('.slideNumber').each(function() {
                 $(this).css('margin-left', width-$(this).width()+20);
                 $(this).css('margin-top', height-$(this).height()-100);
