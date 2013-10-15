@@ -69,6 +69,10 @@ SlideyImagesExtension.prototype = {
      */
     updateImage: function(imageId)
     {
+        if (!imageId in this.imagesSizes) {
+            return;
+        }
+
         var image = $('#' + imageId);
         var size = this.imageSizes[imageId];
 
