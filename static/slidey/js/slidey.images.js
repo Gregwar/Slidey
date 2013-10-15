@@ -30,8 +30,10 @@ function SlideyImagesExtension(slidey)
             }
 
             $(this).load(function() {
-                extension.imageSizes[myId] = [$(this).width(), $(this).height()];
-                extension.updateImage(myId);
+                if ($(this).width()) {
+                    extension.imageSizes[myId] = [$(this).width(), $(this).height()];
+                    extension.updateImage(myId);
+                };
             });
         });
     });
