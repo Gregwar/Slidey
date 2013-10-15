@@ -6848,10 +6848,12 @@ html {
 
 h1 {
   margin-top: 0;
+  font-family: EdmondSansBold, Sans-serif;
   font-size: 54px;
   font-weight: bold;
   text-align: center;
   text-shadow: 3px 3px 3px #ddd;
+  font-variant: small-caps;
 }
 
 h2 {
