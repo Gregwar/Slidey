@@ -6767,6 +6767,24 @@ html {
 }
 
 @font-face {
+  font-family: 'EdmondSansMedium';
+  src: url('../fonts/Edmondsans-Medium.eot');
+  src: url('../fonts/Edmondsans-Medium.eot?#iefix') format('embedded-opentype'), url('../fonts/Edmondsans-Medium.woff') format('woff'), url('../fonts/Edmondsans-Medium.ttf') format('truetype'), url('../fonts/Edmondsans-Medium.svg') format('svg');
+}
+
+@font-face {
+  font-family: 'EdmondSansRegular';
+  src: url('../fonts/Edmondsans-Regular.eot');
+  src: url('../fonts/Edmondsans-Regular.eot?#iefix') format('embedded-opentype'), url('../fonts/Edmondsans-Regular.woff') format('woff'), url('../fonts/Edmondsans-Regular.ttf') format('truetype'), url('../fonts/Edmondsans-Regular.svg') format('svg');
+}
+
+@font-face {
+  font-family: 'EdmondSansBold';
+  src: url('../fonts/Edmondsans-Bold.eot');
+  src: url('../fonts/Edmondsans-Bold.eot?#iefix') format('embedded-opentype'), url('../fonts/Edmondsans-Bold.woff') format('woff'), url('../fonts/Edmondsans-Bold.ttf') format('truetype'), url('../fonts/Edmondsans-Bold.svg') format('svg');
+}
+
+@font-face {
   font-family: 'MonacoWebFont';
   src: url('../fonts/monaco-webfont.eot');
   src: url('../fonts/monaco-webfont.eot?#iefix') format('embedded-opentype'), url('../fonts/monaco-webfont.woff') format('woff'), url('../fonts/monaco-webfont.ttf') format('truetype'), url('../fonts/monaco-webfont.svg') format('svg');
@@ -7155,6 +7173,11 @@ a.permalink {
   font-size: 50px;
 }
 
+.slideEnabled .fullSlide {
+  position: absolute;
+  left: 0;
+}
+
 .slideEnabled .slide {
   width: 970px;
 }
@@ -7421,9 +7444,4 @@ pre .xml .vbscript,
 pre .xml .css,
 pre .xml .cdata {
   opacity: 0.5;
-}
-
-.fullSlide {
-    position:absolute;
-    left:0;
 }

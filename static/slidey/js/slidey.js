@@ -189,7 +189,7 @@ Slidey.prototype = {
     scrollTo: function(slideId)
     {
         var slidey = this;
-        $('html,body').animate({scrollTop:$('#slide' + slideId).offset().top}, 300, 0, function() {
+        $('html,body').animate({scrollTop:$('#slide' + slideId).offset().top+1}, 300, 0, function() {
             if (slidey.slideMode) {
                $('body').css('background-color', $('#slide' + slideId + ' .slide').css('background-color'));
             }
