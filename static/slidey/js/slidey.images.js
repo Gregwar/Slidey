@@ -69,7 +69,7 @@ SlideyImagesExtension.prototype = {
      */
     updateImage: function(imageId)
     {
-        if (!imageId in this.imagesSizes) {
+        if (!imageId in this.imageSizes) {
             return;
         }
 
