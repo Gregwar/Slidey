@@ -10,6 +10,7 @@ function SlideyPollExtension(slidey, interactive)
     slidey.on('init', function() {
         var pollId = 0;
         $('.poll').each(function() {
+            $(this).attr('rel', pollId);
             var answerId = 0;
             $(this).find('li').each(function() {
                 var html = $(this).html();
@@ -57,8 +58,9 @@ function SlideyPollExtension(slidey, interactive)
 
 SlideyPollExtension.prototype = {
     startPoll: function(size) {
+        var id = this.currentPoll.attr('rel');
         if (this.interactive.isAdmin) {
-            $.getJSON(this.interactive.path+'startPoll?size='+size);
+            $.getJSON(this.interactive.path+'startPoll?id='+id+'&size='+size);
         }
 
         $('.poll_result').hide();
@@ -76,23 +78,30 @@ SlideyPollExtension.prototype = {
             var extension = this;
             $.getJSON(this.interactive.path+'infoPoll', function(data) {
                 extension.currentPoll.find('.poll_count').text(data.count+' votant(s)');
-                if (data.opened) {
-                    if (extension.interactive.isAdmin) {
-                        extension.currentPoll.find('.poll_show').show();
+                if (data.id == extension.currentPoll.attr('rel')) {
+                    if (data.opened) {
+                        if (extension.interactive.isAdmin) {
+                            extension.currentPoll.find('.poll_show').show();
+                        }
+                        extension.currentPoll.find('input').show();
+                        extension.currentPoll.find('.poll_result').hide();
+                    } else {
+                        extension.currentPoll.find('.poll_show').hide();
+                        extension.currentPoll.find('input').hide();
+
+                        for (var k in data.answers) {
+                            var value = Math.round(100*data.answers[k]/parseFloat(data.count));
+                            extension.currentPoll.find('.poll_result_'+k).show();
+                            extension.currentPoll.find('.poll_result_'+k+' .progress-bar').attr('aria-valuenow', value);
+                            extension.currentPoll.find('.poll_result_'+k+' .progress-bar').css('width', value+'%');
+                            extension.currentPoll.find('.poll_result_'+k+' .progress-bar').html(value+'%');
+                        }
                     }
-                    extension.currentPoll.find('input').show();
-                    extension.currentPoll.find('.poll_result').hide();
                 } else {
+                    alert('bad id');
+                    extension.currentPoll.find('.poll_result').hide();
                     extension.currentPoll.find('.poll_show').hide();
                     extension.currentPoll.find('input').hide();
-
-                    for (var k in data.answers) {
-                        var value = Math.round(100*data.answers[k]/parseFloat(data.count));
-                        extension.currentPoll.find('.poll_result_'+k).show();
-                        extension.currentPoll.find('.poll_result_'+k+' .progress-bar').attr('aria-valuenow', value);
-                        extension.currentPoll.find('.poll_result_'+k+' .progress-bar').css('width', value+'%');
-                        extension.currentPoll.find('.poll_result_'+k+' .progress-bar').html(value+'%');
-                    }
                 }
             });
         }

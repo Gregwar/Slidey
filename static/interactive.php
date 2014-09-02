@@ -42,6 +42,7 @@ class State
         $this->poll = @include($directory . '/poll.php');
         if (!$this->poll) {
             $this->poll = array(
+                'id' => 0,
                 'size' => 0,
                 'opened' => 0,
                 'answers' => array()
@@ -94,10 +95,11 @@ class Interactive
     /**
      * Starts a poll
      */
-    public function startPoll($size)
+    public function startPoll($id, $size)
     {
         if ($size > 12) $size = 12;
         $this->state->poll = array(
+            'id' => $id,
             'size' => $size,
             'opened' => 1,
             'answers' => array()
@@ -192,8 +194,8 @@ class Interactive
                 $this->status = array();
                 break;
             case '/startPoll':
-                if (isset($_GET['size']) && isset($this->status['admin'])) {
-                    $this->startPoll((int)$_GET['size']);
+                if (isset($_GET['id']) && isset($_GET['size']) && isset($this->status['admin'])) {
+                    $this->startPoll($_GET['id'], (int)$_GET['size']);
                 }
                 break;
             case '/votePoll':
