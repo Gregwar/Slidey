@@ -10,7 +10,6 @@ function SlideyPollExtension(slidey, interactive)
     slidey.on('init', function() {
         var pollId = 0;
         $('.poll').each(function() {
-            $(this).attr('rel', pollId);
             var answerId = 0;
             $(this).find('li').each(function() {
                 var html = $(this).html();
@@ -58,7 +57,7 @@ function SlideyPollExtension(slidey, interactive)
 
 SlideyPollExtension.prototype = {
     startPoll: function(size) {
-        var id = this.currentPoll.attr('rel');
+        var id = this.currentPoll.attr('id');
         if (this.interactive.isAdmin) {
             $.getJSON(this.interactive.path+'startPoll?id='+id+'&size='+size);
         }
@@ -78,7 +77,7 @@ SlideyPollExtension.prototype = {
             var extension = this;
             $.getJSON(this.interactive.path+'infoPoll', function(data) {
                 extension.currentPoll.find('.poll_count').text(data.count+' votant(s)');
-                if (data.id == extension.currentPoll.attr('rel')) {
+                if (data.id == extension.currentPoll.attr('id')) {
                     if (data.opened) {
                         if (extension.interactive.isAdmin) {
                             extension.currentPoll.find('.poll_show').show();
@@ -98,7 +97,6 @@ SlideyPollExtension.prototype = {
                         }
                     }
                 } else {
-                    alert('bad id');
                     extension.currentPoll.find('.poll_result').hide();
                     extension.currentPoll.find('.poll_show').hide();
                     extension.currentPoll.find('input').hide();

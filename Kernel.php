@@ -17,11 +17,13 @@ class Kernel extends Base
         $directives[] = new Directives\Youtube;
 
         $classes = array('textOnly', 'slideOnly', 'discover',
-            'step', 'note', 'tip', 'warning', 'spoiler', 'center', 'important', 'success', 'poll');
+            'step', 'note', 'tip', 'warning', 'spoiler', 'center', 'important', 'success');
 
         foreach ($classes as $class) {
             $directives[] = new Wrap($class);
         }
+
+        $directives[] = new Wrap('poll', true);
 
         return $directives;
     }
