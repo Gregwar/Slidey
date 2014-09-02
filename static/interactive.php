@@ -12,6 +12,11 @@ class State
     public $current = array();
 
     /**
+     * Poll infos
+     */
+    public $poll = array();
+
+    /**
      * Directory to use for reading & writing state
      */
     protected $directory;
@@ -34,6 +39,15 @@ class State
             );
         }
 
+        $this->poll = @include($directory . '/poll.php');
+        if (!$this->poll) {
+            $this->poll = array(
+                'size' => 0,
+                'opened' => 0,
+                'answers' => array()
+            );
+        }
+
         $this->directory = $directory;
     }
 
@@ -43,6 +57,14 @@ class State
     public function persist()
     {
         file_put_contents($this->directory . '/current.php', '<?php return '.var_export($this->current, true).';');
+    }
+
+    /**
+     * Persist poll data
+     */
+    public function persistPoll()
+    {
+        file_put_contents($this->directory . '/poll.php', '<?php return '.var_export($this->poll, true).';');
     }
 }
 
@@ -67,6 +89,66 @@ class Interactive
         $this->status = isset($_SESSION[$this->key]) ? $_SESSION[$this->key] : array();
         $this->config = $config;
         $this->state = new State($config['directory']);
+    }
+
+    /**
+     * Starts a poll
+     */
+    public function startPoll($size)
+    {
+        if ($size > 12) $size = 12;
+        $this->state->poll = array(
+            'size' => $size,
+            'opened' => 1,
+            'answers' => array()
+        );
+        $this->state->persistPoll();
+    }
+
+    /**
+     * Vote for the poll
+     */
+    public function votePoll($vote)
+    {
+        $id = session_id();
+        $poll = &$this->state->poll;
+        if ($poll['opened'] && $vote>=0 && $vote<$poll['size']) {
+            $poll['answers'][session_id()] = $vote;
+        }
+        $this->state->persistPoll();
+    }
+
+    /**
+     * Closes the poll
+     */
+    public function endPoll()
+    {
+        $this->state->poll['opened'] = 0;
+        $this->state->persistPoll();
+    }
+
+    /**
+     * Info for the poll
+     */
+    public function infoPoll()
+    {
+        $poll = $this->state->poll;
+        $poll['count'] = count($poll['answers']);
+
+        if ($poll['opened']) {
+            unset($poll['answers']);
+        } else {
+            $answers = array();
+            for ($i=0; $i<$poll['size']; $i++) {
+                $answers[$i] = 0;
+            }
+            foreach ($poll['answers'] as $value) {
+                $answers[$value]++;
+            }
+            $poll['answers'] = $answers;
+        }
+
+        return $poll;
     }
 
     /**
@@ -108,6 +190,24 @@ class Interactive
                 break;
             case '/logout':
                 $this->status = array();
+                break;
+            case '/startPoll':
+                if (isset($_GET['size']) && isset($this->status['admin'])) {
+                    $this->startPoll((int)$_GET['size']);
+                }
+                break;
+            case '/votePoll':
+                if (isset($_GET['answer'])) {
+                    $this->votePoll((int)$_GET['answer']);
+                }
+                break;
+            case '/endPoll':
+                if (isset($this->status['admin'])) {
+                    $this->endPoll();
+                }
+                break;
+            case '/infoPoll':
+                $response = $this->infoPoll();
                 break;
         }
 

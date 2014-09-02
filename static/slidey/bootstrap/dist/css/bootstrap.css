@@ -7159,6 +7159,11 @@ a.permalink {
   margin: 5px;
 }
 
+.poll ul {
+  list-style-type: none;
+  cursor: pointer;
+}
+
 /**
  * Contains all changes applied by the slide mode
  */

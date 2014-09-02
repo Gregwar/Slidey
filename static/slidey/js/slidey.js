@@ -142,6 +142,7 @@ Slidey.prototype = {
         if (this.currentSlide != slide) {
             this.currentSlide = slide;
             this.scrollTo(this.currentSlide);
+            this.dispatch('moved');
         }
             
         $('#slide' + this.currentSlide + ' .discover').hide();

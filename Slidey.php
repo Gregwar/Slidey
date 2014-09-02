@@ -59,7 +59,7 @@ class Slidey extends Builder
         $this->copy(__DIR__.'/static/interactive.php');
 
         $this->addHook(function($document) {
-            $jss = array('slidey.interactive.js');
+            $jss = array('slidey.interactive.js', 'slidey.poll.js');
 
             foreach ($jss as $js) {
                 $document->addJs('/slidey/js/'.$js);
@@ -70,6 +70,7 @@ class Slidey extends Builder
             'password' => sha1($password),
             'directory' => $directory,
             'key' => uniqid('slidey_'),
+            'polls' => '/tmp/polls/',
         );
 
         $this->mkdir($directory);

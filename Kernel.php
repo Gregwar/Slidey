@@ -17,7 +17,7 @@ class Kernel extends Base
         $directives[] = new Directives\Youtube;
 
         $classes = array('textOnly', 'slideOnly', 'discover',
-            'step', 'note', 'tip', 'warning', 'spoiler', 'center', 'important', 'success');
+            'step', 'note', 'tip', 'warning', 'spoiler', 'center', 'important', 'success', 'poll');
 
         foreach ($classes as $class) {
             $directives[] = new Wrap($class);
