@@ -191,8 +191,8 @@ SlideyInteractiveExtension.prototype = {
 
     currentPage: function()
     {
-        var url = document.URL.split('/');
-        var page = url[url.length-1].split('#');
+        var url = document.URL;
+        var page = url.split('#');
 
         return page[0];
     },
