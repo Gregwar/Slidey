@@ -41,6 +41,16 @@ function SlideyInteractiveExtension(slidey)
      */
     slidey.on('init', function()
     {
+        $('script').each(function() {
+            var src = $(this).attr('src');
+            var name = 'slidey.interactive.js';
+
+            if (src.substr(-name.length) == name) {
+                var root = src.substr(0, src.length-name.length);
+                extension.path = root+'../../interactive.php/';
+            }
+        });
+
         $.getJSON(extension.path + 'getStatus', function(data) {
             extension.updateStatus(data);
         });
