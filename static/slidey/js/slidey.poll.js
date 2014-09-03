@@ -51,6 +51,7 @@ function SlideyPollExtension(slidey, interactive)
             extension.pollOpened = false;
             extension.startPoll(poll.find('li').length);
             extension.update();
+            $('.poll_label').removeClass('text-primary');
         } else {
             extension.currentPoll = null;
         }
