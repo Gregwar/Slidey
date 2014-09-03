@@ -5,6 +5,7 @@ function SlideyPollExtension(slidey, interactive)
 {
     this.interactive = interactive;
     this.currentPoll = null;
+    this.pollOpened = false;
     var extension = this;
 
     slidey.on('init', function() {
@@ -13,7 +14,7 @@ function SlideyPollExtension(slidey, interactive)
             var answerId = 0;
             $(this).find('li').each(function() {
                 var html = $(this).html();
-                html = '<label><input rel="'+answerId+'" class="poll_answer" type="radio" name="poll_'+pollId+'" /> '+html+'</label>';
+                html = '<label class="poll_label"><input rel="'+answerId+'" class="poll_answer" type="radio" name="poll_'+pollId+'" /> '+html+'</label>';
                 html += '<div class="poll_result poll_result_'+answerId+'">';
                 html += '<div class="progress">';
                 html += '<div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">';
@@ -34,8 +35,12 @@ function SlideyPollExtension(slidey, interactive)
         });
 
         $('.poll_answer').click(function() {
-            var vote = $(this).attr('rel');
-            $.getJSON(interactive.path + 'votePoll?answer='+vote);
+            if (extension.currentPoll && extension.pollOpened) {
+                var vote = $(this).attr('rel');
+                $.getJSON(interactive.path + 'votePoll?answer='+vote);
+                $('.poll_label').removeClass('text-primary');
+                $(this).parent().addClass('text-primary');
+            }
         });
     });
 
@@ -43,6 +48,7 @@ function SlideyPollExtension(slidey, interactive)
         var poll = $('#slide' + slidey.currentSlide + ' .poll');
         if (poll.length) {
             extension.currentPoll = poll;
+            extension.pollOpened = false;
             extension.startPoll(poll.find('li').length);
             extension.update();
         } else {
@@ -77,8 +83,10 @@ SlideyPollExtension.prototype = {
             var extension = this;
             $.getJSON(this.interactive.path+'infoPoll', function(data) {
                 extension.currentPoll.find('.poll_count').text(data.count+' votant(s)');
+                extension.pollOpened = false;
                 if (data.id == extension.currentPoll.attr('id')) {
                     if (data.opened) {
+                        extension.pollOpened = true;
                         if (extension.interactive.isAdmin) {
                             extension.currentPoll.find('.poll_show').show();
                         }
