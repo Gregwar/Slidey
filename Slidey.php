@@ -99,7 +99,7 @@ class Slidey extends Builder
      * @param $destination the destination folder
      * @param $source the source folder, containing all pages
      */
-    public function build($destination = 'web', $source = 'pages')
+    public function build($destination = 'web', $source = 'pages', $verbose = true)
     {
         // Handle cleaning
         global $argv;
@@ -140,7 +140,7 @@ class Slidey extends Builder
         });
 
         // Run the build
-        parent::build($source, $destination);
+        parent::build($source, $destination, $verbose);
 
         // Write the interactive file
         if ($this->interactive) {
