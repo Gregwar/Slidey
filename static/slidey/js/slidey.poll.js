@@ -98,11 +98,15 @@ SlideyPollExtension.prototype = {
                         extension.currentPoll.find('input').hide();
 
                         for (var k in data.answers) {
-                            var value = Math.round(100*data.answers[k]/parseFloat(data.count));
+                            if (data.answers[k] == 0) {
+                                value = 0;
+                            } else {
+                                var value = Math.round(100*data.answers[k]/parseFloat(data.count));
+                            }
                             extension.currentPoll.find('.poll_result_'+k).show();
                             extension.currentPoll.find('.poll_result_'+k+' .progress-bar').attr('aria-valuenow', value);
                             extension.currentPoll.find('.poll_result_'+k+' .progress-bar').css('width', value+'%');
-                            extension.currentPoll.find('.poll_result_'+k+' .progress-bar').html(value+'%');
+                            extension.currentPoll.find('.poll_result_'+k+' .progress-bar').html(value+'% ('+data.answers[k]+')');
                         }
                     }
                 } else {
