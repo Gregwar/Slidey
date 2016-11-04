@@ -326,7 +326,7 @@ Slidey.prototype = {
         this.stopInterval();
         this.interval = setInterval(function() {
             slidey.tick();
-        }, 1500);
+        }, 1000);
     },
 
     init: function() {

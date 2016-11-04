@@ -65,7 +65,13 @@ class State
      */
     public function persistPoll()
     {
-        file_put_contents($this->directory . '/poll.php', '<?php return '.var_export($this->poll, true).';');
+        $poll = fopen($this->directory . '/poll.php', 'w');
+        if (flock($poll, LOCK_EX)) {
+            ftruncate($poll, 0);
+            fwrite($poll, '<?php return '.var_export($this->poll, true).';');
+            fflush($poll);
+            flock($poll, LOCK_UN);
+        }
     }
 }
 
