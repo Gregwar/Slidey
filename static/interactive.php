@@ -19,7 +19,7 @@ class State
     /**
      * Directory to use for reading & writing state
      */
-    protected $directory;
+    public $directory;
 
     /**
      * Build and load the state
@@ -65,13 +65,8 @@ class State
      */
     public function persistPoll()
     {
-        $poll = fopen($this->directory . '/poll.php', 'w');
-        if (flock($poll, LOCK_EX)) {
-            ftruncate($poll, 0);
-            fwrite($poll, '<?php return '.var_export($this->poll, true).';');
-            fflush($poll);
-            flock($poll, LOCK_UN);
-        }
+        $data = '<?php return '.var_export($this->poll, true).';';
+        file_put_contents($this->directory . '/poll.php', $data);
     }
 }
 
@@ -110,6 +105,16 @@ class Interactive
             'opened' => 1,
             'answers' => array()
         );
+        $voteDir = $this->state->directory . '/votes';
+        if (is_dir($voteDir)) {
+            foreach (scanDir($voteDir) as $file) {
+                if ($file != '.' && $file != '..') {
+                    unlink($voteDir . '/' . $file);
+                }
+            }
+        } else {
+            mkdir($voteDir);
+        }
         $this->state->persistPoll();
     }
 
@@ -119,11 +124,13 @@ class Interactive
     public function votePoll($vote)
     {
         $id = session_id();
+        $voteDir = $this->state->directory . '/votes';
         $poll = &$this->state->poll;
+        $vote = (int)$vote;
         if ($poll['opened'] && $vote>=0 && $vote<$poll['size']) {
-            $poll['answers'][session_id()] = $vote;
+            file_put_contents($voteDir . '/'.$id, $vote);
         }
-        $this->state->persistPoll();
+
     }
 
     /**
@@ -141,7 +148,8 @@ class Interactive
     public function infoPoll()
     {
         $poll = $this->state->poll;
-        $poll['count'] = count($poll['answers']);
+        $voteDir = $this->state->directory . '/votes';
+        $poll['count'] = count(scanDir($voteDir))-2;
 
         if ($poll['opened']) {
             unset($poll['answers']);
@@ -150,8 +158,11 @@ class Interactive
             for ($i=0; $i<$poll['size']; $i++) {
                 $answers[$i] = 0;
             }
-            foreach ($poll['answers'] as $value) {
-                $answers[$value]++;
+            foreach (scanDir($voteDir) as $file) {
+                if ($file != '.' && $file != '..') {
+                    $value = (int)file_get_contents($voteDir . '/' . $file);
+                    $answers[$value]++;
+                }
             }
             $poll['answers'] = $answers;
         }
