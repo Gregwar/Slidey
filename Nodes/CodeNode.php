@@ -8,13 +8,17 @@ class CodeNode extends Base
 {
     public function render()
     {
-        $language = $this->language ?: 'php';
-        $code = htmlspecialchars(trim($this->value));
+        if ($this->raw) {
+            return $this->value;
+        } else {
+            $language = $this->language ?: 'php';
+            $code = htmlspecialchars(trim($this->value));
 
-        if ($language == 'text') {
-            $language = 'no-highlight';
+            if ($language == 'text') {
+                $language = 'no-highlight';
+            }
+
+            return '<pre><code class="' . $language . '">' . $code . '</code></pre>';
         }
-
-        return '<pre><code class="' . $language . '">' . $code . '</code></pre>';
     }
 }
