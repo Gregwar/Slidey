@@ -84,16 +84,16 @@ function SlideyInteractiveExtension(slidey)
                 return;
             }
 
-            if (e.keyCode == 27) {
+            if (e.key == 'Escape') {
                 extension.closeWindows();
             }
 
-            if (e.keyCode == 164) {
+            if (e.key == '$') {
                 extension.login();
                 return false;
             }
 
-            if (e.keyCode == 170) {
+            if (e.key == '*') {
                 $.getJSON(extension.path + 'logout', function(status) {
                     alert('Vous êtes déconnectés');
                     extension.updateStatus(status);
