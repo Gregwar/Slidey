@@ -65,8 +65,9 @@ function SlideyStepsExtension(slidey)
         });
     });
 
-    slidey.on('keypress', function(code) {
-        if (code == 161) {
+    slidey.on('keypress', function(event) {
+        if (event.keyCode == 161) {
+            event.preventDefault();
             self.cleanCounter++;
 
             if (self.cleanCounter >= 3) {

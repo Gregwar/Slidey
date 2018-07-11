@@ -373,7 +373,7 @@ Slidey.prototype = {
         });
         
         $(document).keydown(function(e){
-            slidey.dispatch('keypress', e.keyCode);
+            slidey.dispatch('keypress', e);
 
             if (!slidey.slideMode || !slidey.controlsEnabled) {
                 return;
