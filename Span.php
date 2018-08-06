@@ -19,7 +19,7 @@ class Span extends Base
             $tex = new \Gregwar\Tex2png\Tex2png($formula, 200);
             $tex->setCacheDirectory($environment->relativeUrl('/cache/tex/'));
             $tex->setActualCacheDirectory($environment->getTargetDirectory().'/cache/tex/');
-            $html = '<img src="'.$tex->generate().'" />';
+            $html = '<img class="formula" src="'.$tex->generate().'" />';
 
             $this->tokens[$token] = [
                 'type' => 'raw',
