@@ -368,7 +368,7 @@ Slidey.prototype = {
                 slidey.dispatch('moved');
             });
 
-            slidey.runSlideMode();
+            //slidey.runSlideMode();
             slidey.runTextMode();
 
             slidey.dispatch('tick');
