@@ -2,6 +2,7 @@
 
 namespace Gregwar\Slidey;
 
+use Gregwar\Slidey\Span;
 use Gregwar\RST\HTML\Kernel as Base;
 
 use Gregwar\RST\HTML\Directives\Wrap;
@@ -36,6 +37,10 @@ class Kernel extends Base
             if ($name == 'Nodes\\'.$node) {
                 return '\\Gregwar\\Slidey\\Nodes\\'.$node;
             }
+        }
+
+        if ($name == 'Span') {
+            return Span::class;
         }
 
         return parent::getClass($name);

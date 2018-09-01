@@ -23,7 +23,7 @@ class Math extends Directive
 
         $formula = trim($node->getValue());
 
-        $tex = new \Gregwar\Tex2png\Tex2png($formula, isset($options['density']) ? $options['density'] : 300);
+        $tex = new \Gregwar\Tex2png\Tex2png($formula, isset($options['density']) ? $options['density'] : 235);
         $tex->setCacheDirectory($environment->relativeUrl('/cache/tex/'));
         $tex->setActualCacheDirectory($environment->getTargetDirectory().'/cache/tex/');
 
