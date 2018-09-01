@@ -123,6 +123,8 @@ Slidey.prototype = {
                 $(this).css('margin-left', width-$(this).width()+20);
                 $(this).css('margin-top', height-$(this).height()-100);
             });
+
+            this.scrollTo(this.currentSlide);
         } else {
             if (force) {
                 width = $('.contents').width();
@@ -366,7 +368,7 @@ Slidey.prototype = {
                 slidey.dispatch('moved');
             });
 
-            slidey.runSlideMode();
+            //slidey.runSlideMode();
             slidey.runTextMode();
 
             slidey.dispatch('tick');
