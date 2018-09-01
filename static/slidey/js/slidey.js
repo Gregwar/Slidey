@@ -381,20 +381,20 @@ Slidey.prototype = {
 
             switch (e.keyCode) {
                 case 33: // Page up
-                case 37: // Left
+                case 38: // Up
                     e.preventDefault();
                     slidey.precDiscover();
                    break;
                 case 34: // Page down
-                case 39: // Right
+                case 40: // Down
                     e.preventDefault();
                     slidey.nextDiscover();
                     break;
-                case 38: // Up
+                case 37: // Left
                     e.preventDefault();
                     slidey.precSlide();
                 break;
-                case 40: // Down
+                case 39: // Right
                     e.preventDefault();
                     slidey.nextSlide();
                 break;
