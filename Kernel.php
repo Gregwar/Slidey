@@ -25,13 +25,12 @@ class Kernel extends Base
         }
 
         $directives[] = new Wrap('poll', true);
-
         return $directives;
     }
 
     public function getClass($name)
     {
-        $nodes = array('CodeNode', 'TocNode', 'ListNode');
+        $nodes = array('CodeNode', 'TocNode', 'ListNode', 'TableNode');
 
         foreach ($nodes as $node) {
             if ($name == 'Nodes\\'.$node) {
