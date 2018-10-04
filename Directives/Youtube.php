@@ -33,7 +33,7 @@ class Youtube extends Directive
         }
 
         if ($embed) {
-            $html = '<iframe class="youtube" src="http://www.youtube.com/embed/'.$embed.'" frameborder="0" allowfullscreen></iframe>';
+            $html = '<iframe class="youtube" src="https://www.youtube.com/embed/'.$embed.'" frameborder="0" allowfullscreen></iframe>';
         }
 
         return new RawNode($html);
