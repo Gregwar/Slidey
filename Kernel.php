@@ -2,6 +2,7 @@
 
 namespace Gregwar\Slidey;
 
+use Gregwar\Slidey\Span;
 use Gregwar\RST\HTML\Kernel as Base;
 
 use Gregwar\RST\HTML\Directives\Wrap;
@@ -24,18 +25,21 @@ class Kernel extends Base
         }
 
         $directives[] = new Wrap('poll', true);
-
         return $directives;
     }
 
     public function getClass($name)
     {
-        $nodes = array('CodeNode', 'TocNode', 'ListNode');
+        $nodes = array('CodeNode', 'TocNode', 'ListNode', 'TableNode');
 
         foreach ($nodes as $node) {
             if ($name == 'Nodes\\'.$node) {
                 return '\\Gregwar\\Slidey\\Nodes\\'.$node;
             }
+        }
+
+        if ($name == 'Span') {
+            return Span::class;
         }
 
         return parent::getClass($name);

@@ -60,6 +60,15 @@ function SlideyPollExtension(slidey, interactive)
     slidey.on('tick', function() {
         extension.update()
     });
+
+    slidey.on('keypress', function(event) {
+        if (event.keyCode == 9) {
+            event.preventDefault();
+            if (extension.currentPoll) {
+                extension.currentPoll.find('.poll_show').click();
+            }
+        }
+    });
 }
 
 SlideyPollExtension.prototype = {

@@ -123,6 +123,8 @@ Slidey.prototype = {
                 $(this).css('margin-left', width-$(this).width()+20);
                 $(this).css('margin-top', height-$(this).height()-100);
             });
+
+            this.scrollTo(this.currentSlide);
         } else {
             if (force) {
                 width = $('.contents').width();
@@ -366,14 +368,14 @@ Slidey.prototype = {
                 slidey.dispatch('moved');
             });
 
-            slidey.runSlideMode();
+            //slidey.runSlideMode();
             slidey.runTextMode();
 
             slidey.dispatch('tick');
         });
         
         $(document).keydown(function(e){
-            slidey.dispatch('keypress', e.keyCode);
+            slidey.dispatch('keypress', e);
 
             if (!slidey.slideMode || !slidey.controlsEnabled) {
                 return;
@@ -381,20 +383,20 @@ Slidey.prototype = {
 
             switch (e.keyCode) {
                 case 33: // Page up
-                case 37: // Left
+                case 38: // Up
                     e.preventDefault();
                     slidey.precDiscover();
                    break;
                 case 34: // Page down
-                case 39: // Right
+                case 40: // Down
                     e.preventDefault();
                     slidey.nextDiscover();
                     break;
-                case 38: // Up
+                case 37: // Left
                     e.preventDefault();
                     slidey.precSlide();
                 break;
-                case 40: // Down
+                case 39: // Right
                     e.preventDefault();
                     slidey.nextSlide();
                 break;
