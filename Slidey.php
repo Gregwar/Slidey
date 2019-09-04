@@ -42,7 +42,7 @@ class Slidey extends Builder
                 $title = $prefix;
             }
 
-            $document->addHeaderNode(new RawNode('<title>'.htmlspecialchars($title).'</title>'));
+            $document->addHeaderNode(new RawNode('<title>'.$title.'</title>'));
         });
 
         return $this;
