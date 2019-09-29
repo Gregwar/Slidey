@@ -45,7 +45,7 @@ function SlideyInteractiveExtension(slidey)
             var src = $(this).attr('src');
             var name = 'slidey.interactive.js';
 
-            if (src && src.substr(-name.length) == name) {
+            if (typeof(src) != 'undefined' && src && src.substr(-name.length) == name) {
                 var root = src.substr(0, src.length-name.length);
                 extension.path = root+'../../interactive.php/';
             }
