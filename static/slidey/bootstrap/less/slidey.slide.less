@@ -3,13 +3,21 @@
  */
 
 .slideEnabled {
-    display:table;
-    width:900px;
-    font-size:250%;
+    display:flex;
+    justify-content: center;
+    flex-direction: column;
+    
+    width:100%;
+
+    img {
+        max-width:100%;
+        width:auto;
+        height:auto !important;
+    }
  
     .slideNumber {
         position:absolute;
-        font-size:50px;
+        font-size:20px;
         width:auto;
     }
 
@@ -19,7 +27,7 @@
     }
 
     .slide {
-        width:970px;
+        width:100%;
     }
 
     .middleSlide {
@@ -50,7 +58,6 @@
     }
 
     pre code {
-        font-size:28px;
         padding:8px;
         overflow:hidden;
     }

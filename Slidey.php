@@ -113,6 +113,14 @@ class Slidey extends Builder
 
         // Add the main hooks
         $this->addHook(function($document) {
+            // Viewport for mobiles
+            $document->addHeaderNode(new RawNode('
+                <meta http-equiv="X-UA-Compatible" content="IE=edge">
+                <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+            '));
+
+            $document->addHeaderNode(new RawNode('<link href="https://fonts.googleapis.com/css2?family=Gentium+Basic&display=swap" rel="stylesheet"> '));
+
             // Adding CSS
             $document->addCss('/slidey/bootstrap/dist/css/bootstrap.css');
 

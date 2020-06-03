@@ -13,7 +13,7 @@ function SlideyImagesExtension(slidey)
     /**
      * Ratio
      */
-    this.ratio = 1.8;
+    this.ratio = 1.35;
 
     /**
      * Initializes

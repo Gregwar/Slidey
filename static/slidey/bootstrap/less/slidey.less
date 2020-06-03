@@ -1,6 +1,11 @@
 body {
     margin:0;
     padding:0;
+    font-size:22px;
+}
+
+code, pre {
+    font-size:18px;
 }
 
 html {
@@ -46,28 +51,26 @@ html {
 .core {
     height:1px;
     padding:0px;
-    width: 1000px;
+    max-width: 800px;
     margin:auto;
-    font-family: sans-serif;
     margin-top:0px;
     margin-bottom:20px;
-}
-
-.toc {
-    font-size:24px;
-    font-weight:bold;
-    color:#e6e4ff;
-}
-
-.toc li {
-    list-style:square;
-    margin-left:30px;
 }
 
 .toc .slide {
     margin-top:10px;
 }
 
+.toc {
+    font-size:24px;
+    font-weight:bold;
+    color:#bbe2cf;
+}
+
+.toc li {
+    list-style:square;
+    margin-left:30px;
+}
 .toc ul {
     margin-left:0;
     margin-bottom:9px;
@@ -109,27 +112,12 @@ h1 {
     margin-top:0px;
 }
 
-h2 {
-    margin: 2px;
-    background-color:white;
-    padding:2px;
-    font-size:28px;
-    margin-bottom:0px;
-    font-family:Serif;
-    text-shadow:2px 2px 1px #eee;
-    border-bottom:2px solid #eee;
+h2, h3 {
+    font-weight:bold;
 }
 
-h3 {
-    font-family:Serif;
-    font-size:18px;
-    text-align:left;
-    margin-left:12px;
-    margin-right:10px;
-    margin-top:10px;
-    margin-bottom:10px;
-    padding-bottom:1px;
-    border-bottom:2px dotted #eee;
+strong {
+    font-weight:550;
 }
 
 li {
@@ -163,12 +151,19 @@ a.prev, a.next {
 .slide {
     width:100%;
     background-color:white;
+    margin-top:-15px;
 }
 
 
 .slideNumber {
     position:absolute;
     z-index:5;
+}
+
+@media screen and (max-width: 800px) {
+    .slideNumber {
+        display:none !important;
+    }
 }
 
 .mobileControls {
@@ -209,12 +204,11 @@ img.formula {
 }
 
 .contents {
+    max-width:100%;
     text-align:justify;
     background-color:white;
     float:left;
     padding:10px;
-    border-left:3px solid #ddd;
-    border-right:3px solid #ddd;
 }
 
 table {
@@ -260,6 +254,7 @@ ul li.dash {
 
 html {
     background-image:url('gfx/texture.png');
+    background-attachment: fixed;
 }
 
 .warning {

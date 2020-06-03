@@ -2,13 +2,19 @@
     font-weight:bold;
     position:fixed;
     font-size:17px;
-    margin-top:30px;
-    width:180px;
-    padding:5px;
-    border-radius:12px;
+    margin-top:10px;
+    width:220px;
+    margin-left:-255px;
+    padding:12px;
     background-color:#000;
     background-image:url('gfx/fade.png');
     background-repeat:repeat-y;
+}
+
+@media screen and (max-width: 1000px) {
+    .menu {
+        display:none;
+    }
 }
 
 .menu code {
@@ -20,7 +26,7 @@
 
 .menuh2 {
     font-weight:bold;
-    font-size:85%;
+    font-size:80%;
     margin-left:10px;
 }
 
@@ -36,7 +42,6 @@
 }
 
 .menu .menuPassed {
-    text-decoration:line-through;
     color:#777;
 }
 

@@ -52,11 +52,6 @@ function SlideyMenuExtension(slidey)
                 }
             }
         });
-
-        $('.menuh3').hide();
-        if (hasH3) {
-            $('.menuh2of'+hasH3).show();
-        }
     });
     
     slidey.on('changeMode', function() {
@@ -83,13 +78,9 @@ SlideyMenuExtension.prototype = {
     moveMenu: function()
     {
         if (slidey.slideMode || !this.shouldBeDisplayed()) {
-            $('.contents').css('margin-left', 0);
-            $('.menu').css('margin-left', -250);
-            $('.contents').css('width', $('.core').width());
+            $('.menu').hide();
         } else {
-            $('.contents').css('margin-left', 200);
-            $('.menu').css('margin-left', -30);
-            $('.contents').css('width', 750);
+            $('.menu').show();
         }
     },
 
@@ -114,9 +105,9 @@ SlideyMenuExtension.prototype = {
                 var titleText = $(this).find('.titleText');
                 var contents;
                 if (titleText.length) {
-                    contents = titleText.html();
+                    contents = titleText.text();
                 } else {
-                    contents = $(this).html();
+                    contents = $(this).text();
                 }
                 html = '<div id="menu_for_'+$(this).attr('id')+'" rel="'+$(this).attr('id')+'" class="menuItem menuh2of'+currentH2+' menu'+tagName+'">'+contents+'</div>';
                 menuElements += html;
