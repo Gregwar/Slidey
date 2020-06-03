@@ -7322,7 +7322,7 @@ pre.code {
 @media screen and (max-width: 800px) {
   pre,
   code {
-    font-size: 80% !important;
+    font-size: 75% !important;
   }
 }
 
