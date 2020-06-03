@@ -6927,6 +6927,7 @@ a.next {
 }
 
 img {
+  max-width: 100%;
   margin: 20px;
   vertical-align: middle;
   border: 0;
@@ -7316,6 +7317,13 @@ pre.code {
 code,
 pre.code {
   font-family: "MonacoWebFont", Menlo, Consolas, "Courier New", monospace !important;
+}
+
+@media screen and (max-width: 800px) {
+  pre,
+  code {
+    font-size: 80% !important;
+  }
 }
 
 .stepChecker {
