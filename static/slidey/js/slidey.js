@@ -192,11 +192,16 @@ Slidey.prototype = {
     scrollTo: function(slideId)
     {
         var slidey = this;
-        $('html,body').animate({scrollTop:$('#slide' + slideId).offset().top+1}, 300, 0, function() {
-            if (slidey.slideMode) {
-               $('body').css('background-color', $('#slide' + slideId + ' .slide').css('background-color'));
-            }
-        });
+        var target = $('#slide' + slideId).offset().top;
+        var current = $('html').scrollTop();
+        
+        if (Math.abs(target - current) > 2) {
+            $('html').animate({scrollTop:target}, 300, 0, function() {
+                if (slidey.slideMode) {
+                $('body').css('background-color', $('#slide' + slideId + ' .slide').css('background-color'));
+                }
+            });
+        }
     },
 
     /**

@@ -6760,7 +6760,7 @@ td.visible-print {
 body {
   padding: 0;
   margin: 0;
-  font-size: 22px;
+  font-size: 24px;
 }
 
 code,
@@ -6897,7 +6897,6 @@ a.next {
 
 .slide {
   width: 100%;
-  margin-top: -15px;
   background-color: white;
 }
 
@@ -7192,6 +7191,7 @@ a.permalink {
 
 .slideEnabled .slide {
   width: 100%;
+  margin-top: -35px;
 }
 
 .slideEnabled .middleSlide {
@@ -7297,7 +7297,6 @@ a.permalink {
 
 code {
   padding: 2px 4px;
-  font-size: 110%;
   color: #333;
   background-color: #f9f2f4;
   border: 1px solid #aaa;
