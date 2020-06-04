@@ -6934,7 +6934,8 @@ a.next {
   display: none;
 }
 
-.slideMode {
+.slideMode,
+.exitSlideMode {
   position: fixed;
   right: 10px;
   bottom: 10px;
@@ -7181,6 +7182,12 @@ a.permalink {
  * Contains all changes applied by the slide mode
  */
 
+.slideOnly {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
 .slideEnabled {
   display: flex;
   width: 100%;
@@ -7215,7 +7222,7 @@ a.permalink {
 
 .slideEnabled .slide {
   width: 100%;
-  margin-top: -35px;
+  padding-bottom: 35px;
 }
 
 .slideEnabled h1 {

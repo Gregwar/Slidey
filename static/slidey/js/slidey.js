@@ -119,15 +119,14 @@ Slidey.prototype = {
             $('.fullSlide').height(height);
             $('.slide.fullSlide').width($('body').width());
 
-            $('.slideNumber').each(function() {
-                $(this).css('margin-left', width-$(this).width()+50);
-                $(this).css('margin-top', height-$(this).height()-100);
-            });
+            $('.slideNumber').hide();
+            $('.currentSlideNumber').text((this.currentSlide+1)+"/"+this.slidesCount);
 
             this.scrollTo(this.currentSlide);
         } else {
             if (force) {
                 width = $('.contents').width();
+                $('.slideNumber').show();
                 $('.slideNumber').each(function() {
                     $(this).css('margin-left', width);
                     $(this).css('margin-top', 5);
@@ -294,6 +293,9 @@ Slidey.prototype = {
         this.updateDiscovers();
         this.dispatch('slideMode');
         this.dispatch('moved');
+
+        $('.slideMode').hide();
+        $('.exitSlideMode').show();
     },
 
     /**
@@ -313,6 +315,9 @@ Slidey.prototype = {
         this.resizeSlides(true);
         $('.slideWrapper').removeClass('slideEnabled');
         this.dispatch('textMode');
+
+        $('.slideMode').show();
+        $('.exitSlideMode').hide();
     },
 
     tick: function()
@@ -352,7 +357,7 @@ Slidey.prototype = {
                 }
             }
 
-            $('.slideModeNormal').click(function() {
+            $('.stopShow').click(function() {
                 slidey.runTextMode();
                 slidey.scrollToCurrentSlide();
             });	
