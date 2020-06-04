@@ -358,6 +358,7 @@ Slidey.prototype = {
             }
 
             $('.stopShow').click(function() {
+                slidey.dispatch('stopShowClicked');
                 slidey.runTextMode();
                 slidey.scrollToCurrentSlide();
             });	

@@ -36,6 +36,11 @@ function SlideyInteractiveExtension(slidey)
         }
     });
 
+    slidey.on('stopShowClicked', function()
+    {
+        extension.logout();   
+    });
+
     /**
      * Initializes
      */
