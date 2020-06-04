@@ -6967,7 +6967,7 @@ img.formula {
 
 .contents {
   float: left;
-  max-width: 100%;
+  width: 100%;
   padding: 10px;
   text-align: justify;
   background-color: white;
