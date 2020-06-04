@@ -10,9 +10,9 @@ class TocNode extends Base
     {
         $render = parent::renderLevel($url, $titles, $level, $path);
 
-        if ($level == 1) {
-            $render = '<div class="slide middleSlide tocSlide">'.$render.'</div>';
-        }
+        // if ($level == 1) {
+        //     $render = '<div class="slide middleSlide tocSlide">'.$render.'</div>';
+        // }
 
         return $render;
     }

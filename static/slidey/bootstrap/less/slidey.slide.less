@@ -6,6 +6,12 @@
     display:flex;
     justify-content: center;
     flex-direction: column;
+
+    overflow-y:hidden;
+    
+    .toc ul ul li {
+        display:none;
+    }
     
     width:100%;
 
@@ -24,17 +30,14 @@
     .fullSlide {
         position:absolute;
         left:0;
+        display:flex;
+        justify-content: center;
+        flex-direction: column;
     }
 
     .slide {
         width:100%;
         margin-top:-35px;
-    }
-
-    .middleSlide {
-        vertical-align:middle;
-        display:table-cell;
-        text-align:left;
     }
 
     h1 {
