@@ -6768,6 +6768,16 @@ pre {
   font-size: 18px;
 }
 
+@media screen and (max-width: 800px) {
+  body {
+    font-size: 18px !important;
+  }
+  pre,
+  code {
+    font-size: 14px !important;
+  }
+}
+
 html {
   margin: 0;
 }
@@ -6864,6 +6874,11 @@ h1 {
 h2,
 h3 {
   font-weight: bold;
+}
+
+h2 {
+  padding-top: 15px;
+  border-top: 1px dashed #ccc;
 }
 
 strong {
@@ -6984,8 +6999,8 @@ td {
 
 hr {
   height: 1px;
-  background-color: #aaa;
   border: 0;
+  border-bottom: 1px dashed #ccc;
 }
 
 ul li.dash:before {
@@ -7201,26 +7216,16 @@ a.permalink {
   vertical-align: middle;
 }
 
-.slideEnabled h2,
-.slideEnabled h3 {
-  font-size: 170% !important;
-}
-
 .slideEnabled h1 {
   font-size: 60px;
 }
 
 .slideEnabled h2 {
   border: none;
-  border-bottom: 3px solid #aaa;
 }
 
 .slideEnabled h2:before {
   content: '';
-}
-
-.slideEnabled h3 {
-  font-size: 35px;
 }
 
 .slideEnabled pre code {
@@ -7317,13 +7322,6 @@ pre.code {
 code,
 pre.code {
   font-family: "MonacoWebFont", Menlo, Consolas, "Courier New", monospace !important;
-}
-
-@media screen and (max-width: 800px) {
-  pre,
-  code {
-    font-size: 75% !important;
-  }
 }
 
 .stepChecker {
