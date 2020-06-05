@@ -17,7 +17,6 @@ function SlideyMobileExtension(slidey)
             $('.showMobile').show();
 
             $('.showMobile').click(function() {
-                console.log('!!!!');
                 $('.mobileControls').toggle();
             });
         }
