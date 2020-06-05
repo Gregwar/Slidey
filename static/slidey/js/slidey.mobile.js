@@ -14,7 +14,12 @@ function SlideyMobileExtension(slidey)
     slidey.on('init', function()
     {
         if (extension.isMobile()) {
-            $('.mobileControls').show();
+            $('.showMobile').show();
+
+            $('.showMobile').click(function() {
+                console.log('!!!!');
+                $('.mobileControls').toggle();
+            });
         }
 
         $('.mobileControls .left').click(function() {

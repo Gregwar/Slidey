@@ -6926,6 +6926,10 @@ a.next {
   }
 }
 
+.showMobile {
+  display: none;
+}
+
 .mobileControls {
   position: fixed;
   right: 10px;
