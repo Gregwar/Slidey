@@ -146,7 +146,7 @@ SlideyInteractiveExtension.prototype = {
 
         var extension = this;
         $.getJSON(this.path + 'current', function(current) {
-            if (!extension.ignoreOrder) {
+            if (!extension.ignoreOrder && current.page != "") {
                 extension.ignore = true;
                 if (!current.page) {
                     current.page = 'index.html';
