@@ -11,6 +11,10 @@ function SlideyMobileExtension(slidey)
         return ua.indexOf('mobile') > 1;
     };
 
+    slidey.on('textMode', function() {
+        $('.mobileControls').hide();
+    });
+
     slidey.on('init', function()
     {
         if (extension.isMobile()) {
