@@ -56,7 +56,7 @@ function Slidey()
         $('.slide').each(function() {
             $(this).wrap('<div class="slideWrapper" rel="' + id + '" id="slide' + id + '"></div>');	
 
-            $('#slide' + id).prepend('<div class="btn btn-default slideNumber" rel="' + id + '">' + (id+1) + '/' + slidey.slidesCount + '</div>');
+            $('#slide' + id).prepend('<div class="btn btn-default slideNumber" rel="' + id + '">' + (parseInt(id)+1) + '/' + slidey.slidesCount + '</div>');
 
             var discover_id = 0;
 
@@ -120,7 +120,7 @@ Slidey.prototype = {
             $('.slide.fullSlide').width($('body').width());
 
             $('.slideNumber').hide();
-            $('.currentSlideNumber').text((this.currentSlide+1)+"/"+this.slidesCount);
+            $('.currentSlideNumber').text((parseInt(this.currentSlide)+1)+"/"+this.slidesCount);
 
             this.scrollTo(this.currentSlide);
         } else {
@@ -142,7 +142,7 @@ Slidey.prototype = {
     {
         if (this.currentSlide != slide) {
             this.currentSlide = slide;
-            this.scrollTo(this.currentSlide);
+            this.resizeSlides();
             this.dispatch('moved');
         }
             
@@ -208,7 +208,7 @@ Slidey.prototype = {
      */
     scrollToCurrentSlide: function()
     {
-        this.scrollTo(this.currentSlide);
+        this.resizeSlides();
     },
 
     /**

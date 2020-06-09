@@ -38,7 +38,10 @@ function SlideyInteractiveExtension(slidey)
 
     slidey.on('stopShowClicked', function()
     {
-        extension.logout();   
+        if (!extension.isAdmin) {
+            // Stop following as well (else we will switch back to slide mode)
+            extension.logout();   
+        }
     });
 
     /**
@@ -70,6 +73,7 @@ function SlideyInteractiveExtension(slidey)
                     alert('Vous êtes maintenant identifiés !');
                     extension.sendCurrent();
                 } else {
+                    $('input').blur();
                     alert('Mauvais mot de passe');
                 }
             });
