@@ -7185,6 +7185,10 @@ a.permalink {
   cursor: pointer;
 }
 
+strong {
+  font-weight: 600;
+}
+
 /**
  * Contains all changes applied by the slide mode
  */
