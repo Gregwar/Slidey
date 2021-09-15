@@ -176,20 +176,20 @@ class Interactive
     public function run()
     {
         $response = null;
-        $action = isset($_SERVER['PATH_INFO']) ? $_SERVER['PATH_INFO'] : '';
+        $action = isset($_GET['action']) ? $_GET['action'] : '';
 
         switch ($action) {
-            case '/login':
+            case 'login':
                 $password = isset($_GET['password']) ? $_GET['password'] : null;
 
                 if ($password && sha1($password) == $this->config['password']) {
                     $this->status['admin'] = true;
                 }
                 break;
-            case '/follow':
+            case 'follow':
                 $this->status['follower'] = true;
                 break;
-            case '/update':
+            case 'update':
                 $current = array();
 
                 foreach (array('page', 'slide', 'discover') as $key) {
@@ -203,29 +203,29 @@ class Interactive
                 $this->state->persist();
 
                 break;
-            case '/current':
+            case 'current':
                 $response = $this->state->current;
                 $response['status'] = $this->status;
                 break;
-            case '/logout':
+            case 'logout':
                 $this->status = array();
                 break;
-            case '/startPoll':
+            case 'startPoll':
                 if (isset($_GET['id']) && isset($_GET['size']) && isset($this->status['admin'])) {
                     $this->startPoll($_GET['id'], (int)$_GET['size']);
                 }
                 break;
-            case '/votePoll':
+            case 'votePoll':
                 if (isset($_GET['answer'])) {
                     $this->votePoll((int)$_GET['answer']);
                 }
                 break;
-            case '/endPoll':
+            case 'endPoll':
                 if (isset($this->status['admin'])) {
                     $this->endPoll();
                 }
                 break;
-            case '/infoPoll':
+            case 'infoPoll':
                 $response = $this->infoPoll();
                 break;
         }

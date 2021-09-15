@@ -5,7 +5,7 @@ function SlideyInteractiveExtension(slidey)
 {
     var extension = this;
 
-    this.path = 'interactive.php/';
+    this.path = 'interactive.php?action=';
     this.extraCurrent = false;
     this.isAdmin = false;
     this.follow = false;
@@ -55,7 +55,7 @@ function SlideyInteractiveExtension(slidey)
 
             if (typeof(src) != 'undefined' && src && src.substr(-name.length) == name) {
                 var root = src.substr(0, src.length-name.length);
-                extension.path = root+'../../interactive.php/';
+                extension.path = root+'../../interactive.php?action=';
             }
         });
 
@@ -66,7 +66,8 @@ function SlideyInteractiveExtension(slidey)
         // Logging
         $('#loginWindow form').submit(function() {
             $('#loginWindow').modal('hide');
-            $.getJSON(extension.path + 'login?password=' + $('#loginWindow input').val(), function(status) {
+            console.log(extension.path);
+            $.getJSON(extension.path + 'login&password=' + $('#loginWindow input').val(), function(status) {
                 extension.updateStatus(status);
 
                 if (extension.isAdmin) {
@@ -172,7 +173,7 @@ SlideyInteractiveExtension.prototype = {
     {
         var extension = this;
         extension.ignoreOrder = true;
-        $.getJSON(extension.path + 'update?page=' + extension.currentPage() + '&slide=' + slidey.currentSlide + '&discover=' + slidey.currentDiscover + '&' + extension.extraCurrent, function(status) {
+        $.getJSON(extension.path + 'update&page=' + extension.currentPage() + '&slide=' + slidey.currentSlide + '&discover=' + slidey.currentDiscover + '&' + extension.extraCurrent, function(status) {
             extension.ignoreOrder = false;
             extension.updateStatus(status);
         });

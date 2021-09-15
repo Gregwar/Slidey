@@ -37,7 +37,7 @@ function SlideyPollExtension(slidey, interactive)
         $('.poll_answer').click(function() {
             if (extension.currentPoll && extension.pollOpened) {
                 var vote = $(this).attr('rel');
-                $.getJSON(interactive.path + 'votePoll?answer='+vote);
+                $.getJSON(interactive.path + 'votePoll&answer='+vote);
                 $('.poll_label').removeClass('text-primary');
                 $(this).parent().addClass('text-primary');
             }
@@ -75,7 +75,7 @@ SlideyPollExtension.prototype = {
     startPoll: function(size) {
         var id = this.currentPoll.attr('id');
         if (this.interactive.isAdmin) {
-            $.getJSON(this.interactive.path+'startPoll?id='+id+'&size='+size);
+            $.getJSON(this.interactive.path+'startPoll&id='+id+'&size='+size);
         }
 
         $('.poll_result').hide();
