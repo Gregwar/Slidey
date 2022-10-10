@@ -190,17 +190,19 @@ class Interactive
                 $this->status['follower'] = true;
                 break;
             case 'update':
-                $current = array();
+                if (isset($this->status['admin'])) {
+                    $current = array();
 
-                foreach (array('page', 'slide', 'discover') as $key) {
-                    $current[$key] = isset($_GET[$key]) ? $_GET[$key] : null;
-                    if ($current[$key] == 'null') {
-                        $current[$key] = null;
+                    foreach (array('page', 'slide', 'discover') as $key) {
+                        $current[$key] = isset($_GET[$key]) ? $_GET[$key] : null;
+                        if ($current[$key] == 'null') {
+                            $current[$key] = null;
+                        }
                     }
-                }
 
-                $this->state->current = $current;
-                $this->state->persist();
+                    $this->state->current = $current;
+                    $this->state->persist();
+                }
 
                 break;
             case 'current':
