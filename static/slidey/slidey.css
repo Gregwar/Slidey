@@ -303,6 +303,7 @@ a.permalink {
 
 .alert-light {
     box-shadow: inset 0 0 25px #ddd;
+    position:unset;
 }
 
 .middleSlide  {
@@ -311,4 +312,8 @@ a.permalink {
 
 .currentSlideNumber {
     font-weight:500;
+}
+
+.alert p {
+    margin-bottom:0 !important;
 }
