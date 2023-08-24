@@ -1,14 +1,8 @@
 body {
     margin:0;
     padding:0;
-    font-size:22px;
     font-family: 'Gentium Basic', serif;
 }
-
-code, pre {
-    font-size:18px;
-}
-
 
 @media screen and (max-width: 800px) {
     body {
@@ -63,7 +57,7 @@ html {
 .core {
     height:1px;
     padding:0px;
-    max-width: 900px;
+    max-width: 800px;
     margin:auto;
     margin-top:0px;
     margin-bottom:20px;
@@ -74,7 +68,6 @@ html {
 }
 
 .toc {
-    font-size:24px;
     font-weight:bold;
     color:#b1e3ff;
 }
@@ -95,7 +88,6 @@ html {
 }
 
 .toc ul ul {
-    font-size: 20px;
     font-weight:normal;
 }
 
@@ -111,7 +103,6 @@ html {
 .annex {
     padding-top:10px;
     padding-bottom:10px;
-    font-size:25px;
 }
 
 .contents a {
@@ -140,6 +131,11 @@ h1 {
 h2 {
     border-top:1px dashed #ccc;
     padding-top:15px;
+    font-size:175%;
+}
+
+h3 {
+    font-size:140%;
 }
 
 li {
@@ -165,7 +161,6 @@ li.current a {
 }
 
 a.prev, a.next {
-    font-size:20px;
     font-weight:bold;
 }
 
@@ -284,28 +279,6 @@ ul li.dash {
 html {
     background-image:url('gfx/texture.png');
     background-attachment: fixed;
-}
-
-.warning {
-    .alert;
-    .alert-warning;
-}
-
-.success {
-    .alert;
-    .alert-success;
-}
-
-.important {
-    .well;
-    font-size:120%;
-    text-align:center;
-    font-weight:bold;
-}
-
-.note, .tip, .spoiler {
-    .alert;
-    .alert-info;
 }
 
 a.permalink {
