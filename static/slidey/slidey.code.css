@@ -1,0 +1,20 @@
+code {
+    padding: 2px 4px;
+    color: #333;
+    background-color: #eee;
+}
+
+pre.code {
+    display: block;
+    margin: 5px;
+    border: 1px solid #aaa;
+    padding: 3px;
+    background-color: white;
+    border-radius: 3px;
+    border: 0;
+}
+
+code,
+pre.code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace;
+}

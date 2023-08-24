@@ -4,11 +4,16 @@
 function Slidey()
 {
     var slidey = this;
+
+    /**
+     * Is the slide currently scrolling ?
+     */
+    this.scrolling = false;
     
     /**
      * Is the slide Mode enabled ?
-     */
-    this.slideMode = false;
+    */
+   this.slideMode = false;
 
     /**
      * Are the controls enabled ?
@@ -56,7 +61,7 @@ function Slidey()
         $('.slide').each(function() {
             $(this).wrap('<div class="slideWrapper" rel="' + id + '" id="slide' + id + '"></div>');	
 
-            $('#slide' + id).prepend('<div class="btn btn-default slideNumber" rel="' + id + '">' + (parseInt(id)+1) + '/' + slidey.slidesCount + '</div>');
+            $('#slide' + id).prepend('<div class="btn btn-light slideNumber" rel="' + id + '">' + (parseInt(id)+1) + '/' + slidey.slidesCount + '</div>');
 
             var discover_id = 0;
 
@@ -194,8 +199,10 @@ Slidey.prototype = {
         var target = $('#slide' + slideId).offset().top;
         var current = $('html').scrollTop();
         
-        if (Math.abs(target - current) > 2) {
-            $('html').animate({scrollTop:target}, 300, 0, function() {
+        if (Math.abs(target - current) > 2 && !slidey.scrolling) {
+            slidey.scrolling = true;
+            $('html').animate({scrollTop:target}, 50, 0, function() {
+                slidey.scrolling = false;
                 if (slidey.slideMode) {
                 $('body').css('background-color', $('#slide' + slideId + ' .slide').css('background-color'));
                 }

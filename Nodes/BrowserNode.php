@@ -36,23 +36,25 @@ class BrowserNode extends Base
 
         $html = '';
 
-        $html .= '<ul class="pager">';
+        $html .= '<nav>';
+        $html .= '<ul class="pagination justify-content-center">';
 
         if ($prev) {
-            $html .= '<li class="previous"><a href="'.$prev[0].'">&larr; '.$prev[1].'</a></li>';
+            $html .= '<li class="page-item"><a class="page-link" href="'.$prev[0].'">&larr; '.$prev[1].'</a></li>';
         }
 
 
         if ($parent) {
             $ref = $this->reference($parent);
-            $html .= '<li><a href="'.$ref[0].'">'.$ref[1].'</a></li>';
+            $html .= '<li class="page-item"><a class="page-link" href="'.$ref[0].'">'.$ref[1].'</a></li>';
         }
 
         if ($next) {
-            $html .= '<li class="next"><a href="'.$next[0].'">'.$next[1].' &rarr;</a></li>';
+            $html .= '<li class="page-item"><a class="page-link" href="'.$next[0].'">'.$next[1].' &rarr;</a></li>';
         }
         
         $html .= '</ul>';
+        $html .= '</nav>';
  
         return $html;
     }

@@ -3,9 +3,9 @@
   <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-          <h4 class="modal-title">Log-in</h4>
-        </div>
+            <h5 class="modal-title">Log-in</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>    
         <div class="modal-body">
             <form>
                 Mot de passe&nbsp;:<br />
@@ -18,35 +18,46 @@
 
 <div class="core">
 
+    <script>hljs.highlightAll();</script>
+
 <!-- Extra-controls for mobile device -->
 <div class="mobileControls">
     <div class="btn-group">
-        <a href="javascript:void(0)" class="left btn btn-default btn-lg"><span class="glyphicon glyphicon-arrow-up"></span></a>
-        <a href="javascript:void(0)" class="right btn btn-default btn-lg"><span class="glyphicon glyphicon-arrow-down"></span></a>
-        <a href="javascript:void(0)" class="up btn btn-default btn-lg"><span class="glyphicon glyphicon-arrow-left"></span></a>
-        <a href="javascript:void(0)" class="down btn btn-default btn-lg"><span class="glyphicon glyphicon-arrow-right"></span></a>
-        <a href="javascript:void(0)" class="login btn btn-default btn-lg"><span class="glyphicon glyphicon-lock"></span></a>
+        <a href="javascript:void(0)" class="left btn btn-light btn-lg">
+            <i class="bi bi-arrow-up"></i>
+        </a>
+        <a href="javascript:void(0)" class="right btn btn-light btn-lg">
+            <i class="bi bi-arrow-down"></i>
+        </a>
+        <a href="javascript:void(0)" class="up btn btn-light btn-lg">
+            <i class="bi bi-arrow-left"></i>
+        </a>
+        <a href="javascript:void(0)" class="down btn btn-light btn-lg">
+            <i class="bi bi-arrow-right"></i>
+        </a>
+        <a href="javascript:void(0)" class="login btn btn-light btn-lg">
+            <i class="bi bi-lock"></i>
+        </a>
     </div>
 </div>
 
 <!-- Controls -->
 <div class="slideMode">
     <div class="btn-group">
-        <a href="javascript:void(0)" class="btn btn-default btn-lg slideModeSlide"><span class="glyphicon glyphicon-film"></span></a>
-        <a href="javascript:void(0)" class="btn btn-default btn-lg followMode"><span class="glyphicon glyphicon-time"></span> </a>
-        <a href="%home%" class="btn btn-default btn-lg goHome"><span class="glyphicon glyphicon-home"></span></a>
+        <a href="javascript:void(0)" class="btn btn-light btn-lg slideModeSlide"><i class="bi bi-film"></i></a>
+        <a href="javascript:void(0)" class="btn btn-light btn-lg followMode"><i class="bi bi-stopwatch"></i> </a>
+        <a href="%home%" class="btn btn-light btn-lg goHome"><i class="bi bi-house"></i></a>
     </div>
 </div>
 
 <div class="exitSlideMode">
     <div class="btn-group">
-        <a href="javascript:void(0)" class="btn btn-default btn-lg followMode"><span class="glyphicon glyphicon-time"></span></a>
-        <a href="javascript:void(0)" class="btn btn-default btn-lg showMobile"><span class="glyphicon glyphicon-phone"></span> </a>
-        <a href="javascript:void(0)" class="btn btn-default btn-lg stopShow">
+        <a href="javascript:void(0)" class="btn btn-light btn-lg followMode"><i class="bi bi-stopwatch"></i></a>
+        <a href="javascript:void(0)" class="btn btn-light btn-lg showMobile"><i class="bi bi-phone"></i></a>
+        <a href="javascript:void(0)" class="btn btn-light btn-lg stopShow">
             <span class="currentSlideNumber">
             </span>
-            <span class="glyphicon glyphicon-remove">    
-            </span>
+            <i class="bi bi-x-lg"></i>
         </a>
     </div>
 </div>
@@ -55,4 +66,4 @@
 <div class="menu">
 </div>
 
-<div class="contents">
+<div class="contents container">

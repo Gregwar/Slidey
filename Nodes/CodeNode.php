@@ -18,7 +18,7 @@ class CodeNode extends Base
                 $language = 'no-highlight';
             }
 
-            return '<pre><code class="' . $language . '">' . $code . '</code></pre>';
+            return '<pre><code class="' . $language . ' hljs">' . $code . '</code></pre>';
         }
     }
 }

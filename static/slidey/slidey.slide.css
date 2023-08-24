@@ -1,0 +1,79 @@
+/**
+ * Contains all changes applied by the slide mode
+ */
+
+ .slideOnly {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.slideEnabled {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+
+    overflow-y: hidden;
+    width: 100%;
+}
+
+.slideEnabled .toc ul ul li {
+    display: none;
+}
+
+
+.slideEnabled img {
+    max-width: 100%;
+    width: auto;
+    height: auto !important;
+    margin: 0;
+}
+
+.slideEnabled .slideNumber {
+    position: absolute;
+    font-size: 20px;
+    width: auto;
+}
+
+.slideEnabled .fullSlide {
+    position: absolute;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.slideEnabled .slide {
+    width: 100%;
+    padding-bottom: 35px;
+}
+
+.slideEnabled h1 {
+    font-size: 60px;
+}
+
+.slideEnabled h2 {
+    border: none;
+}
+
+.slideEnabled h2:before {
+    content: '';
+}
+
+.slideEnabled pre code {
+    padding: 8px;
+    overflow: hidden;
+}
+
+.slideEnabled .tocSlide {
+    font-size: 60px;
+}
+
+.slideEnabled .tocSlide ul {
+    font-size: 45px;
+}
+
+.slideEnabled .youtube {
+    width: 800px;
+    height: 470px;
+}

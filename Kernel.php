@@ -17,12 +17,20 @@ class Kernel extends Base
         $directives[] = new Directives\DiscoverList;
         $directives[] = new Directives\Youtube;
 
-        $classes = array('textOnly', 'slideOnly', 'discover',
-            'step', 'note', 'tip', 'warning', 'spoiler', 'center', 'important', 'success');
+        $classes = array(
+            'textOnly', 'slideOnly', 'discover',
+            'step', 'tip', 'spoiler', 'center'
+        );
 
         foreach ($classes as $class) {
             $directives[] = new Wrap($class);
         }
+
+        $directives[] = new Directives\TriggerWrap('important', 'alert alert-light p-2 fs-4 text-center');
+        $directives[] = new Directives\TriggerWrap('note', 'alert alert-info');
+        $directives[] = new Directives\TriggerWrap('warning', 'alert alert-warning');
+        $directives[] = new Directives\TriggerWrap('success', 'alert alert-success');
+        $directives[] = new Directives\TriggerWrap('danger', 'alert alert-danger');
 
         $directives[] = new Wrap('poll', true);
         return $directives;
@@ -33,8 +41,8 @@ class Kernel extends Base
         $nodes = array('CodeNode', 'TocNode', 'ListNode', 'TableNode');
 
         foreach ($nodes as $node) {
-            if ($name == 'Nodes\\'.$node) {
-                return '\\Gregwar\\Slidey\\Nodes\\'.$node;
+            if ($name == 'Nodes\\' . $node) {
+                return '\\Gregwar\\Slidey\\Nodes\\' . $node;
             }
         }
 

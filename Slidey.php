@@ -128,7 +128,14 @@ class Slidey extends Builder
             $document->addHeaderNode(new RawNode('<link href="https://fonts.googleapis.com/css2?family=Gentium+Basic&display=swap" rel="stylesheet"> '));
 
             // Adding CSS
-            $document->addCss('/slidey/bootstrap/dist/css/bootstrap.css');
+            $document->addCss('/slidey/bootstrap/css/bootstrap.min.css');
+            $document->addCss('/slidey/bootstrap-icons/font/bootstrap-icons.css');
+            $document->addCss('/slidey/highlight.css');
+            $document->addCss('/slidey/slidey.css');
+            $document->addCss('/slidey/slidey.menu.css');
+            $document->addCss('/slidey/slidey.step.css');
+            $document->addCss('/slidey/slidey.code.css');
+            $document->addCss('/slidey/slidey.slide.css');
 
             // Adding JS
             $jss = array('jquery.js', 'slidey.images.js', 'slidey.permalink.js',
@@ -138,7 +145,7 @@ class Slidey extends Builder
             foreach ($jss as $js) {
                 $document->addJs('/slidey/js/'.$js);
             }
-            $document->addJs('/slidey/bootstrap/dist/js/bootstrap.min.js');
+            $document->addJs('/slidey/bootstrap/js/bootstrap.min.js');
             $document->addJs('/slidey/highlight/highlight.pack.js');
 
             $environment = $document->getEnvironment();
