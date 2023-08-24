@@ -48,7 +48,7 @@
 }
 
 .menu .menuItem:hover {
-    color:#fff;
+    text-decoration:underline;
 }
 
 .followMode {
