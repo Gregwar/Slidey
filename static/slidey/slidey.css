@@ -317,3 +317,7 @@ a.permalink {
 .alert p {
     margin-bottom:0 !important;
 }
+
+p {
+    margin-bottom:10px;
+}
