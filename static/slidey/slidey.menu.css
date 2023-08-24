@@ -6,9 +6,10 @@
     width:220px;
     margin-left:-255px;
     padding:12px;
-    background-color:#000;
-    background-image:url('gfx/fade.png');
+    background-color:#eee;
     background-repeat:repeat-y;
+    box-shadow: inset 0 0 20px #ddd;
+    border-radius:10px;
 }
 
 @media screen and (max-width: 1000px) {
@@ -37,12 +38,13 @@
 }
 
 .menuItem {
-    color:#ddd;
+    color:#222;
     cursor:pointer;
 }
 
 .menu .menuPassed {
-    color:#777;
+    color:#aaa;
+    text-decoration:line-through;
 }
 
 .menu .menuItem:hover {

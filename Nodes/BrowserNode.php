@@ -46,7 +46,7 @@ class BrowserNode extends Base
 
         if ($parent) {
             $ref = $this->reference($parent);
-            $html .= '<li class="page-item"><a class="page-link" href="'.$ref[0].'">'.$ref[1].'</a></li>';
+            $html .= '<li class="page-item"><a class="page-link" href="'.$ref[0].'"><i class="bi bi-arrow-bar-up"></i> '.$ref[1].'</a></li>';
         }
 
         if ($next) {
