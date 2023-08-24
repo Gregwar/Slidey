@@ -122,6 +122,10 @@ html {
     text-decoration:underline;
 }
 
+h1 {
+    font-weight:bold;
+}
+
 h1, h2, h3 {
     text-shadow:2px 2px 1px #eee;
     font-family: var(--bs-body-font-family);
