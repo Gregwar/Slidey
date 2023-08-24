@@ -1,108 +1,87 @@
 pre code.hljs {
     display: block;
     overflow-x: auto;
-    padding: 0.5em;
-    line-height: 1.1;
+    padding: .5em;
+    line-height: 1.2
 }
 
 code.hljs {
     padding: 3px 5px
 }
 
-/*!
-  Theme: StackOverflow Dark
-  Description: Dark theme as used on stackoverflow.com
-  Author: stackoverflow.com
-  Maintainer: @Hirse
-  Website: https://github.com/StackExchange/Stacks
-  License: MIT
-  Updated: 2021-05-15
-
-  Updated for @stackoverflow/stacks v0.64.0
-  Code Blocks: /blob/v0.64.0/lib/css/components/_stacks-code-blocks.less
-  Colors: /blob/v0.64.0/lib/css/exports/_stacks-constants-colors.less
-*/
 .hljs {
-    color: #fff;
-    background: #1c1b1b
+    background: #111;
+    color: #d1d9e1
 }
 
-.hljs-subst {
-    color: #fff
+.hljs-comment,
+.hljs-quote {
+    color: #969896;
+    font-style: italic
 }
 
-.hljs-comment {
-    color: #999
-}
-
-.hljs-attr,
-.hljs-doctag,
+.hljs-addition,
 .hljs-keyword,
-.hljs-meta .hljs-keyword,
-.hljs-section,
-.hljs-selector-tag {
-    color: #88aece
-}
-
-.hljs-attribute {
-    color: #c59bc1
-}
-
-.hljs-name,
-.hljs-number,
-.hljs-quote,
-.hljs-selector-id,
-.hljs-template-tag,
+.hljs-literal,
+.hljs-selector-tag,
 .hljs-type {
-    color: #f08d49
+    color: #c9c
 }
 
-.hljs-selector-class {
-    color: #88aece
-}
-
-.hljs-link,
-.hljs-regexp,
+.hljs-number,
 .hljs-selector-attr,
-.hljs-string,
-.hljs-symbol,
-.hljs-template-variable,
-.hljs-variable {
-    color: #b5bd68
+.hljs-selector-pseudo {
+    color: #f99157
 }
 
-.hljs-meta,
-.hljs-selector-pseudo {
-    color: #88aece
+.hljs-doctag,
+.hljs-regexp,
+.hljs-string {
+    color: #8abeb7
 }
 
 .hljs-built_in,
-.hljs-literal,
+.hljs-name,
+.hljs-section,
 .hljs-title {
-    color: #f08d49
-}
-
-.hljs-bullet,
-.hljs-code {
-    color: #ccc
-}
-
-.hljs-meta .hljs-string {
     color: #b5bd68
 }
 
-.hljs-deletion {
-    color: #de7176
+.hljs-class .hljs-title,
+.hljs-selector-id,
+.hljs-template-variable,
+.hljs-title.class_,
+.hljs-variable {
+    color: #fc6
 }
 
-.hljs-addition {
-    color: #76c490
+.hljs-name,
+.hljs-section,
+.hljs-strong {
+    font-weight: 700
+}
+
+.hljs-bullet,
+.hljs-link,
+.hljs-meta,
+.hljs-subst,
+.hljs-symbol {
+    color: #f99157
+}
+
+.hljs-deletion {
+    color: #dc322f
+}
+
+.hljs-formula {
+    background: #eee8d5
+}
+
+.hljs-attr,
+.hljs-attribute {
+    color: #81a2be
 }
 
 .hljs-emphasis {
     font-style: italic
-}
-
-.hljs-strong {
-    font-weight: 700
 }

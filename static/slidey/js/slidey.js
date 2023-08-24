@@ -201,7 +201,7 @@ Slidey.prototype = {
         
         if (Math.abs(target - current) > 2 && !slidey.scrolling) {
             slidey.scrolling = true;
-            $('html').animate({scrollTop:target}, 50, 0, function() {
+            $('html').animate({scrollTop:target}, 1, "linear", function() {
                 slidey.scrolling = false;
                 if (slidey.slideMode) {
                 $('body').css('background-color', $('#slide' + slideId + ' .slide').css('background-color'));
