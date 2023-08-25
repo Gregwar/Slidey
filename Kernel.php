@@ -26,7 +26,7 @@ class Kernel extends Base
             $directives[] = new Wrap($class);
         }
 
-        $directives[] = new Directives\TriggerWrap('important', 'alert alert-light p-2 fs-4 text-center');
+        $directives[] = new Directives\TriggerWrap('important', 'alert alert-light p-2 fs-5 text-center');
         $directives[] = new Directives\TriggerWrap('note', 'alert alert-info');
         $directives[] = new Directives\TriggerWrap('warning', 'alert alert-warning');
         $directives[] = new Directives\TriggerWrap('success', 'alert alert-success');
