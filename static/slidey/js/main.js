@@ -1,6 +1,5 @@
 var slidey = new Slidey();
 new SlideyMenuExtension(slidey);
-new SlideyImagesExtension(slidey);
 new SlideySpoilersExtension(slidey);
 new SlideyMobileExtension(slidey);
 new SlideyStepsExtension(slidey);
