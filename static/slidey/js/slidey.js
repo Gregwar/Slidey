@@ -111,7 +111,7 @@ Slidey.prototype = {
     /**
      * Resizes the slide to fit the screen size
      */
-    resizeSlides: function(force)
+    resizeSlides: function(force, forceScroll)
     {
         var width = $('.core').width();
         var height = $(window).height();
@@ -136,6 +136,10 @@ Slidey.prototype = {
                     $(this).css('margin-left', width);
                     $(this).css('margin-top', 5);
                 });
+            }
+
+            if (forceScroll) {
+                this.scrollTo(this.currentSlide);
             }
         }
     },
@@ -213,9 +217,9 @@ Slidey.prototype = {
     /**
      * Scrolls to the current slide
      */
-    scrollToCurrentSlide: function()
+    scrollToCurrentSlide: function(forceScroll)
     {
-        this.resizeSlides();
+        this.resizeSlides(false, forceScroll);
     },
 
     /**
@@ -369,12 +373,12 @@ Slidey.prototype = {
             $('.stopShow').click(function() {
                 slidey.dispatch('stopShowClicked');
                 slidey.runTextMode();
-                slidey.scrollToCurrentSlide();
+                slidey.scrollToCurrentSlide(true);
             });	
 
             $('.slideModeSlide').click(function() {
                 slidey.runSlideMode();
-                slidey.scrollToCurrentSlide();
+                slidey.scrollToCurrentSlide(true);
             });	
 
             $('.slideNumber').click(function() {
