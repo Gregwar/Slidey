@@ -22,7 +22,6 @@
 
 .slideEnabled img {
     max-width: 100%;
-    width: auto;
     height: auto !important;
     margin: 0;
 }
