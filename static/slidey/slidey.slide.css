@@ -50,6 +50,7 @@
 
 .contents.contentsSlideEnabled {
     background-color:transparent;
+    box-shadow:none;
 }
 
 .slideEnabled h1 {
