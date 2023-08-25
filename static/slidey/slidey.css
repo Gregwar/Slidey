@@ -132,11 +132,13 @@ h1 {
 h2 {
     border-top:1px dashed #ccc;
     padding-top:15px;
-    font-size:175%;
+    font-size:150%;
+    font-weight:bold;
 }
 
 h3 {
-    font-size:140%;
+    font-size:125%;
+    font-weight:bold;
 }
 
 li {
