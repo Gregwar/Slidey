@@ -296,6 +296,7 @@ Slidey.prototype = {
         this.slideMode = true;
         this.dispatch('changeMode');
         $('.slideWrapper').addClass('slideEnabled');
+        $('.contents').addClass('contentsSlideEnabled');
         this.resizeSlides(true);
         this.updateDiscovers();
         this.dispatch('slideMode');
@@ -321,6 +322,7 @@ Slidey.prototype = {
         $('.slideEnabled').height('auto');
         this.resizeSlides(true);
         $('.slideWrapper').removeClass('slideEnabled');
+        $('.contents').removeClass('contentsSlideEnabled');
         this.dispatch('textMode');
 
         $('.slideMode').show();

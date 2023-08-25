@@ -203,7 +203,8 @@ a.prev, a.next {
 }
 
 img {
-    max-width:100%;
+    max-width:75%;
+    height:auto;
     border:0px;
     vertical-align:middle;
     margin:20px;
@@ -228,9 +229,8 @@ img.formula {
 .contents {
     width:100%;
     text-align:justify;
+    padding:20px;
     background-color:white;
-    float:left;
-    padding:10px;
 }
 
 table {
