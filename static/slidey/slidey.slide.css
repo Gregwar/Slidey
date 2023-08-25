@@ -44,7 +44,7 @@
 .slideEnabled .slide {
     width: 100%;
     padding: 20px;
-    border-radius:20px;
+    border-radius:5px;
     box-shadow: -10px 10px 12px #ccc
 }
 
