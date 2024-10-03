@@ -40,15 +40,37 @@ function SlideyStepsExtension(slidey)
             }
         }
 
+        var stepGroup = 0;
+        var stepGroups = {};
+        var stepGroupSizes = {};
+
+        $('.step').each(function() {
+            if ($(this).data('params') == 'reset' && (stepGroup in stepGroupSizes)) {
+                stepGroup += 1;
+            }
+            if (!(stepGroup in stepGroupSizes)) {
+                stepGroupSizes[stepGroup] = 0;
+            }
+            stepGroupSizes[stepGroup] += 1;
+
+            var myStepId = stepId++;
+            stepGroups[myStepId] = [stepGroupSizes[stepGroup], stepGroup];
+        });
+        stepId = 0;
+
         $('.step').each(function() {
             var myStepId = stepId++;
+            var group = stepGroups[myStepId];
+            var groupStep = group[0];
+            var groupSize = stepGroupSizes[group[1]];
+
             $(this).wrap('<div class="stepContents stepContents'+myStepId+'"></div>');
             var contents = $('.stepContents'+myStepId);
             contents.wrap('<div class="stepContainer stepContainer'+myStepId+'"></div>');
             var container = $('.stepContainer'+myStepId);
 
-            container.prepend('<div class="stepChecker"><input type="checkbox" rel="'+myStepId+'" /><br />'+(myStepId+1)+'/'+numSteps+'</div>');
-            var checkbox = container.find('.stepChecker input[type=checkbox]');
+            container.prepend('<div class="stepChecker"><input type="checkbox" rel="'+myStepId+'" /><br />'+groupStep+'/'+groupSize+'</div>');
+            var checkbox = container.find('.stepChecker input[type=checkbox]');groupSize
 
             checkbox.change(function() {
                 self.updateCheckbox($(this));

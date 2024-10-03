@@ -1,9 +1,11 @@
 .stepChecker {
     position:absolute;
     margin-left:-40px;
+    margin-top:5px;
     font-size:13px;
     color:#aaa;
     text-align:center;
+    line-height:1.25em;
 }
 
 .stepChecker input[type=checkbox] {
