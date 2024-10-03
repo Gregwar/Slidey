@@ -22,7 +22,6 @@
 
 .slideEnabled img {
     max-width: 100%;
-    width: auto;
     height: auto !important;
     margin: 0;
 }
@@ -67,7 +66,6 @@
 
 .slideEnabled pre code {
     padding: 8px;
-    overflow: hidden;
 }
 
 .slideEnabled .tocSlide {
